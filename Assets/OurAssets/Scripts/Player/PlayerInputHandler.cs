@@ -30,4 +30,10 @@ public class PlayerInputHandler : MonoBehaviour
         JumpWasReleasedThisFrame = ctx.canceled;
     }
     #endregion
+
+    #region Control Scheme Change
+    public InputDevice CurrentDevice { get; private set; }
+
+    public void HandleControlsChange(PlayerInput input) => CurrentDevice = input.devices.Count > 0 ? input.devices[0] : null;
+    #endregion
 }
