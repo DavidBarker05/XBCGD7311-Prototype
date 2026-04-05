@@ -15,6 +15,11 @@ public class PlayerCamera : MonoBehaviour
     public void Init(CameraSettings cameraSettings, Transform target)
     {
         m_CameraSettings = cameraSettings;
+        ChangeCameraTarget(target);
+    }
+
+    public void ChangeCameraTarget(Transform target)
+    {
         transform.position = target.position;
         transform.eulerAngles = target.eulerAngles;
         m_EulerAngles = target.eulerAngles;

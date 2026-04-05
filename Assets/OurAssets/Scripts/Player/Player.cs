@@ -74,6 +74,17 @@ public class Player : MonoBehaviour
     {
         if (m_PlayerInput.currentActionMap.name == actionMap) return;
         m_PlayerInput.SwitchCurrentActionMap(actionMap);
+        switch (actionMap)
+        {
+            case "Player":
+                m_PlayerCamera.ChangeCameraTarget(m_PlayerCharacter.CameraTarget);
+                break;
+            case "PipePlayer":
+                m_PlayerCamera.ChangeCameraTarget(m_PipePlayerCharacter.CameraTarget);
+                break;
+            default:
+                break;
+        }
     }
 
     #region Cursor Toggles
