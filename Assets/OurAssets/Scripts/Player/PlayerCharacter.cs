@@ -2,6 +2,7 @@ using UnityEngine;
 
 public struct CharacterInput
 {
+    public Quaternion Rotation;
     public Vector2 MovementInput;
     public bool bJumpPressedThisFrame;
 }
@@ -34,12 +35,19 @@ public class PlayerCharacter : MonoBehaviour
 
     public void UpdatePosition(CharacterInput input, float deltaTime)
     {
+        UpdateRotation(input.Rotation);
         CollisionChecks();
         UpdateTimers(deltaTime);
         UpdateHorizontalVelocity(input.MovementInput);
         JumpChecks(input.bJumpPressedThisFrame);
         UpdateVerticalVelocity(deltaTime);
         m_CC.Move(m_Velocity * deltaTime);
+    }
+
+    void UpdateRotation(Quaternion rotation)
+    {
+        Vector3 forward = Vector3.ProjectOnPlane(rotation * Vector3.forward, Vector3.up).normalized;
+        transform.rotation = Quaternion.LookRotation(forward, Vector3.up);
     }
 
     #region Collision Checks

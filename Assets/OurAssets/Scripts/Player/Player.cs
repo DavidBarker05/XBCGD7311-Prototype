@@ -11,35 +11,61 @@ public class Player : MonoBehaviour
     [SerializeField]
     PlayerCamera m_PlayerCamera;
 
+    PlayerInput m_PlayerInput;
+
     CharacterInput m_CharacterInput;
     CameraInput m_CameraInput;
 
+    bool m_bCursorHidden;
+
     void Awake()
     {
+        m_PlayerInput = GetComponent<PlayerInput>();
         m_PlayerCharacter.Init(m_PlayerSettings.CharacterSettings);
-        m_PlayerCamera.Init(m_PlayerSettings.CameraSettings, m_PlayerCharacter.transform, m_PlayerCharacter.CameraTarget);
+        m_PlayerCamera.Init(m_PlayerSettings.CameraSettings, m_PlayerCharacter.CameraTarget);
         m_CameraInput = new CameraInput();
         m_CharacterInput = new CharacterInput();
-        HideCursor();
     }
 
     void Update()
     {
-        m_PlayerCamera.UpdateRotation(m_CameraInput, Time.deltaTime);
-        m_PlayerCharacter.UpdatePosition(m_CharacterInput, Time.deltaTime);
+        switch (m_PlayerInput.currentActionMap.name)
+        {
+            case "Player":
+                if (!m_bCursorHidden) HideCursor();
+                m_PlayerCamera.UpdateRotation(m_CameraInput, Time.deltaTime);
+                m_CharacterInput.Rotation = m_PlayerCamera.transform.rotation;
+                m_PlayerCharacter.UpdatePosition(m_CharacterInput, Time.deltaTime);
+                break;
+            default:
+                if (m_bCursorHidden) ShowCursor();
+                break;
+        }
     }
 
-    void LateUpdate() => m_PlayerCamera.UpdatePosition(m_PlayerCharacter.CameraTarget);
+    void LateUpdate()
+    {
+        switch (m_PlayerInput.currentActionMap.name)
+        {
+            case "Player":
+                m_PlayerCamera.UpdatePosition(m_PlayerCharacter.CameraTarget);
+                break;
+            default:
+                break;
+        }
+    }
 
     #region Cursor Toggles
     public void ShowCursor()
     {
+        m_bCursorHidden = false;
         Cursor.lockState = CursorLockMode.Confined;
         Cursor.visible = true;
     }
 
     public void HideCursor()
     {
+        m_bCursorHidden = true;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
