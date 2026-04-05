@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a497486f7e4318348ae7a5025867e4e5, type: 3}
+  m_Name: PlayerSettings
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerSettings
+  <CharacterSettings>k__BackingField: {fileID: 11400000, guid: 22108a551220517499182be029771981, type: 2}
+  <CameraSettings>k__BackingField: {fileID: 11400000, guid: 97ff678844a18c647be3d1f661594d33, type: 2}
