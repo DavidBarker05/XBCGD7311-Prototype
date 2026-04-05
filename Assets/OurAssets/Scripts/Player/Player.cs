@@ -9,11 +9,16 @@ public class Player : MonoBehaviour
     [SerializeField]
     PlayerCharacter m_PlayerCharacter;
     [SerializeField]
+    PipePlayerCharacter m_PipePlayerCharacter;
+    [SerializeField]
     PlayerCamera m_PlayerCamera;
+    [SerializeField]
+    Camera m_Camera;
 
     PlayerInput m_PlayerInput;
 
     CharacterInput m_CharacterInput;
+    PipeCharacterInput m_PipeCharacterInput;
     CameraInput m_CameraInput;
 
     bool m_bCursorHidden;
@@ -23,8 +28,9 @@ public class Player : MonoBehaviour
         m_PlayerInput = GetComponent<PlayerInput>();
         m_PlayerCharacter.Init(m_PlayerSettings.CharacterSettings);
         m_PlayerCamera.Init(m_PlayerSettings.CameraSettings, m_PlayerCharacter.CameraTarget);
-        m_CameraInput = new CameraInput();
         m_CharacterInput = new CharacterInput();
+        m_PipeCharacterInput = new PipeCharacterInput();
+        m_CameraInput = new CameraInput();
     }
 
     void Update()
@@ -33,9 +39,15 @@ public class Player : MonoBehaviour
         {
             case "Player":
                 if (!m_bCursorHidden) HideCursor();
-                m_PlayerCamera.UpdateRotation(m_CameraInput, Time.deltaTime);
+                m_PlayerCamera.UpdateRotation(ref m_CameraInput, Time.deltaTime);
                 m_CharacterInput.Rotation = m_PlayerCamera.transform.rotation;
-                m_PlayerCharacter.UpdatePosition(m_CharacterInput, Time.deltaTime);
+                m_PlayerCharacter.UpdatePosition(ref m_CharacterInput, Time.deltaTime);
+                break;
+            case "PipePlayer":
+                if (m_bCursorHidden) ShowCursor();
+                (bool, RaycastHit) mouseHitInWorld = GetMouseHitInWorld(m_PipePlayerCharacter.HitLayer);
+                m_PipeCharacterInput.MouseHitInWorld = mouseHitInWorld;
+                m_PipePlayerCharacter.UpdatePipeCharacter(ref m_PipeCharacterInput);
                 break;
             default:
                 if (m_bCursorHidden) ShowCursor();
@@ -50,9 +62,18 @@ public class Player : MonoBehaviour
             case "Player":
                 m_PlayerCamera.UpdatePosition(m_PlayerCharacter.CameraTarget);
                 break;
+            case "PipePlayer":
+                m_PlayerCamera.UpdatePosition(m_PipePlayerCharacter.CameraTarget);
+                break;
             default:
                 break;
         }
+    }
+
+    public void ChangeActionMap(string actionMap)
+    {
+        if (m_PlayerInput.currentActionMap.name == actionMap) return;
+        m_PlayerInput.SwitchCurrentActionMap(actionMap);
     }
 
     #region Cursor Toggles
@@ -71,6 +92,14 @@ public class Player : MonoBehaviour
     }
     #endregion
 
+    public (bool bSuccessful, RaycastHit hitInfo) GetMouseHitInWorld(LayerMask layerToHit, float maxDistance = 100f)
+    {
+        Vector3 mousePos = Mouse.current.position.value;
+        mousePos.z = m_Camera.nearClipPlane;
+        Ray ray = m_Camera.ScreenPointToRay(mousePos);
+        return (Physics.Raycast(ray, out RaycastHit hit, maxDistance, layerToHit), hit);
+    }
+
     #region Handle PlayerInput Events
     public void HandleMoveInput(InputAction.CallbackContext ctx) => m_CharacterInput.MovementInput = ctx.ReadValue<Vector2>();
 
@@ -81,6 +110,11 @@ public class Player : MonoBehaviour
     }
 
     public void HandleJumpInput(InputAction.CallbackContext ctx) => m_CharacterInput.bJumpPressedThisFrame = ctx.action.WasPressedThisFrame();
+
+    public void HandleClickInput(InputAction.CallbackContext ctx)
+    {
+        if (ctx.started) m_PipeCharacterInput.bClickedThisFrame = true;
+    }
 
     #region Control Scheme Change
     public InputDevice CurrentDevice { get; private set; }

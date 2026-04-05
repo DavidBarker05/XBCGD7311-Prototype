@@ -33,7 +33,7 @@ public class PlayerCharacter : MonoBehaviour
 
     public void Init(CharacterSettings characterSettings) => m_CharacterSettings = characterSettings;
 
-    public void UpdatePosition(CharacterInput input, float deltaTime)
+    public void UpdatePosition(ref CharacterInput input, float deltaTime)
     {
         UpdateRotation(input.Rotation);
         CollisionChecks();

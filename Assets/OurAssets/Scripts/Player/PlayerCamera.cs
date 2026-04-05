@@ -20,7 +20,7 @@ public class PlayerCamera : MonoBehaviour
         m_EulerAngles = target.eulerAngles;
     }
 
-    public void UpdateRotation(CameraInput input, float deltaTime)
+    public void UpdateRotation(ref CameraInput input, float deltaTime)
     {
         float lY = input.LookInput.y;
         float lX = input.LookInput.x;

@@ -706,6 +706,34 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "PipePlayer",
+            "id": "22d17d0b-d246-4ca6-b763-0eccf5f28c98",
+            "actions": [
+                {
+                    "name": "Click",
+                    "type": "Button",
+                    "id": "404ffaa4-2f27-4902-b14d-435becd0240c",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "cdba872d-07d0-43d2-b62c-feb4be66a8d6",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "Click",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": [
