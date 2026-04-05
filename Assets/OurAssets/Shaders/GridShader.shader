@@ -66,9 +66,9 @@ Shader "Custom/GridShader"
 
             float Grid(float3 positionOS)
             {
-                float x = GridLine(positionOS.x, 1 / _Tiling.x * _CellSize.x);
-                float y = GridLine(positionOS.y, 1 / _Tiling.y * _CellSize.y);
-                float z = GridLine(positionOS.z, 1 / _Tiling.z * _CellSize.z);
+                float x = GridLine(positionOS.x, _CellSize.x / _Tiling.x);
+                float y = GridLine(positionOS.y, _CellSize.y / _Tiling.y);
+                float z = GridLine(positionOS.z, _CellSize.z / _Tiling.z);
                 return 1 - (x * y * z);
             }
 
