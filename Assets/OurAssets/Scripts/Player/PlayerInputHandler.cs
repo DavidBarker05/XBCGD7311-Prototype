@@ -26,8 +26,8 @@ public class PlayerInputHandler : MonoBehaviour
 
     public void HandleJumpInput(InputAction.CallbackContext ctx)
     {
-        JumpWasPressedThisFrame = ctx.started || ctx.performed;
-        JumpWasReleasedThisFrame = ctx.canceled;
+        JumpWasPressedThisFrame = ctx.action.WasPressedThisFrame();
+        JumpWasReleasedThisFrame = ctx.action.WasReleasedThisFrame();
     }
     #endregion
 
