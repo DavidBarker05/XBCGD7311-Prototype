@@ -1,6 +1,13 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+public struct MouseInfo
+{
+    public Vector3 MouseScreenPosition;
+    public bool bHitObject;
+    public RaycastHit HitInfo;
+}
+
 [RequireComponent(typeof(PlayerInput))]
 public class Player : MonoBehaviour
 {
@@ -21,16 +28,20 @@ public class Player : MonoBehaviour
     PipeCharacterInput m_PipeCharacterInput;
     CameraInput m_CameraInput;
 
+    MouseInfo m_PipeMouseInfo;
+
     bool m_bCursorHidden;
 
     void Awake()
     {
         m_PlayerInput = GetComponent<PlayerInput>();
         m_PlayerCharacter.Init(m_PlayerSettings.CharacterSettings);
+        m_PipePlayerCharacter.Init();
         m_PlayerCamera.Init(m_PlayerSettings.CameraSettings, m_PlayerCharacter.CameraTarget);
         m_CharacterInput = new CharacterInput();
         m_PipeCharacterInput = new PipeCharacterInput();
         m_CameraInput = new CameraInput();
+        m_PipeMouseInfo = new MouseInfo();
     }
 
     void Update()
@@ -45,8 +56,9 @@ public class Player : MonoBehaviour
                 break;
             case "PipePlayer":
                 if (m_bCursorHidden) ShowCursor();
-                (bool, RaycastHit) mouseHitInWorld = GetMouseHitInWorld(m_PipePlayerCharacter.HitLayer);
-                m_PipeCharacterInput.MouseHitInWorld = mouseHitInWorld;
+                m_PipeMouseInfo.MouseScreenPosition = GetMousePositionOnScreen();
+                GetMouseInfo(ref m_PipeMouseInfo, m_PipePlayerCharacter.HitLayer);
+                m_PipeCharacterInput.PipeMouseInfo = m_PipeMouseInfo;
                 m_PipePlayerCharacter.UpdatePipeCharacter(ref m_PipeCharacterInput);
                 break;
             default:
@@ -103,12 +115,18 @@ public class Player : MonoBehaviour
     }
     #endregion
 
-    public (bool bSuccessful, RaycastHit hitInfo) GetMouseHitInWorld(LayerMask layerToHit, float maxDistance = 100f)
+    public Vector3 GetMousePositionOnScreen()
     {
-        Vector3 mousePos = Mouse.current.position.value;
-        mousePos.z = m_Camera.nearClipPlane;
-        Ray ray = m_Camera.ScreenPointToRay(mousePos);
-        return (Physics.Raycast(ray, out RaycastHit hit, maxDistance, layerToHit), hit);
+        Vector3 pos = Mouse.current.position.value;
+        pos.z = m_Camera.nearClipPlane;
+        return pos;
+    }
+
+    public void GetMouseInfo(ref MouseInfo mouseInfo, LayerMask layerToHit, float maxDistance = 100f)
+    {
+        Ray ray = m_Camera.ScreenPointToRay(mouseInfo.MouseScreenPosition);
+        mouseInfo.bHitObject = Physics.Raycast(ray, out RaycastHit hit, maxDistance, layerToHit);
+        if (mouseInfo.bHitObject) mouseInfo.HitInfo = hit;
     }
 
     #region Handle PlayerInput Events

@@ -49,6 +49,7 @@ MonoBehaviour:
   <HitLayer>k__BackingField:
     serializedVersion: 2
     m_Bits: 8
+  m_CellIndicatorPrefab: {fileID: 787134959866969004, guid: 0df069d1b4529854abc6c7337b28050d, type: 3}
 --- !u!1 &1907176602637222017
 GameObject:
   m_ObjectHideFlags: 0
@@ -365,7 +366,7 @@ MonoBehaviour:
     m_ActionName: 'PipePlayer/Click[/Mouse/leftButton]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
-  m_DefaultActionMap: PipePlayer
+  m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
 --- !u!114 &476227618167522471

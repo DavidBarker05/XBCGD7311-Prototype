@@ -3,7 +3,7 @@ using UnityEngine;
 public struct PipeCharacterInput
 {
     public bool bClickedThisFrame;
-    public (bool bSuccessful, RaycastHit hitInfo) MouseHitInWorld;
+    public MouseInfo PipeMouseInfo;
 }
 
 public class PipePlayerCharacter : MonoBehaviour
@@ -12,19 +12,24 @@ public class PipePlayerCharacter : MonoBehaviour
     public Transform CameraTarget { get; private set; }
     [field: SerializeField]
     public LayerMask HitLayer { get; private set; }
+    [SerializeField]
+    GameObject m_CellIndicatorPrefab;
+
+    GameObject m_CellIndicator;
+
+    public void Init() => m_CellIndicator = Instantiate(m_CellIndicatorPrefab);
 
     public void UpdatePipeCharacter(ref PipeCharacterInput input)
     {
-        if (input.MouseHitInWorld.bSuccessful)
+        if (input.PipeMouseInfo.bHitObject)
         {
-            if (!input.bClickedThisFrame) return;
-            RaycastHit hit = input.MouseHitInWorld.hitInfo;
-            Color colour = input.bClickedThisFrame ? Color.red : Color.green;
+            RaycastHit hit = input.PipeMouseInfo.HitInfo;
             Grid grid = hit.collider.gameObject.GetComponent<Grid>();
             if (!grid) return;
             Vector3Int lp = grid.WorldToCell(hit.point);
             Vector3 wp = grid.CellToWorld(lp);
-            Debug.DrawRay(wp, hit.normal, colour, 5f);
+            m_CellIndicator.transform.position = wp;
+            m_CellIndicator.transform.up = hit.normal;
         }
         input.bClickedThisFrame = false;
     }

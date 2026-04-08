@@ -1,10 +1,10 @@
-Shader "Custom/GridShader"
+Shader "Custom/CellIndicatorShader"
 {
     Properties
     {
         [MainColor] _LineColour("Line Colour", Color) = (1, 1, 1, 1)
-        _LineThickness("Line Thickness", Float) = 0.1
-        _CellSize("Cell Size", Vector, 3) = (1, 1, 1, 0)
+        _LineThickness("Line Thickness", Float) = 0.2
+        _DefaultSize("Default Size", Vector, 3) = (10, 0, 10)
     }
 
     SubShader
@@ -43,8 +43,7 @@ Shader "Custom/GridShader"
             CBUFFER_START(UnityPerMaterial)
                 float4 _LineColour;
                 float _LineThickness;
-                float3 _CellSize;
-                float3 _Tiling;
+                float3 _DefaultSize;
             CBUFFER_END
 
             Varyings vert(Attributes IN)
@@ -57,29 +56,30 @@ Shader "Custom/GridShader"
                 return OUT;
             }
 
-            float GridLine(float axis, float axisSize, float axisScale)
+            float Edge(float axis, float axisSize, float axisScale)
             {
                 if (axisSize == 0 || axisScale == 0) return 1;
-                float scaledLineThickness = _LineThickness / axisScale;
-                float scaledAxisSize = axisSize / axisScale;
+                float halfSize = axisSize / 2;
+                float scaledHalfSize = halfSize * axisScale;
+                float scaledLineThickness = _LineThickness / scaledHalfSize;
                 float a = abs(axis);
-                float a1 = abs(a + scaledLineThickness / 2);
-                float a2 = a1 % scaledAxisSize;
+                float a1 = a / halfSize;
+                float a2 = 1 - a1;
                 return smoothstep(a2, scaledLineThickness, 0);
             }
 
-            float Grid(float4 positionOS, float3 scale)
+            float Edges(float4 positionOS, float3 scale)
             {
-                float x = GridLine(positionOS.x, _CellSize.x, scale.x);
-                float y = GridLine(positionOS.y, _CellSize.y, scale.y);
-                float z = GridLine(positionOS.z, _CellSize.z, scale.z);
+                float x = Edge(positionOS.x, _DefaultSize.x, scale.x);
+                float y = Edge(positionOS.y, _DefaultSize.y, scale.y);
+                float z = Edge(positionOS.z, _DefaultSize.z, scale.z);
                 return 1 - (x * y * z);
             }
 
             float4 frag(Varyings IN) : SV_Target
             {
                 float4 colour = _LineColour;
-                colour.a *= Grid(IN.positionOS, IN.scale);
+                colour.a *= Edges(IN.positionOS, IN.scale);
                 return colour;
             }
             ENDHLSL
