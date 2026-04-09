@@ -55,6 +55,26 @@ public class PipeGrid : MonoBehaviour
         }
     }
 
+    public (int x, int y) GetIndexOf(Pipe pipe)
+    {
+        for (int x = 0; x < m_PipeCells.GetLength(0); ++x)
+        {
+            for (int y = 0; y < m_PipeCells.GetLength(1); ++y)
+            {
+                if (m_PipeCells[x, y] == pipe) return (x, y);
+            }
+        }
+        return (-1, -1);
+    }
+
+    public Pipe GetPipe(int x, int y) => m_PipeCells[x, y];
+
+    public Pipe GetPipe(Vector3Int cellPosition)
+    {
+        (int x, int y) = CellPositionToArrayIndex2D(cellPosition);
+        return GetPipe(x, y);
+    }
+
     public int CellPosAxisToArrayIndex(int cellPosAxis, int gridSizeAxis) => cellPosAxis + Mathf.CeilToInt(gridSizeAxis / 2f);
 
     public int ArrayIndexToCellPosAxis(int index, int gridSizeAxis) => index - Mathf.CeilToInt(gridSizeAxis / 2f);
@@ -87,6 +107,73 @@ public class PipeGrid : MonoBehaviour
         {
             (int x, int y) = CellPositionToArrayIndex2D(cellPosition);
             return CellIsEmpty(x, y);
+        }
+        catch (System.Exception e) { throw e; }
+    }
+
+    (int x, int y) IndexOfCellOnSide(PipeSide side, int x, int y) => side switch
+    {
+        PipeSide.Left => (x - 1, y),
+        PipeSide.Top => (x, y + 1),
+        PipeSide.Right => (x + 1, y),
+        PipeSide.Bottom => (x, y - 1),
+        _ => throw new System.ArgumentException("Somehow you input a side that doesn't exist")
+    };
+
+    public (bool bIsValid, int x, int y) SafeIndexOfCellOnSide(PipeSide side, int x, int y)
+    {
+        try
+        {
+            bool bIsValid = true;
+            (int oX, int oY) = IndexOfCellOnSide(side, x, y);
+            if (oX < 0 || oX >= m_PipeCells.GetLength(0) || oY < 0 || oY >= m_PipeCells.GetLength(1))
+            {
+                bIsValid = false;
+                oX = -1;
+                oY = -1;
+            }
+            return (bIsValid, oX, oY);
+        }
+        catch (System.Exception e) { throw e; }
+    }
+
+    bool InternalPipeOpenOnSide(PipeSide side, Pipe pipe, int x, int y)
+    {
+        try
+        {
+            (bool bSideValid, int rX, int rY) = SafeIndexOfCellOnSide(side, x, y);
+            Pipe sidePipe = m_PipeCells[rX, rY];
+            return pipe.CurrentOrientation.HasHole(side) && bSideValid && sidePipe.CurrentPipeSO != m_EmptyPipe;
+        }
+        catch (System.Exception e) { throw e; }
+    }
+
+    public bool PipeOpenOnSide(PipeSide side, Pipe pipe)
+    {
+        try
+        {
+            (int x, int y) = GetIndexOf(pipe);
+            return InternalPipeOpenOnSide(side, pipe, x, y);
+        }
+        catch (System.Exception e) { throw e; }
+    }
+
+    public bool PipeOpenOnSide(PipeSide side, int x, int y)
+    {
+        try
+        {
+            Pipe pipe = m_PipeCells[x, y];
+            return InternalPipeOpenOnSide(side, pipe, x, y);
+        }
+        catch (System.Exception e) { throw e; }
+    }
+
+    public bool PipeOpenOnSide(PipeSide side, Vector3Int cellPos)
+    {
+        try
+        {
+            (int x, int y) = CellPositionToArrayIndex2D(cellPos);
+            return PipeOpenOnSide(side, x, y);
         }
         catch (System.Exception e) { throw e; }
     }

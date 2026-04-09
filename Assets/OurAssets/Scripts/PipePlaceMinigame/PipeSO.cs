@@ -1,6 +1,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum PipeSide
+{
+    Left,
+    Top,
+    Right,
+    Bottom
+}
+
 [System.Serializable]
 public enum PipeRotationAngle
 {
@@ -50,6 +58,15 @@ public struct PipeOrientation
         HasRightHole = bRight;
         HasBottomHole = bBottom;
     }
+
+    public bool HasHole(PipeSide side) => side switch
+    {
+        PipeSide.Left => HasLeftHole,
+        PipeSide.Top => HasTopHole,
+        PipeSide.Right => HasRightHole,
+        PipeSide.Bottom => HasBottomHole,
+        _ => throw new System.ArgumentException("Somehow you input a side that doesn't exist")
+    };
 
     public PipeOrientation NextRightOrientation()
     {
