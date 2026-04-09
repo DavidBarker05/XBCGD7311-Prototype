@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(PlaneGridGenerator), typeof(Grid))]
@@ -137,6 +138,26 @@ public class PipeGrid : MonoBehaviour
         catch (System.Exception e) { throw e; }
     }
 
+    public (bool bIsValid, int x, int y) SafeIndexOfCellOnSide(PipeSide side, Vector3Int cellPos)
+    {
+        try
+        {
+            (int x, int y) = CellPositionToArrayIndex2D(cellPos);
+            return SafeIndexOfCellOnSide(side, x, y);
+        }
+        catch (System.Exception e) { throw e; }
+    }
+
+    public (bool bIsValid, int x, int y) SafeIndexOfCellOnSide(PipeSide side, Pipe pipe)
+    {
+        try
+        {
+            (int x, int y) = GetIndexOf(pipe);
+            return SafeIndexOfCellOnSide(side, x, y);
+        }
+        catch (System.Exception e) { throw e; }
+    }
+
     bool InternalPipeOpenOnSide(PipeSide side, Pipe pipe, int x, int y)
     {
         try
@@ -177,4 +198,62 @@ public class PipeGrid : MonoBehaviour
         }
         catch (System.Exception e) { throw e; }
     }
+
+    #region Pipe Flow
+    void AddPipeIfAdjacent(ref List<Pipe> pipes, PipeSide side, ref Pipe pipe)
+    {
+        if (!PipeOpenOnSide(side, pipe)) return;
+        (bool bIsValid, int x, int y) = SafeIndexOfCellOnSide(side, pipe);
+        if (!bIsValid) return;
+        Pipe adjacent = m_PipeCells[x, y];
+        pipes.Add(adjacent);
+    }
+
+    public void AddAdjacentPipes(ref List<Pipe> pipes, ref Pipe pipe)
+    {
+        AddPipeIfAdjacent(ref pipes, PipeSide.Left, ref pipe);
+        AddPipeIfAdjacent(ref pipes, PipeSide.Top, ref pipe);
+        AddPipeIfAdjacent(ref pipes, PipeSide.Right, ref pipe);
+        AddPipeIfAdjacent(ref pipes, PipeSide.Bottom, ref pipe);
+    }
+
+    List<Pipe> BreadthFirstSearch(Pipe start, Pipe end)
+    {
+        HashSet<Pipe> searched = new HashSet<Pipe>();
+        Queue<Pipe> toSearch = new Queue<Pipe>();
+        Dictionary<Pipe, Pipe> previousPipes = new Dictionary<Pipe, Pipe>();
+        searched.Add(start);
+        toSearch.Enqueue(start);
+        previousPipes.Add(start, null);
+        while (toSearch.Count > 0)
+        {
+            Pipe front = toSearch.Dequeue();
+            if (front == end)
+            {
+                List<Pipe> shortestPath = new List<Pipe>();
+                Pipe current = end;
+                while (current != null)
+                {
+                    shortestPath.Insert(0, current);
+                    current = previousPipes[current];
+                }
+                return shortestPath;
+            }
+            List<Pipe> adjacentPipes = new List<Pipe>();
+            AddAdjacentPipes(ref adjacentPipes, ref front);
+            foreach (Pipe adjacent in adjacentPipes)
+            {
+                if (!searched.Contains(adjacent))
+                {
+                    searched.Add(adjacent);
+                    toSearch.Enqueue(adjacent);
+                    previousPipes.Add(adjacent, front);
+                }
+            }
+        }
+        return null;
+    }
+
+    public List<Pipe> FindPath(Pipe start, Pipe end) => BreadthFirstSearch(start, end);
+    #endregion
 }
