@@ -7,7 +7,7 @@ public class GridResizer : MonoBehaviour
     Vector3 m_DefaultCellSize;
     Vector3 lastScale;
 
-    void Awake()
+    void OnEnable()
     {
         m_Grid = GetComponent<Grid>();
         m_DefaultCellSize = m_Grid.cellSize;

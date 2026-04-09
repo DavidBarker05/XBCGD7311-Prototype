@@ -26,11 +26,18 @@ public class PipePlayerCharacter : MonoBehaviour
             RaycastHit hit = input.PipeMouseInfo.HitInfo;
             Grid grid = hit.collider.gameObject.GetComponent<Grid>();
             if (!grid) return;
-            Vector3Int lp = grid.WorldToCell(hit.point);
-            Vector3 wp = grid.CellToWorld(lp);
-            m_CellIndicator.transform.position = wp;
-            m_CellIndicator.transform.up = hit.normal;
+            Vector3Int cp = grid.WorldToCell(hit.point);
+            MoveCellIndicator(ref grid, cp, hit.normal);
+            PipeGrid pipeGrid = hit.collider.gameObject.GetComponent<PipeGrid>();
+            if (!pipeGrid) return;
         }
         input.bClickedThisFrame = false;
+    }
+
+    void MoveCellIndicator(ref Grid grid, Vector3Int cellPosition, Vector3 up)
+    {
+        Vector3 worldPosition = grid.CellToWorld(cellPosition);
+        m_CellIndicator.transform.position = worldPosition;
+        m_CellIndicator.transform.up = up;
     }
 }

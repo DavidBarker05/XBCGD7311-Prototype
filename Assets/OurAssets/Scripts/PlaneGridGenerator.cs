@@ -27,13 +27,13 @@ public class PlaneGridGenerator : MonoBehaviour
         Resize();
     }
 
-    void Awake()
+    void OnEnable()
     {
         m_GridSize = EnsureMinSize(m_GridSize);
         Resize();
     }
 
-    Vector2Int EnsureMinSize(Vector2Int value) => Vector2Int.Max(MIN, value); 
+    Vector2Int EnsureMinSize(Vector2Int value) => Vector2Int.Max(MIN, value);
 
     void Resize()
     {

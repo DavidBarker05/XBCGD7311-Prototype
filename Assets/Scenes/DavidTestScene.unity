@@ -190,6 +190,7 @@ GameObject:
   m_Component:
   - component: {fileID: 253860354}
   - component: {fileID: 253860357}
+  - component: {fileID: 253860358}
   - component: {fileID: 253860353}
   - component: {fileID: 253860352}
   - component: {fileID: 253860351}
@@ -333,6 +334,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlaneGridGenerator
   m_GridSize: {x: 10, y: 10}
+--- !u!114 &253860358
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 253860350}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9481c5fb4605f24abaa94d2081045cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PipeGrid
+  m_PipePrefab: {fileID: 1824637721083445770, guid: 91333e14356cc364db0f33c98f622e05, type: 3}
+  m_EmptyPipe: {fileID: 11400000, guid: e88076bfc8f42e34c9e6873dae1c6aa5, type: 2}
 --- !u!1 &391418953
 GameObject:
   m_ObjectHideFlags: 0
