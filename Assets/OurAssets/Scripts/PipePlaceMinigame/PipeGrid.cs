@@ -24,6 +24,7 @@ public class PipeGrid : MonoBehaviour
 
     void OnDisable() => DeletePipes(ref m_PipeCells);
 
+    #region Delete & Init
     void DeletePipes(ref Pipe[,] pipeCells)
     {
         for (int x = pipeCells.GetLength(0) - 1; x >= 0; --x)
@@ -55,7 +56,9 @@ public class PipeGrid : MonoBehaviour
             }
         }
     }
+    #endregion
 
+    #region GetIndex & GetPipe
     public (int x, int y) GetIndexOf(Pipe pipe)
     {
         for (int x = 0; x < m_PipeCells.GetLength(0); ++x)
@@ -68,6 +71,7 @@ public class PipeGrid : MonoBehaviour
         return (-1, -1);
     }
 
+    #region GetPipe
     public Pipe GetPipe(int x, int y) => m_PipeCells[x, y];
 
     public Pipe GetPipe(Vector3Int cellPosition)
@@ -75,7 +79,10 @@ public class PipeGrid : MonoBehaviour
         (int x, int y) = CellPositionToArrayIndex2D(cellPosition);
         return GetPipe(x, y);
     }
+    #endregion
+    #endregion
 
+    #region CellPos & Index Conversion
     public int CellPosAxisToArrayIndex(int cellPosAxis, int gridSizeAxis) => cellPosAxis + Mathf.CeilToInt(gridSizeAxis / 2f);
 
     public int ArrayIndexToCellPosAxis(int index, int gridSizeAxis) => index - Mathf.CeilToInt(gridSizeAxis / 2f);
@@ -94,7 +101,9 @@ public class PipeGrid : MonoBehaviour
         pos.z = ArrayIndexToCellPosAxis(y, Size.y);
         return pos;
     }
+    #endregion
 
+    #region CellIsEmpty
     public bool CellIsEmpty(int x, int y)
     {
         if (x < m_PipeCells.GetLength(0) && y < m_PipeCells.GetLength(1))
@@ -111,7 +120,9 @@ public class PipeGrid : MonoBehaviour
         }
         catch (System.Exception e) { throw e; }
     }
+    #endregion
 
+    #region IndexofCellOnSide
     (int x, int y) IndexOfCellOnSide(PipeSide side, int x, int y) => side switch
     {
         PipeSide.Left => (x - 1, y),
@@ -121,6 +132,7 @@ public class PipeGrid : MonoBehaviour
         _ => throw new System.ArgumentException("Somehow you input a side that doesn't exist")
     };
 
+    #region SafeIndexOfCellOnSide
     public (bool bIsValid, int x, int y) SafeIndexOfCellOnSide(PipeSide side, int x, int y)
     {
         try
@@ -157,7 +169,10 @@ public class PipeGrid : MonoBehaviour
         }
         catch (System.Exception e) { throw e; }
     }
+    #endregion
+    #endregion
 
+    #region PipeOpenOnSide
     bool InternalPipeOpenOnSide(PipeSide side, Pipe pipe, int x, int y)
     {
         try
@@ -198,6 +213,7 @@ public class PipeGrid : MonoBehaviour
         }
         catch (System.Exception e) { throw e; }
     }
+    #endregion
 
     #region Pipe Flow
     void AddPipeIfAdjacent(ref List<Pipe> pipes, PipeSide side, ref Pipe pipe)
