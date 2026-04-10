@@ -208,7 +208,6 @@ Shader "Custom/ToonShader"
                 float3 tint = 0;
                 Light mainLight = MainLight(positionHCS, inputData.positionWS);
                 float3 mainTint = ToonTintShadow(mainLight, inputData);
-                //return mainTint;
                 AccumulateTint(tint, mainTint);
                 #if defined(_ADDITIONAL_LIGHTS)
                     AdditionalLightLoop(tint, inputData);
