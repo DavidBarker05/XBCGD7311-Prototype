@@ -73,7 +73,7 @@ Shader "Custom/GridShader"
                 float x = GridLine(positionOS.x, _CellSize.x, scale.x);
                 float y = GridLine(positionOS.y, _CellSize.y, scale.y);
                 float z = GridLine(positionOS.z, _CellSize.z, scale.z);
-                return 1 - (x * y * z);
+                return Inverse(x * y * z);
             }
 
             float4 frag(Varyings IN) : SV_Target
