@@ -59,7 +59,7 @@ Shader "Custom/ToonShader"
                 float4 positionOS : POSITION;
                 float3 normalOS : NORMAL;
                 float2 uv : TEXCOORD0;
-                float4 texcoord1: TEXCOORD1;
+                float4 lightingData: TEXCOORD1;
             };
 
             struct Varyings
@@ -100,7 +100,7 @@ Shader "Custom/ToonShader"
                 OUT.normalWS = TransformObjectToWorldNormal(IN.normalOS);
                 OUT.uv = TRANSFORM_TEX(IN.uv, _BaseMap);
                 OUT.positionWS = TransformObjectToWorld(IN.positionOS.xyz);
-                OUTPUT_LIGHTMAP_UV(IN.texcoord1, unity_LightmapST, OUT.lightmapUV);
+                OUTPUT_LIGHTMAP_UV(IN.lightingData, unity_LightmapST, OUT.lightmapUV);
                 OUTPUT_SH(OUT.normalWS, OUT.vertexSH);
                 return OUT;
             }
@@ -158,29 +158,15 @@ Shader "Custom/ToonShader"
                 return _ToonRimTint * rimIntensity;
             }
 
-            float3 ToonTintNoShadow(Light light)
-            {
-                return light.color * light.distanceAttenuation;
-            }
-
-            float3 ToonTintShadow(Light light, InputData inputData)
+            float3 ToonTintSingle(Light light, InputData inputData)
             {
                 if (Float3Compare(light.color, 0)) return 0;
-                float NdotL = dot(normalize(light.direction), inputData.normalWS);
+                float NdotL = dot(inputData.normalWS, normalize(light.direction));
                 float lightIntensity = LightIntensity(light, NdotL);
                 float3 lightTint = light.color * lightIntensity;
                 float3 specularTint = SpecularTint(light, lightIntensity, inputData);
                 float3 rimTint = RimTint(inputData, NdotL);
                 return lightTint + specularTint + rimTint;
-            }
-
-            float3 AdditionalLight(Light light, InputData inputData)
-            {
-                #if defined(_ADDITIONAL_LIGHT_SHADOWS)
-                    return ToonTintShadow(light, inputData);
-                #else
-                    return ToonTintNoShadow(light);
-                #endif
             }
             
             float3 AdditionalLightLoop(InputData inputData)
@@ -190,13 +176,13 @@ Shader "Custom/ToonShader"
                     UNITY_LOOP for (uint lightIndex = 0; lightIndex < min(URP_FP_DIRECTIONAL_LIGHTS_COUNT, MAX_VISIBLE_LIGHTS); ++lightIndex)
                     {
                         Light light = GetAdditionalLight(lightIndex, inputData.positionWS, inputData.shadowMask);
-                        additionalTint += AdditionalLight(light, inputData);
+                        additionalTint += ToonTintSingle(light, inputData);
                     }
                 #endif
                 uint pixelLightCount = GetAdditionalLightsCount();
                 LIGHT_LOOP_BEGIN(pixelLightCount)
                     Light light = GetAdditionalLight(lightIndex, inputData.positionWS, inputData.shadowMask);
-                    additionalTint += AdditionalLight(light, inputData);
+                    additionalTint += ToonTintSingle(light, inputData);
                 LIGHT_LOOP_END
                 return additionalTint;
             }
@@ -205,13 +191,7 @@ Shader "Custom/ToonShader"
             {
                 float3 tint = _ToonShadowTint;
                 Light mainLight = MainLight(positionHCS, inputData.positionWS);
-                float3 mainTint;
-                #if defined(_MAIN_LIGHT_SHADOWS_CASCADE) || defined(_MAIN_LIGHT_SHADOWS)
-                    mainTint = ToonTintShadow(mainLight, inputData);
-                #else
-                    mainTint = ToonTintNoShadow(mainLight);
-                #endif
-                tint += mainTint;
+                tint += ToonTintSingle(mainLight, inputData);
                 #if defined(_ADDITIONAL_LIGHTS)
                     tint += AdditionalLightLoop(inputData);
                 #endif
@@ -259,12 +239,25 @@ Shader "Custom/ToonShader"
             {
                 float4 positionOS : POSITION;
                 float3 normalOS : NORMAL;
+                float2 uv : TEXCOORD0;
             };
 
             struct Varyings
             {
                 float4 positionHCS : SV_POSITION;
+                float2 uv : TEXCOORD0;
             };
+
+            TEXTURE2D(_BaseMap);
+            SAMPLER(sampler_BaseMap);
+
+            CBUFFER_START(UnityPerMaterial)
+                bool _AlphaClipping;
+                float _AlphaClippingThreshold;
+
+                float4 _BaseColor;
+                float4 _BaseMap_ST;
+            CBUFFER_END
 
             float3 _LightDirection;
 
@@ -282,11 +275,14 @@ Shader "Custom/ToonShader"
                 Varyings OUT;
                 ZERO_INITIALIZE(Varyings, OUT);
                 OUT.positionHCS = GetShadowPositionHClip(IN);
+                OUT.uv = TRANSFORM_TEX(IN.uv, _BaseMap);
                 return OUT;
             }
 
             float4 frag(Varyings IN) : SV_Target
             {
+                float4 colour = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, IN.uv) * _BaseColor;
+                if (_AlphaClipping) clip(colour.a - _AlphaClippingThreshold);
                 return 0;
             }
             ENDHLSL
@@ -313,23 +309,39 @@ Shader "Custom/ToonShader"
             struct Attributes
             {
                 float4 positionOS : POSITION;
+                float2 uv : TEXCOORD0;
             };
 
             struct Varyings
             {
                 float4 positionHCS : SV_POSITION;
+                float2 uv : TEXCOORD0;
             };
+
+            TEXTURE2D(_BaseMap);
+            SAMPLER(sampler_BaseMap);
+
+            CBUFFER_START(UnityPerMaterial)
+                bool _AlphaClipping;
+                float _AlphaClippingThreshold;
+
+                float4 _BaseColor;
+                float4 _BaseMap_ST;
+            CBUFFER_END
 
             Varyings vert(Attributes IN)
             {
                 Varyings OUT;
                 ZERO_INITIALIZE(Varyings, OUT);
                 OUT.positionHCS = TransformObjectToHClip(IN.positionOS.xyz);
+                OUT.uv = TRANSFORM_TEX(IN.uv, _BaseMap);
                 return OUT;
             }
 
             float frag(Varyings IN) : SV_Target
             {
+                float4 colour = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, IN.uv) * _BaseColor;
+                if (_AlphaClipping) clip(colour.a - _AlphaClippingThreshold);
                 return IN.positionHCS.z;
             }
             ENDHLSL
@@ -356,13 +368,26 @@ Shader "Custom/ToonShader"
             {
                 float4 positionOS : POSITION;
                 float3 normalOS : NORMAL;
+                float2 uv : TEXCOORD0;
             };
 
             struct Varyings
             {
                 float4 positionHCS : SV_POSITION;
                 float3 normalWS : NORMAL;
+                float2 uv : TEXCOORD0;
             };
+
+            TEXTURE2D(_BaseMap);
+            SAMPLER(sampler_BaseMap);
+
+            CBUFFER_START(UnityPerMaterial)
+                bool _AlphaClipping;
+                float _AlphaClippingThreshold;
+
+                float4 _BaseColor;
+                float4 _BaseMap_ST;
+            CBUFFER_END
 
             Varyings vert(Attributes IN)
             {
@@ -370,11 +395,14 @@ Shader "Custom/ToonShader"
                 ZERO_INITIALIZE(Varyings, OUT);
                 OUT.positionHCS = TransformObjectToHClip(IN.positionOS.xyz);
                 OUT.normalWS = TransformObjectToWorldNormal(IN.normalOS);
+                OUT.uv = TRANSFORM_TEX(IN.uv, _BaseMap);
                 return OUT;
             }
 
             float4 frag(Varyings IN) : SV_Target
             {
+                float4 colour = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, IN.uv) * _BaseColor;
+                if (_AlphaClipping) clip(colour.a - _AlphaClippingThreshold);
                 float3 normalWS = NormalizeNormalPerPixel(IN.normalWS);
                 return float4(normalWS, 1);
             }
