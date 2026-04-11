@@ -2,13 +2,12 @@ Shader "Custom/ToonShader"
 {
     Properties
     {
-        [MainColor] _BaseColour("Base Colour", Color) = (1, 1, 1, 1)
-        [MainTexture] _BaseTexture("Base Texture", 2D) = "white" {}
-        _LightColourInfluence("Light Colour Influence", Range(0, 1)) = 1
+        [MainColor] _BaseColor("Base Color", Color) = (1, 1, 1, 1)
+        [MainTexture] _BaseMap("Base Map", 2D) = "white" {}
         _ToonShadowTint("Toon Shadow Tint", Color) = (0.4, 0.4, 0.4)
         _ToonShadowSmoothness("Toon Shadow Smoothness", Range(0, 1)) = 0.01
         _ToonSpecularTint("Toon Specular Tint", Color) = (0.9, 0.9, 0.9)
-        _Glossiness("Glossiness", Range(0, 1)) = 0
+        _ToonGlossiness("Toon Glossiness", Range(0, 1)) = 0
         _ToonRimTint("Toon Rim Tint", Color) = (1, 1, 1)
         _ToonRimAmount("Toon Rim Amount", Range(0, 1)) = 0.716
         _ToonRimThreshold("Toon Rim Threshold", Range(0, 1)) = 0.1
@@ -31,14 +30,16 @@ Shader "Custom/ToonShader"
                 "LightMode" = "UniversalForward"
             }
 
+            ZWrite On
+
             HLSLPROGRAM
 
             #pragma vertex vert
             #pragma fragment frag
             #pragma multi_compile _ _CLUSTER_LIGHT_LOOP
-            #pragma multi_compile_fragment _ _SHADOWS_SOFT
+            #pragma multi_compile_fragment _ _SHADOWS_SOFT _SHADOWS_SOFT_LOW _SHADOWS_SOFT_MEDIUM _SHADOWS_SOFT_HIGH
             #pragma multi_compile_fragment _ _MAIN_LIGHT_SHADOWS _MAIN_LIGHT_SHADOWS_CASCADE _MAIN_LIGHT_SHADOWS_SCREEN
-            #pragma multi_compile_fragment _ _ADDITIONAL_LIGHT_SHADOWS
+            #pragma multi_compile_fragment _ _ADDITIONAL_LIGHT_SHADOWS _ADDITIONAL_LIGHT_SHADOWS_CASCADE _ADDITIONAL_LIGHT_SHADOWS_SCREEN
 
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
@@ -47,29 +48,30 @@ Shader "Custom/ToonShader"
             struct Attributes
             {
                 float4 positionOS : POSITION;
-                float2 uv : TEXCOORD0;
                 float3 normalOS : NORMAL;
+                float2 uv : TEXCOORD0;
+                float4 texcoord1: TEXCOORD1;
             };
 
             struct Varyings
             {
                 float4 positionHCS : SV_POSITION;
+                float3 normalWS : NORMAL;
                 float2 uv : TEXCOORD0;
                 float3 positionWS : TEXCOORD1;
-                float3 normalWS : NORMAL;
+                DECLARE_LIGHTMAP_OR_SH(lightmapUV, vertexSH, 2);
             };
 
-            TEXTURE2D(_BaseTexture);
-            SAMPLER(sampler_BaseTexture);
+            TEXTURE2D(_BaseMap);
+            SAMPLER(sampler_BaseMap);
 
             CBUFFER_START(UnityPerMaterial)
-                float4 _BaseColour;
-                float4 _BaseTexture_ST;
-                float _LightColourInfluence;
+                float4 _BaseColor;
+                float4 _BaseMap_ST;
                 float3 _ToonShadowTint;
                 float _ToonShadowSmoothness;
                 float3 _ToonSpecularTint;
-                float _Glossiness;
+                float _ToonGlossiness;
                 float3 _ToonRimTint;
                 float _ToonRimAmount;
                 float _ToonRimThreshold;
@@ -80,9 +82,11 @@ Shader "Custom/ToonShader"
                 Varyings OUT;
                 ZERO_INITIALIZE(Varyings, OUT);
                 OUT.positionHCS = TransformObjectToHClip(IN.positionOS.xyz);
-                OUT.uv = TRANSFORM_TEX(IN.uv, _BaseTexture);
-                OUT.positionWS = TransformObjectToWorld(IN.positionOS.xyz);
                 OUT.normalWS = TransformObjectToWorldNormal(IN.normalOS);
+                OUT.uv = TRANSFORM_TEX(IN.uv, _BaseMap);
+                OUT.positionWS = TransformObjectToWorld(IN.positionOS.xyz);
+                OUTPUT_LIGHTMAP_UV(IN.texcoord1, unity_LightmapST, OUT.lightmapUV);
+                OUTPUT_SH(OUT.normalWS, OUT.vertexSH);
                 return OUT;
             }
 
@@ -105,18 +109,12 @@ Shader "Custom/ToonShader"
 
             float Glossiness()
             {
-                float gloss = 100 * _Glossiness;
-                return gloss * gloss;
-            }
-
-            float3 LightColour(Light light)
-            {
-                return lerp(1, light.color, _LightColourInfluence);
+                return exp2(10 * _ToonGlossiness + 1);
             }
 
             float Shadow (Light light)
             {
-                return light.distanceAttenuation * light.distanceAttenuation * light.shadowAttenuation;
+                return light.distanceAttenuation * light.shadowAttenuation;
             }
 
             float LightIntensity(Light light, float NdotL)
@@ -125,105 +123,97 @@ Shader "Custom/ToonShader"
                 return smoothstep(0, _ToonShadowSmoothness, NdotL * shadow);
             }
 
-            float3 LightTint(Light light, float lightIntensity)
-            {
-                return LightColour(light) * lightIntensity;
-            }
-
             float3 SpecularTint(Light light, float lightIntensity, InputData inputData)
             {
                 float3 halfVector = normalize(light.direction + inputData.viewDirectionWS);
                 float NdotH = dot(inputData.normalWS, halfVector);
-                float smoothSpecularIntensity = 0;
-                if (_Glossiness > 0)
-                {
-                    float specularIntensity = pow(saturate(NdotH * lightIntensity), Glossiness());
-                    smoothSpecularIntensity = smoothstep(0, 0.01, specularIntensity);
-                }
+                float specularIntensity = pow(saturate(NdotH * lightIntensity), Glossiness());
+                float smoothSpecularIntensity = smoothstep(0, 0.01, specularIntensity);
                 return _ToonSpecularTint * smoothSpecularIntensity;
             }
 
             float3 RimTint(InputData inputData, float NdotL)
             {
                 if (_ToonRimAmount == 0) return 0;
-                float rimDot = Inverse(dot(inputData.viewDirectionWS, inputData.normalWS));
-                float invToonRimThreshold = Inverse(_ToonRimThreshold);
+                float rimDot = 1 - dot(inputData.viewDirectionWS, inputData.normalWS);
+                float invToonRimThreshold = 1 - _ToonRimThreshold;
                 float rimStep = rimDot * pow(saturate(NdotL), invToonRimThreshold);
-                float invToonRimAmount = Inverse(_ToonRimAmount);
+                float invToonRimAmount = 1 - _ToonRimAmount;
                 float rimIntensity = smoothstep(invToonRimAmount - 0.01, invToonRimAmount + 0.01, rimStep);
                 return _ToonRimTint * rimIntensity;
             }
 
             float3 ToonTintNoShadow(Light light)
             {
-                return 0;
-                float3 lightColour = LightColour(light);
-                return lightColour * light.distanceAttenuation * light.distanceAttenuation;
+                return light.color * light.distanceAttenuation;
             }
 
             float3 ToonTintShadow(Light light, InputData inputData)
             {
-                float NdotL = dot(light.direction, inputData.normalWS);
+                if (Float3Compare(light.color, 0)) return 0;
+                float NdotL = dot(normalize(light.direction), inputData.normalWS);
                 float lightIntensity = LightIntensity(light, NdotL);
-                float3 lightTint = LightTint(light, lightIntensity);
+                float3 lightTint = light.color * lightIntensity;
                 float3 specularTint = SpecularTint(light, lightIntensity, inputData);
                 float3 rimTint = RimTint(inputData, NdotL);
-                return _ToonShadowTint + lightTint + specularTint + rimTint;
+                return lightTint + specularTint + rimTint;
             }
 
-            void AccumulateTint(inout float3 tint, float3 tintToAdd)
+            float3 AdditionalLight(Light light, InputData inputData)
             {
-                tint += tintToAdd;
-            }
-
-            void AdditionalLight(inout float3 tint, uint index, InputData inputData)
-            {
-                half4 aoFactor = half4(1, 1, 1, 1);
-                Light light = GetAdditionalLight(index, inputData.positionWS, aoFactor);
-                float3 additionalTint;
                 #if defined(_ADDITIONAL_LIGHT_SHADOWS)
-                    additionalTint = ToonTintShadow(light, inputData);
+                    return ToonTintShadow(light, inputData);
                 #else
-                    additionalTint = ToonTintNoShadow(light);
+                    return ToonTintNoShadow(light);
                 #endif
-                AccumulateTint(tint, additionalTint);
             }
             
-            void AdditionalLightLoop(inout float3 tint, InputData inputData)
+            float3 AdditionalLightLoop(InputData inputData)
             {
+                float3 additionalTint = 0;
                 #if USE_CLUSTER_LIGHT_LOOP
-                    UNITY_LOOP for (uint i = 0; i < min(URP_FP_DIRECTIONAL_LIGHTS_COUNT, MAX_VISIBLE_LIGHTS); ++i)
+                    UNITY_LOOP for (uint lightIndex = 0; lightIndex < min(URP_FP_DIRECTIONAL_LIGHTS_COUNT, MAX_VISIBLE_LIGHTS); ++lightIndex)
                     {
-                        AdditionalLight(tint, i, inputData);
+                        Light light = GetAdditionalLight(lightIndex, inputData.positionWS, inputData.shadowMask);
+                        additionalTint += AdditionalLight(light, inputData);
                     }
                 #endif
                 uint pixelLightCount = GetAdditionalLightsCount();
                 LIGHT_LOOP_BEGIN(pixelLightCount)
-                    AdditionalLight(tint, lightIndex, inputData);
+                    Light light = GetAdditionalLight(lightIndex, inputData.positionWS, inputData.shadowMask);
+                    additionalTint += AdditionalLight(light, inputData);
                 LIGHT_LOOP_END
+                return additionalTint;
             }
 
             float3 ToonTint(float4 positionHCS, InputData inputData)
             {
-                float3 tint = 0;
+                float3 tint = _ToonShadowTint;
                 Light mainLight = MainLight(positionHCS, inputData.positionWS);
-                float3 mainTint = ToonTintShadow(mainLight, inputData);
-                AccumulateTint(tint, mainTint);
+                float3 mainTint;
+                #if defined(_MAIN_LIGHT_SHADOWS_CASCADE) || defined(_MAIN_LIGHT_SHADOWS)
+                    mainTint = ToonTintShadow(mainLight, inputData);
+                #else
+                    mainTint = ToonTintNoShadow(mainLight);
+                #endif
+                tint += mainTint;
                 #if defined(_ADDITIONAL_LIGHTS)
-                    AdditionalLightLoop(tint, inputData);
+                    tint += AdditionalLightLoop(inputData);
                 #endif
                 return tint;
             }
 
             float4 frag(Varyings IN) : SV_Target
             {
-                float4 colour = SAMPLE_TEXTURE2D(_BaseTexture, sampler_BaseTexture, IN.uv) * _BaseColour;
+                float4 colour = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, IN.uv) * _BaseColor;
                 InputData inputData;
                 ZERO_INITIALIZE(InputData, inputData);
                 inputData.positionWS = IN.positionWS;
                 inputData.normalWS = NormalizeNormalPerPixel(IN.normalWS);
                 inputData.viewDirectionWS = GetWorldSpaceNormalizeViewDir(IN.positionWS);
                 inputData.normalizedScreenSpaceUV = GetNormalizedScreenSpaceUV(IN.positionHCS);
+                inputData.bakedGI = SAMPLE_GI(IN.lightmapUV, IN.vertexSH, inputData.normalWS);
+                inputData.shadowMask = SAMPLE_SHADOWMASK(IN.lightmapUV);
                 float3 toonTint = ToonTint(IN.positionHCS, inputData);
                 float4 tint = float4(toonTint, 1);
                 return colour * tint;
@@ -240,7 +230,6 @@ Shader "Custom/ToonShader"
             }
 
             ZWrite On
-            ZTest LEqual
             ColorMask 0
 
             HLSLPROGRAM
