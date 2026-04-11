@@ -127,7 +127,7 @@ Shader "Custom/ToonShader"
                 return exp2(10 * _ToonGlossiness + 1);
             }
 
-            float Shadow (Light light)
+            float Shadow(Light light)
             {
                 return light.distanceAttenuation * light.shadowAttenuation;
             }
