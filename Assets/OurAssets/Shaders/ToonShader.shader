@@ -11,7 +11,7 @@ Shader "Custom/ToonShader"
         _ToonSpecularTint("Toon Specular Tint", Color) = (0.9, 0.9, 0.9)
         _ToonGlossiness("Toon Glossiness", Range(0, 1)) = 0
         _ToonRimTint("Toon Rim Tint", Color) = (1, 1, 1)
-        _ToonRimAmount("Toon Rim Amount", Range(0, 1)) = 0.716
+        _ToonRimAmount("Toon Rim Amount", Range(0, 1)) = 0
         _ToonRimThreshold("Toon Rim Threshold", Range(0, 1)) = 0.1
     }
 
