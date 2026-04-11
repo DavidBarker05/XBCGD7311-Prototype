@@ -2,14 +2,20 @@ Shader "Custom/ToonShader"
 {
     Properties
     {
+        [Enum(UnityEngine.Rendering.CullMode)] _Cull("Culling", Integer) = 2 // 0 = Render Front and Back, 1 = Render Back Only, 2 = Render Front Only
+
         [Toggle] _AlphaClipping("Alpha Clipping", Integer) = 0
         _AlphaClippingThreshold("Alpha Clipping Threshold", Range(0, 1)) = 0
+
         [MainColor] _BaseColor("Base Color", Color) = (1, 1, 1, 1)
         [MainTexture] _BaseMap("Base Map", 2D) = "white" {}
+
         _ToonShadowTint("Toon Shadow Tint", Color) = (0.4, 0.4, 0.4)
         _ToonShadowSmoothness("Toon Shadow Smoothness", Range(0, 1)) = 0.01
+
         _ToonSpecularTint("Toon Specular Tint", Color) = (0.9, 0.9, 0.9)
         _ToonGlossiness("Toon Glossiness", Range(0, 1)) = 0
+
         _ToonRimTint("Toon Rim Tint", Color) = (1, 1, 1)
         _ToonRimAmount("Toon Rim Amount", Range(0, 1)) = 0
         _ToonRimThreshold("Toon Rim Threshold", Range(0, 1)) = 0.1
@@ -33,6 +39,7 @@ Shader "Custom/ToonShader"
             }
 
             ZWrite On
+            Cull[_Cull]
 
             HLSLPROGRAM
 
@@ -70,12 +77,16 @@ Shader "Custom/ToonShader"
             CBUFFER_START(UnityPerMaterial)
                 bool _AlphaClipping;
                 float _AlphaClippingThreshold;
+
                 float4 _BaseColor;
                 float4 _BaseMap_ST;
+
                 float3 _ToonShadowTint;
                 float _ToonShadowSmoothness;
+
                 float3 _ToonSpecularTint;
                 float _ToonGlossiness;
+
                 float3 _ToonRimTint;
                 float _ToonRimAmount;
                 float _ToonRimThreshold;
