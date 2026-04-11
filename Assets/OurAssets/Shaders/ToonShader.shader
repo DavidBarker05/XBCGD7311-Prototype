@@ -2,6 +2,8 @@ Shader "Custom/ToonShader"
 {
     Properties
     {
+        [Toggle] _AlphaClipping("Alpha Clipping", Integer) = 0
+        _AlphaClippingThreshold("Alpha Clipping Threshold", Range(0, 1)) = 0
         [MainColor] _BaseColor("Base Color", Color) = (1, 1, 1, 1)
         [MainTexture] _BaseMap("Base Map", 2D) = "white" {}
         _ToonShadowTint("Toon Shadow Tint", Color) = (0.4, 0.4, 0.4)
@@ -66,6 +68,8 @@ Shader "Custom/ToonShader"
             SAMPLER(sampler_BaseMap);
 
             CBUFFER_START(UnityPerMaterial)
+                bool _AlphaClipping;
+                float _AlphaClippingThreshold;
                 float4 _BaseColor;
                 float4 _BaseMap_ST;
                 float3 _ToonShadowTint;
@@ -206,6 +210,7 @@ Shader "Custom/ToonShader"
             float4 frag(Varyings IN) : SV_Target
             {
                 float4 colour = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, IN.uv) * _BaseColor;
+                if (_AlphaClipping) clip(colour.a - _AlphaClippingThreshold);
                 InputData inputData;
                 ZERO_INITIALIZE(InputData, inputData);
                 inputData.positionWS = IN.positionWS;
