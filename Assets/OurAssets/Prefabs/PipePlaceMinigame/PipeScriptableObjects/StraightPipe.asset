@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 55aa84b9e0477e24a8e9b0d2cef742d2, type: 3}
-  m_Name: CrossPipe
+  m_Name: StraightPipe
   m_EditorClassIdentifier: Assembly-CSharp::PipeSO
-  <Model>k__BackingField: {fileID: 0}
+  <Model>k__BackingField: {fileID: 1707321903144873540, guid: 77e72b4be54f4da4da826eb648a6bafe, type: 3}
   m_DefaultOrientation:
     <HasLeftHole>k__BackingField: 1
-    <HasTopHole>k__BackingField: 1
+    <HasTopHole>k__BackingField: 0
     <HasRightHole>k__BackingField: 1
-    <HasBottomHole>k__BackingField: 1
+    <HasBottomHole>k__BackingField: 0
