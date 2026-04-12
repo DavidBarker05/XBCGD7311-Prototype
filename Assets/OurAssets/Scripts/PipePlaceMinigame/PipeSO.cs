@@ -87,7 +87,7 @@ public struct PipeOrientation
     }
 }
 
-[CreateAssetMenu(fileName = "PipeSO", menuName = "Scriptable Objects/PipeSO")]
+[CreateAssetMenu(fileName = "PipeSO", menuName = "Pipe Place Minigame/PipeSO")]
 public class PipeSO : ScriptableObject
 {
     [field: SerializeField]

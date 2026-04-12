@@ -35,7 +35,7 @@ public class Pipe : MonoBehaviour
         get => m_CurrentAngle;
         set
         {
-            m_PipeTransform.rotation = Quaternion.Euler(0f, (int)value, 0f);
+            m_PipeTransform.localEulerAngles = new Vector3(0f, (int)value, 0f);
             CurrentOrientation = CurrentPipeSO.GetOrientationFromAngle(value);
             m_CurrentAngle = value;
         }

@@ -5,6 +5,8 @@ using UnityEngine;
 public class PipeGrid : MonoBehaviour
 {
     [SerializeField]
+    Transform unscaledTransform;
+    [SerializeField]
     Pipe m_PipePrefab;
     [SerializeField]
     PipeSO m_EmptyPipe;
@@ -15,10 +17,18 @@ public class PipeGrid : MonoBehaviour
 
     Pipe[,] m_PipeCells;
 
+    public struct StartEndPipe
+    {
+        public Pipe PipeCell;
+        public PipeSide EntranceExitSide;
+    }
+    StartEndPipe m_StartPipe;
+    StartEndPipe m_EndPipe;
+
     void OnEnable()
     {
-        m_PlaneGrid = GetComponent<PlaneGridGenerator>();
-        m_Grid = GetComponent<Grid>();
+        if (!m_PlaneGrid) m_PlaneGrid = GetComponent<PlaneGridGenerator>();
+        if (!m_Grid) m_Grid = GetComponent<Grid>();
         InitCells(ref m_PipeCells, ref m_Grid, Size);
     }
 
@@ -45,42 +55,64 @@ public class PipeGrid : MonoBehaviour
         {
             for (int y = 0; y < size.y; ++y)
             {
-                GameObject go = Instantiate(m_PipePrefab.gameObject);
+                GameObject go = Instantiate(m_PipePrefab.gameObject, unscaledTransform);
                 Vector3Int cp = ArrayIndex2DToCellPosition(x, y);
                 Vector3 wp = grid.CellToWorld(cp);
                 go.transform.position = wp;
-                go.transform.up = transform.up;
                 Pipe pipe = go.GetComponent<Pipe>();
                 pipe.CurrentPipeSO = m_EmptyPipe;
                 m_PipeCells[x, y] = pipe;
             }
         }
     }
-    #endregion
+    #endregion Delete & Init
+
+    #region Start & End Minigame
+    #region Start Minigame
+    public void StartMinigame(Vector2Int gridSize, int startX, int startY, PipeSide entranceSide, int endX, int endY, PipeSide exitSide)
+    {
+        m_PlaneGrid.GridSize = gridSize;
+        if (gameObject.activeSelf) InitCells(ref m_PipeCells, ref m_Grid, Size);
+        else gameObject.SetActive(true);
+        Pipe startPipe = GetPipe(startX, startY);
+        Utils.Sys.Assert(startPipe, $"({startX}, {startY}) was not a valid index");
+        m_StartPipe = new StartEndPipe() { PipeCell = startPipe, EntranceExitSide = entranceSide };
+        Pipe endPipe = GetPipe(endX, endY);
+        Utils.Sys.Assert(endPipe, $"({endX}, {endY}) was not a valid index");
+        m_EndPipe = new StartEndPipe() { PipeCell = endPipe, EntranceExitSide = exitSide };
+    }
+
+    public void StartMinigame(int width, int height, int startX, int startY, PipeSide entranceSide, int endX, int endY, PipeSide exitSide)
+    {
+        Vector2Int gridSize = new Vector2Int(width, height);
+        StartMinigame(gridSize, startX, startY, entranceSide, endX, endY, exitSide);
+    }
+    #endregion Start Minigame
+
+    void EndMinigame(List<Pipe> path) // path is in case we want to do some kind of flowing animation
+    {
+        // TODO: End minigame
+    }
+    #endregion Start & End Minigame
 
     #region GetIndex & GetPipe
     public (int x, int y) GetIndexOf(Pipe pipe)
     {
-        for (int x = 0; x < m_PipeCells.GetLength(0); ++x)
-        {
-            for (int y = 0; y < m_PipeCells.GetLength(1); ++y)
-            {
-                if (m_PipeCells[x, y] == pipe) return (x, y);
-            }
-        }
-        return (-1, -1);
+        int[] indices = Utils.Arrays.IndexOf(m_PipeCells, pipe);
+        int x = indices[0], y = indices[1];
+        return (x, y);
     }
 
     #region GetPipe
-    public Pipe GetPipe(int x, int y) => m_PipeCells[x, y];
+    public Pipe GetPipe(int x, int y) => Utils.Arrays.IsValidIndex(m_PipeCells, x, y) ? m_PipeCells[x, y] : null;
 
     public Pipe GetPipe(Vector3Int cellPosition)
     {
         (int x, int y) = CellPositionToArrayIndex2D(cellPosition);
         return GetPipe(x, y);
     }
-    #endregion
-    #endregion
+    #endregion GetPipe
+    #endregion GetIndex & GetPipe
 
     #region CellPos & Index Conversion
     public int CellPosAxisToArrayIndex(int cellPosAxis, int gridSizeAxis) => cellPosAxis + Mathf.CeilToInt(gridSizeAxis / 2f);
@@ -101,7 +133,7 @@ public class PipeGrid : MonoBehaviour
         pos.z = ArrayIndexToCellPosAxis(y, Size.y);
         return pos;
     }
-    #endregion
+    #endregion CellPos & Index Conversion
 
     #region CellIsEmpty
     public bool CellIsEmpty(int x, int y)
@@ -120,9 +152,93 @@ public class PipeGrid : MonoBehaviour
         }
         catch (System.Exception e) { throw e; }
     }
-    #endregion
+    #endregion CellIsEmpty
 
-    #region IndexofCellOnSide
+    #region Place & Remove Pipe
+    #region Place Pipe
+    public PipeSO PlacePipe(PipeSO pipeSO, int x, int y)
+    {
+        if (!pipeSO || pipeSO == m_EmptyPipe) return m_EmptyPipe;
+        Pipe pipe = GetPipe(x, y);
+        PipeSO originalPipeSO = pipe.CurrentPipeSO;
+        pipe.CurrentPipeSO = pipeSO;
+        pipe.CurrentPipeAngle = PipeRotationAngle.Zero;
+        CheckWaterCanReachEnd(m_StartPipe, m_EndPipe);
+        return originalPipeSO;
+    }
+
+    public PipeSO PlacePipe(PipeSO pipeSO, Vector3Int cellPosition)
+    {
+        (int x, int y) = CellPositionToArrayIndex2D(cellPosition);
+        return PlacePipe(pipeSO, x, y);
+    }
+    #endregion Place Pipe
+
+    #region Remove Pipe
+    public PipeSO RemovePipe(int x, int y)
+    {
+        Pipe pipe = GetPipe(x, y);
+        PipeSO originalPipeSO = pipe.CurrentPipeSO;
+        pipe.CurrentPipeSO = m_EmptyPipe;
+        pipe.CurrentPipeAngle = PipeRotationAngle.Zero;
+        return originalPipeSO;
+    }
+
+    public PipeSO RemovePipe(Vector3Int cellPosition)
+    {
+        (int x, int y) = CellPositionToArrayIndex2D(cellPosition);
+        return RemovePipe(x, y);
+    }
+
+    public PipeSO RemovePipe(Pipe pipe)
+    {
+        PipeSO originalPipeSO = pipe.CurrentPipeSO;
+        pipe.CurrentPipeSO = m_EmptyPipe;
+        pipe.CurrentPipeAngle = PipeRotationAngle.Zero;
+        return originalPipeSO;
+    }
+    #endregion Remove Pipe
+    #endregion Place & Remove Pipe
+
+    #region Rotate Pipe
+    #region Rotate Right
+    public void RotatePipeRight(int x, int y)
+    {
+        if (CellIsEmpty(x, y)) return;
+        Pipe pipe = GetPipe(x, y);
+        pipe.RotateRight();
+        CheckWaterCanReachEnd(m_StartPipe, m_EndPipe);
+    }
+
+    public void RotatePipeRight(Vector3Int cellPosition)
+    {
+        if (CellIsEmpty(cellPosition)) return;
+        Pipe pipe = GetPipe(cellPosition);
+        pipe.RotateRight();
+        CheckWaterCanReachEnd(m_StartPipe, m_EndPipe);
+    }
+    #endregion Rotate Right
+
+    #region Rotate Left
+    public void RotatePipeLeft(int x, int y)
+    {
+        if (CellIsEmpty(x, y)) return;
+        Pipe pipe = GetPipe(x, y);
+        pipe.RotateLeft();
+        CheckWaterCanReachEnd(m_StartPipe, m_EndPipe);
+    }
+
+    public void RotatePipeLeft(Vector3Int cellPosition)
+    {
+        if(CellIsEmpty(cellPosition)) return;
+        Pipe pipe = GetPipe(cellPosition);
+        pipe.RotateLeft();
+        CheckWaterCanReachEnd(m_StartPipe, m_EndPipe);
+    }
+    #endregion Rotate Left
+    #endregion Rotate Pipe
+
+    #region IndexOfCellOnSide
     (int x, int y) IndexOfCellOnSide(PipeSide side, int x, int y) => side switch
     {
         PipeSide.Left => (x - 1, y),
@@ -139,7 +255,7 @@ public class PipeGrid : MonoBehaviour
         {
             bool bIsValid = true;
             (int oX, int oY) = IndexOfCellOnSide(side, x, y);
-            if (oX < 0 || oX >= m_PipeCells.GetLength(0) || oY < 0 || oY >= m_PipeCells.GetLength(1))
+            if (!Utils.Arrays.IsValidIndex(m_PipeCells, oX, oY))
             {
                 bIsValid = false;
                 oX = -1;
@@ -169,17 +285,19 @@ public class PipeGrid : MonoBehaviour
         }
         catch (System.Exception e) { throw e; }
     }
-    #endregion
-    #endregion
+    #endregion SafeIndexOfCellOnSide
+    #endregion IndexOfCellOnSide
 
     #region PipeOpenOnSide
     bool InternalPipeOpenOnSide(PipeSide side, Pipe pipe, int x, int y)
     {
+        if (!pipe) return false;
         try
         {
             (bool bSideValid, int rX, int rY) = SafeIndexOfCellOnSide(side, x, y);
+            if (!bSideValid) return false;
             Pipe sidePipe = m_PipeCells[rX, rY];
-            return pipe.CurrentOrientation.HasHole(side) && bSideValid && sidePipe.CurrentPipeSO != m_EmptyPipe;
+            return pipe.CurrentOrientation.HasHole(side) && sidePipe.CurrentPipeSO != m_EmptyPipe;
         }
         catch (System.Exception e) { throw e; }
     }
@@ -198,7 +316,7 @@ public class PipeGrid : MonoBehaviour
     {
         try
         {
-            Pipe pipe = m_PipeCells[x, y];
+            Pipe pipe = GetPipe(x, y);
             return InternalPipeOpenOnSide(side, pipe, x, y);
         }
         catch (System.Exception e) { throw e; }
@@ -208,14 +326,16 @@ public class PipeGrid : MonoBehaviour
     {
         try
         {
+            Pipe pipe = GetPipe(cellPos);
             (int x, int y) = CellPositionToArrayIndex2D(cellPos);
-            return PipeOpenOnSide(side, x, y);
+            return InternalPipeOpenOnSide(side, pipe, x, y);
         }
         catch (System.Exception e) { throw e; }
     }
-    #endregion
+    #endregion PipeOpenOnSide
 
     #region Pipe Flow
+    #region BFS
     void AddPipeIfAdjacent(ref List<Pipe> pipes, PipeSide side, ref Pipe pipe)
     {
         if (!PipeOpenOnSide(side, pipe)) return;
@@ -235,6 +355,7 @@ public class PipeGrid : MonoBehaviour
 
     List<Pipe> BreadthFirstSearch(Pipe start, Pipe end)
     {
+        if (!start || start == m_EmptyPipe || !end || end == m_EmptyPipe) return null;
         HashSet<Pipe> searched = new HashSet<Pipe>();
         Queue<Pipe> toSearch = new Queue<Pipe>();
         Dictionary<Pipe, Pipe> previousPipes = new Dictionary<Pipe, Pipe>();
@@ -269,7 +390,47 @@ public class PipeGrid : MonoBehaviour
         }
         return null;
     }
+    #endregion BFS
 
-    public List<Pipe> FindPath(Pipe start, Pipe end) => BreadthFirstSearch(start, end);
-    #endregion
+    #region Water Flow Check
+    bool WaterCanReachEnd(Pipe startPipe, PipeSide entranceSide, Pipe endPipe, PipeSide exitSide, out List<Pipe> path)
+    {
+        if (!startPipe || startPipe == m_EmptyPipe || !endPipe || endPipe == m_EmptyPipe || !startPipe.CurrentOrientation.HasHole(entranceSide) || !endPipe.CurrentOrientation.HasHole(exitSide))
+        {
+            path = null;
+            return false;
+        }
+        path = BreadthFirstSearch(startPipe, endPipe);
+        return path != null;
+    }
+
+    public void CheckWaterCanReachEnd(Pipe startPipe, PipeSide entranceSide, Pipe endPipe, PipeSide exitSide)
+    {
+        if (WaterCanReachEnd(startPipe, entranceSide, endPipe, exitSide, out List<Pipe> path)) EndMinigame(path);
+    }
+
+    public void CheckWaterCanReachEnd(int startX, int startY, PipeSide entranceSide, int endX, int endY, PipeSide exitSide)
+    {
+        Pipe startPipe = GetPipe(startX, startY);
+        Pipe endPipe = GetPipe(endX, endY);
+        if (WaterCanReachEnd(startPipe, entranceSide, endPipe, exitSide, out List<Pipe> path)) EndMinigame(path);
+    }
+
+    public void CheckWaterCanReachEnd(Vector3Int startCellPosition, PipeSide entranceSide, Vector3Int endCellPosition, PipeSide exitSide)
+    {
+        Pipe startPipe = GetPipe(startCellPosition);
+        Pipe endPipe = GetPipe(endCellPosition);
+        if (WaterCanReachEnd(startPipe, entranceSide, endPipe, exitSide, out List<Pipe> path)) EndMinigame(path);
+    }
+
+    public void CheckWaterCanReachEnd(StartEndPipe startPipe, StartEndPipe endPipe)
+    {
+        Pipe start = startPipe.PipeCell;
+        PipeSide entrance = startPipe.EntranceExitSide;
+        Pipe end = endPipe.PipeCell;
+        PipeSide exit = endPipe.EntranceExitSide;
+        if (WaterCanReachEnd(start, entrance, end, exit, out List<Pipe> path)) EndMinigame(path);
+    }
+    #endregion Water Flow Check
+    #endregion Pipe Flow
 }
