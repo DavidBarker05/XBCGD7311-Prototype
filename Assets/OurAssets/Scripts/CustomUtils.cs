@@ -24,7 +24,7 @@ namespace CustomUtils
                 RangeBounds.ExclusiveMinInclusiveMax => checkMin > 0 && checkMax >= 0,
                 RangeBounds.InclusiveMinExclusiveMax => checkMin >= 0 && checkMax > 0,
                 RangeBounds.InclusiveMinInclusiveMax => checkMin >= 0 && checkMax >= 0,
-                _ => throw new System.ArgumentException("Somehow you have a range bounds value that doesn't exist")
+                _ => throw new ArgumentException("Somehow you have a range bounds value that doesn't exist")
             };
         }
 
@@ -37,7 +37,7 @@ namespace CustomUtils
             RangeBounds.ExclusiveMinInclusiveMax => bNearlyEqual ? (value > min - ApproximateEpsilon && value <= max + ApproximateEpsilon) : (value > min && value <= max),
             RangeBounds.InclusiveMinExclusiveMax => bNearlyEqual ? (value >= min - ApproximateEpsilon && value < max + ApproximateEpsilon) : (value >= min && value < max),
             RangeBounds.InclusiveMinInclusiveMax => bNearlyEqual ? (value >= min - ApproximateEpsilon && value <= max + ApproximateEpsilon) : (value >= min && value <= max),
-            _ => throw new System.ArgumentException("Somehow you have a range bounds value that doesn't exist")
+            _ => throw new ArgumentException("Somehow you have a range bounds value that doesn't exist")
         };
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -126,10 +126,10 @@ namespace CustomUtils
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsValidIndex(int collectionLength, int index)
+        public static bool IsValidIndex(int arrayLength, int index)
         {
-            if (collectionLength == 0) return false;
-            return CustomUtils.RangeCheck.IsInRange(index, 0, collectionLength, CustomUtils.RangeCheck.RangeBounds.InclusiveMinExclusiveMax);
+            if (arrayLength == 0) return false;
+            return RangeCheck.IsInRange(index, 0, arrayLength, RangeCheck.RangeBounds.InclusiveMinExclusiveMax);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
