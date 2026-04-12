@@ -66,13 +66,13 @@ public class PipePlayerCharacter : MonoBehaviour
     {
         if (!input.PipeMouseInfo.bHitObject) return;
         RaycastHit hit = input.PipeMouseInfo.HitInfo;
-        Grid grid = Utils.UnityFuncs.GetComponent<Grid>(hit);
+        Grid grid = CustomUtils.UnityFuncs.GetComponent<Grid>(hit);
         if (!grid) return;
         Vector3Int cp = grid.WorldToCell(hit.point);
         MoveCellIndicator(ref grid, cp, hit.normal);
         if (input.bClickedThisFrame)
         {
-            PipeGrid pipeGrid = Utils.UnityFuncs.GetComponent<PipeGrid>(hit);
+            PipeGrid pipeGrid = CustomUtils.UnityFuncs.GetComponent<PipeGrid>(hit);
             if (!pipeGrid) return;
             PlacePipe(ref pipeGrid, cp);
         }

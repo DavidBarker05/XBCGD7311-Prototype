@@ -1,9 +1,8 @@
 using System;
-using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
-namespace Utils
+namespace CustomUtils
 {
     public static class RangeCheck
     {
@@ -130,7 +129,7 @@ namespace Utils
         public static bool IsValidIndex(int collectionLength, int index)
         {
             if (collectionLength == 0) return false;
-            return Utils.RangeCheck.IsInRange(index, 0, collectionLength, Utils.RangeCheck.RangeBounds.InclusiveMinExclusiveMax);
+            return CustomUtils.RangeCheck.IsInRange(index, 0, collectionLength, CustomUtils.RangeCheck.RangeBounds.InclusiveMinExclusiveMax);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
