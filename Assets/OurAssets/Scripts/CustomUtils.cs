@@ -1,0 +1,187 @@
+using System;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using UnityEngine;
+
+namespace Utils
+{
+    public static class RangeCheck
+    {
+        public enum RangeBounds
+        {
+            ExclusiveMinExclusiveMax,
+            ExclusiveMinInclusiveMax,
+            InclusiveMinExclusiveMax,
+            InclusiveMinInclusiveMax
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsInRange(int value, int min, int max, RangeBounds rangeBounds = RangeBounds.ExclusiveMinExclusiveMax)
+        {
+            int checkMin = value - min;
+            int checkMax = max - value;
+            return rangeBounds switch {
+                RangeBounds.ExclusiveMinExclusiveMax => checkMin > 0 && checkMax > 0,
+                RangeBounds.ExclusiveMinInclusiveMax => checkMin > 0 && checkMax >= 0,
+                RangeBounds.InclusiveMinExclusiveMax => checkMin >= 0 && checkMax > 0,
+                RangeBounds.InclusiveMinInclusiveMax => checkMin >= 0 && checkMax >= 0,
+                _ => throw new System.ArgumentException("Somehow you have a range bounds value that doesn't exist")
+            };
+        }
+
+        public static readonly float ApproximateEpsilon = Mathf.Epsilon * 8f; // Found this in Mathf
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsInRange(float value, float min, float max, bool bNearlyEqual = false, RangeBounds rangeBounds = RangeBounds.ExclusiveMinExclusiveMax) => rangeBounds switch
+        {
+            RangeBounds.ExclusiveMinExclusiveMax => bNearlyEqual ? (value > min - ApproximateEpsilon && value < max + ApproximateEpsilon) : (value > min && value < max),
+            RangeBounds.ExclusiveMinInclusiveMax => bNearlyEqual ? (value > min - ApproximateEpsilon && value <= max + ApproximateEpsilon) : (value > min && value <= max),
+            RangeBounds.InclusiveMinExclusiveMax => bNearlyEqual ? (value >= min - ApproximateEpsilon && value < max + ApproximateEpsilon) : (value >= min && value < max),
+            RangeBounds.InclusiveMinInclusiveMax => bNearlyEqual ? (value >= min - ApproximateEpsilon && value <= max + ApproximateEpsilon) : (value >= min && value <= max),
+            _ => throw new System.ArgumentException("Somehow you have a range bounds value that doesn't exist")
+        };
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsInRangeExclusive(int value, int min, int max) => IsInRange(value, min, max, RangeBounds.ExclusiveMinExclusiveMax);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsInRangeExclusive(float value, float min, float max, bool bNearlyEqual = false) => IsInRange(value, min, max, bNearlyEqual, RangeBounds.ExclusiveMinExclusiveMax);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsInRangeInclusive(int value, int min, int max) => IsInRange(value, min, max, RangeBounds.InclusiveMinInclusiveMax);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsInRangeInclusive(float value, float min, float max, bool bNearlyEqual = false) => IsInRange(value, min, max, bNearlyEqual, RangeBounds.InclusiveMinInclusiveMax);
+    }
+    
+    public static class Types
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool CompareType(Type type1, Type type2) => type1 == type2;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool CompareType<T>(Type type) => CompareType(type, typeof(T));
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool CompareType<T>(Type type, T t) => CompareType(type, typeof(T));
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool CompareType<T>(T t, Type type) => CompareType(typeof(T), type);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool CompareType<T1, T2>() => CompareType(typeof(T1), typeof(T2));
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool CompareType<T1, T2>(T1 t1) => CompareType(typeof(T1), typeof(T2));
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool CompareType<T1, T2>(T2 t2) => CompareType(typeof(T1), typeof(T2));
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool CompareType<T1, T2>(T1 t1, T2 t2) => CompareType(typeof(T1), typeof(T2));
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsValidObject<T>() => typeof(T) is object o && o != null;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsValidObject<T>(T t) => typeof(T) is object o && o != null;
+    }
+
+    public static class Arrays
+    {
+        private static bool InternalIndexOf<T>(Array array, ref int[] indices, int currentDimension, T value)
+        {
+            if (array.GetLength(currentDimension) == 0)
+            {
+                indices[currentDimension] = -1;
+                return false;
+            }
+            for (int i = 0; i < array.GetLength(currentDimension); ++i)
+            {
+                indices[currentDimension] = i;
+                if (currentDimension == array.Rank - 1)
+                {
+                    if (array.GetValue(indices) == value as object) return true;
+                }
+                else if(InternalIndexOf(array, ref indices, currentDimension + 1, value)) return true;
+            }
+            indices[currentDimension] = -1;
+            return false;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Type GetType(Array array) => array.GetType().GetElementType();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsValidArray(Array array) => array != null && array.Length > 0;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int[] IndexOf<T>(Array array, T value)
+        {
+            if (array == null) return new int[1] { -1 };
+            int[] indices = new int[array.Rank];
+            Array.Fill(indices, -1);
+            if (!Types.CompareType<T>(GetType(array)) || !Types.IsValidObject<T>()) return indices;
+            InternalIndexOf(array, ref indices, 0, value);
+            return indices;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsValidIndex(int collectionLength, int index)
+        {
+            if (collectionLength == 0) return false;
+            return Utils.RangeCheck.IsInRange(index, 0, collectionLength, Utils.RangeCheck.RangeBounds.InclusiveMinExclusiveMax);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsValidIndex(Array array, params int[] indices)
+        {
+            if (!IsValidArray(array) || !IsValidArray(indices) || indices.Length > array.Rank) return false;
+            bool isValid = true;
+            for (int i = 0; i < indices.Length; ++i)
+            {
+                isValid &= IsValidIndex(array.GetLength(i), indices[i]);
+                if (!isValid) break;
+            }
+            return isValid;
+        }
+    }
+
+    public static class Sys
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void Exit(int exitCode)
+        {
+#if UNITY_EDITOR
+            if (exitCode == 0) Debug.Log("Exited with code 0");
+            else Debug.LogError($"Exited with code {exitCode}");
+            UnityEditor.EditorApplication.isPlaying = false;
+#else
+            Application.Quit(exitCode);
+#endif
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void Assert(bool condition, string message)
+        {
+            if (condition) return;
+            Debug.LogError(message);
+            Exit(1);
+        }
+    }
+
+    public static class UnityFuncs
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static GameObject GetParentObject(GameObject go) => go.transform.parent.gameObject;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static GameObject GetGameObject(RaycastHit hitInfo) => hitInfo.collider.gameObject;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static T GetComponent<T>(RaycastHit hitInfo) => hitInfo.collider.gameObject.GetComponent<T>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static T GetComponent<T>(Collider collider) => collider.gameObject.GetComponent<T>();
+    }
+}
