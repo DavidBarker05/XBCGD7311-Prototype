@@ -51,7 +51,7 @@ public class PipePlayerCharacter : PlayerCharacter
 
     public override void Init(IPlayerCharacterInitData playerCharacterInitData)
     {
-        OwnUtils.Sys.Assert(playerCharacterInitData is PipePlayerCharacterInitData, "playerCharacterInitData must be type PipePlayerCharacterInitData");
+        Util.Sys.Assert(playerCharacterInitData is PipePlayerCharacterInitData, "playerCharacterInitData must be type PipePlayerCharacterInitData");
         if (playerCharacterInitData is PipePlayerCharacterInitData)
         {
 #if !UNITY_EDITOR
@@ -67,7 +67,7 @@ public class PipePlayerCharacter : PlayerCharacter
 
     public override void UpdateCharacter(ref IPlayerCharacterUpdateData playerCharacterUpdateData)
     {
-        OwnUtils.Sys.Assert(playerCharacterUpdateData is PipePlayerCharacterUpdateData, "playerCharacterUpdateData must be type PipePlayerCharacterUpdateData");
+        Util.Sys.Assert(playerCharacterUpdateData is PipePlayerCharacterUpdateData, "playerCharacterUpdateData must be type PipePlayerCharacterUpdateData");
         if (playerCharacterUpdateData is PipePlayerCharacterUpdateData input)
         {
             DoGridFunctions(ref input);
@@ -79,13 +79,13 @@ public class PipePlayerCharacter : PlayerCharacter
     {
         if (!input.MouseInfo.DidHitObject) return;
         RaycastHit hit = input.MouseInfo.HitInfo;
-        Grid grid = OwnUtils.UnityFuncs.GetComponent<Grid>(hit);
+        Grid grid = Util.UnityUtil.GetComponent<Grid>(hit);
         if (!grid) return;
         Vector3Int cp = grid.WorldToCell(hit.point);
         MoveCellIndicator(ref grid, cp, hit.normal);
         if (input.ClickedThisFrame)
         {
-            PipeGrid pipeGrid = OwnUtils.UnityFuncs.GetComponent<PipeGrid>(hit);
+            PipeGrid pipeGrid = Util.UnityUtil.GetComponent<PipeGrid>(hit);
             if (!pipeGrid) return;
             PlacePipe(ref pipeGrid, cp);
         }
