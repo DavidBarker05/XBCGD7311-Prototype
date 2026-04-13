@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public struct PipePlayerCharacterInitData : IPlayerCharacterInitData { }
+public class PipePlayerCharacterInitData : IPlayerCharacterInitData { }
 
-public struct PipePlayerCharacterUpdateData : IPlayerCharacterUpdateData
+public class PipePlayerCharacterUpdateData : IPlayerCharacterUpdateData
 {
     public float DeltaTime { get; set; }
     public Quaternion CameraRotation { get; set; }
@@ -14,12 +14,6 @@ public struct PipePlayerCharacterUpdateData : IPlayerCharacterUpdateData
 
 public class PipePlayerCharacter : PlayerCharacter
 {
-    public override bool MouseVisible => true;
-
-    public override bool DoCameraRotation => false;
-
-    public override bool UseMouseScreenPosition => true;
-
     [SerializeField]
     GameObject m_CellIndicatorPrefab;
     [SerializeField]
@@ -28,6 +22,10 @@ public class PipePlayerCharacter : PlayerCharacter
     List<PipeSO> m_PlaceablePipes;
     [SerializeField]
     bool m_Debug = false;
+
+    public override bool MouseVisible => true;
+    public override bool DoCameraRotation => false;
+    public override bool UseMouseScreenPosition => true;
 
     GameObject m_CellIndicator;
     PipeSO m_CurrentlySelectedPipe;

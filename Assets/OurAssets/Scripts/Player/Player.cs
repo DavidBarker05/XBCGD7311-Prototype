@@ -31,16 +31,18 @@ public class Player : MonoBehaviour
         m_PlayerInput = GetComponent<PlayerInput>();
         m_PlayerCharacter.Init(new FirstPersonPlayerCharacterInitData() { CharacterSettings = m_PlayerSettings.CharacterSettings });
         m_PipePlayerCharacter.Init(new PipePlayerCharacterInitData());
-        m_WirePlayerCharacter.Init(new WirePlayerCharacterInitData());
+        //m_WirePlayerCharacter.Init(new WirePlayerCharacterInitData());
         m_PlayerCamera.Init(m_PlayerSettings.CameraSettings, m_PlayerCharacter.CameraTarget);
         m_CameraInput = new CameraInput();
         m_MouseInfo = new MouseInfo();
+        ChangeCharacter(m_PlayerInput.currentActionMap.name);
     }
 
     void Update()
     {
         if (!m_CurrentPlayerCharacter || !m_PlayerCamera) return;
         SetCursorVisibility(m_CurrentPlayerCharacter.MouseVisible);
+        m_CurrentPlayerCharacterUpdateData.DeltaTime = Time.deltaTime;
         if (m_CurrentPlayerCharacter.DoCameraRotation)
         {
             m_PlayerCamera.UpdateRotation(ref m_CameraInput, Time.deltaTime);
@@ -130,12 +132,20 @@ public class Player : MonoBehaviour
     #endregion Mouse Info
 
     #region Handle PlayerInput Events
+
+    delegate void SetDataValueFunc<T>(T _);
+
+    void SetDataValue<T>(SetDataValueFunc<T> dataChangeFunction) where T : class, IPlayerCharacterUpdateData
+    {
+        if (m_CurrentPlayerCharacterUpdateData is T t) dataChangeFunction(t);
+    }
+
     public void HandleMoveInput(InputAction.CallbackContext ctx)
     {
         switch (ctx.action.actionMap.name)
         {
             case "Player":
-                if (m_CurrentPlayerCharacterUpdateData is FirstPersonPlayerCharacterUpdateData firstPersonInput) firstPersonInput.MovementInput = ctx.ReadValue<Vector2>();
+                SetDataValue<FirstPersonPlayerCharacterUpdateData>(input => input.MovementInput = ctx.ReadValue<Vector2>());
                 break;
             default:
                 break;
@@ -159,7 +169,7 @@ public class Player : MonoBehaviour
         switch (ctx.action.actionMap.name)
         {
             case "Player":
-                if (m_CurrentPlayerCharacterUpdateData is FirstPersonPlayerCharacterUpdateData firstPersonInput) firstPersonInput.JumpPressedThisFrame = ctx.action.WasPressedThisFrame();
+                SetDataValue<FirstPersonPlayerCharacterUpdateData>(input => input.JumpPressedThisFrame = ctx.action.WasPressedThisFrame());
                 break;
             default:
                 break;
@@ -171,10 +181,10 @@ public class Player : MonoBehaviour
         switch (ctx.action.actionMap.name)
         {
             case "PipePlayer":
-                if (m_CurrentPlayerCharacterUpdateData is PipePlayerCharacterUpdateData pipeInput) pipeInput.ClickedThisFrame = true;
+                SetDataValue<PipePlayerCharacterUpdateData>(input => input.ClickedThisFrame |= ctx.started);
                 break;
             case "WirePlayer":
-                if (m_CurrentPlayerCharacterUpdateData is WirePlayerCharacterUpdateData wireInput) wireInput.ClickedThisFrame = true;
+                SetDataValue<WirePlayerCharacterUpdateData>(input => input.ClickedThisFrame = ctx.action.WasPressedThisFrame());
                 break;
             default:
                 break;

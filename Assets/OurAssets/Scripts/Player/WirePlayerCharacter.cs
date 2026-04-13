@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public struct WirePlayerCharacterInitData : IPlayerCharacterInitData { }
+public class WirePlayerCharacterInitData : IPlayerCharacterInitData { }
 
-public struct WirePlayerCharacterUpdateData : IPlayerCharacterUpdateData
+public class WirePlayerCharacterUpdateData : IPlayerCharacterUpdateData
 {
     public float DeltaTime { get; set; }
     public Quaternion CameraRotation { get; set; }
@@ -14,9 +14,7 @@ public struct WirePlayerCharacterUpdateData : IPlayerCharacterUpdateData
 public class WirePlayerCharacter : PlayerCharacter
 {
     public override bool MouseVisible => true;
-
     public override bool DoCameraRotation => false;
-
     public override bool UseMouseScreenPosition => true;
 
     public override void Init(IPlayerCharacterInitData playerCharacterInitData)

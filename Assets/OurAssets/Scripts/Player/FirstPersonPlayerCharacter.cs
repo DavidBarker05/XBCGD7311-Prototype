@@ -1,11 +1,11 @@
 using UnityEngine;
 
-public struct FirstPersonPlayerCharacterInitData : IPlayerCharacterInitData
+public class FirstPersonPlayerCharacterInitData : IPlayerCharacterInitData
 {
     public CharacterSettings CharacterSettings;
 }
 
-public struct FirstPersonPlayerCharacterUpdateData : IPlayerCharacterUpdateData
+public class FirstPersonPlayerCharacterUpdateData : IPlayerCharacterUpdateData
 {
     public float DeltaTime { get; set; }
     public Quaternion CameraRotation { get; set; }
@@ -13,7 +13,6 @@ public struct FirstPersonPlayerCharacterUpdateData : IPlayerCharacterUpdateData
 
     public Vector2 MovementInput { get; set; }
     public bool JumpPressedThisFrame { get; set; }
-    
 }
 
 [RequireComponent(typeof(CharacterController))]
