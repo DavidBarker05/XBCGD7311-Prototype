@@ -2,7 +2,7 @@ using System;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
-namespace OwnUtils
+namespace Util
 {
     public static class RangeCheck
     {
@@ -175,7 +175,7 @@ namespace OwnUtils
         }
     }
 
-    public static class UnityFuncs
+    public static class UnityUtil
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static GameObject GetParentObject(GameObject go) => go.transform.parent.gameObject;
@@ -188,5 +188,96 @@ namespace OwnUtils
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T GetComponent<T>(Collider collider) => collider.gameObject.GetComponent<T>();
+    }
+
+    public static class Compare
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool MultiCompare(Func<object, object, bool> compare, object first, object second, object third, params object[] rest)
+        {
+            if (!compare(first, second)) return false;
+            if (!compare(second, third)) return false;
+            if (!Arrays.IsValidArray(rest)) return true; // first == second == third, but no more to compare therefore true
+            if (!compare(third, rest[0])) return false;
+            for (int i = 0; i < rest.Length - 1; ++i)
+            {
+                if (!compare(rest[i], rest[i + 1])) return false;
+            }
+            return true;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool MultiEqual<T>(T first, T second, T third, params T[] rest) where T : IComparable<T>
+        {
+
+            if (first.CompareTo(second) != 0) return false;
+            if (second.CompareTo(third) != 0) return false;
+            if (!Arrays.IsValidArray(rest)) return true; // first == second == third, but no more to compare therefore true
+            if (third.CompareTo(rest[0]) != 0) return false;
+            for (int i = 0; i < rest.Length - 1; ++i)
+            {
+                if (rest[i].CompareTo(rest[i + 1]) != 0) return false;
+            }
+            return true;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool MultiEqual(object first, object second, object third, params object[] rest) => MultiCompare((object a, object b) => a.Equals(b), first, second, third, rest);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool MultiLess<T>(T first, T second, T third, params T[] rest) where T : IComparable<T>
+        {
+            if (first.CompareTo(second) >= 0) return false;
+            if (second.CompareTo(third) >= 0) return false;
+            if (!Arrays.IsValidArray(rest)) return true; // first < second < third, but no more to compare therefore true
+            if (third.CompareTo(rest[0]) >= 0) return false;
+            for (int i = 0; i < rest.Length - 1; ++i)
+            {
+                if (rest[i].CompareTo(rest[i + 1]) >= 0) return false;
+            }
+            return true;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool MultiLessOrEqual<T>(T first, T second, T third, params T[] rest) where T : IComparable<T>
+        {
+            if (first.CompareTo(second) > 0) return false;
+            if (second.CompareTo(third) > 0) return false;
+            if (!Arrays.IsValidArray(rest)) return true; // first <= second <= third, but no more to compare therefore true
+            if (third.CompareTo(rest[0]) > 0) return false;
+            for (int i = 0; i < rest.Length - 1; ++i)
+            {
+                if (rest[i].CompareTo(rest[i + 1]) > 0) return false;
+            }
+            return true;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool MultiGreater<T>(T first, T second, T third, params T[] rest) where T : IComparable<T>
+        {
+            if (first.CompareTo(second) <= 0) return false;
+            if (second.CompareTo(third) <= 0) return false;
+            if (!Arrays.IsValidArray(rest)) return true; // first > second > third, but no more to compare therefore true
+            if (third.CompareTo(rest[0]) <= 0) return false;
+            for (int i = 0; i < rest.Length - 1; ++i)
+            {
+                if (rest[i].CompareTo(rest[i + 1]) <= 0) return false;
+            }
+            return true;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool MultiGreaterOrEqual<T>(T first, T second, T third, params T[] rest) where T : IComparable<T>
+        {
+            if (first.CompareTo(second) < 0) return false;
+            if (second.CompareTo(third) < 0) return false;
+            if (!Arrays.IsValidArray(rest)) return true; // first >= second >= third, but no more to compare therefore true
+            if (third.CompareTo(rest[0]) < 0) return false;
+            for (int i = 0; i < rest.Length - 1; ++i)
+            {
+                if (rest[i].CompareTo(rest[i + 1]) < 0) return false;
+            }
+            return true;
+        }
     }
 }
