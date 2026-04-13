@@ -49,16 +49,14 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
     public override void UpdateCharacter(ref IPlayerCharacterUpdateData playerCharacterUpdateData)
     {
         Util.Sys.Assert(playerCharacterUpdateData is FirstPersonPlayerCharacterUpdateData, "playerCharacterUpdateData must be type FirstPersonPlayerCharacterUpdateData");
-        if (playerCharacterUpdateData is FirstPersonPlayerCharacterUpdateData input)
-        {
-            UpdateRotation(input.CameraRotation);
-            CollisionChecks();
-            UpdateTimers(input.DeltaTime);
-            UpdateHorizontalVelocity(input.MovementInput);
-            JumpChecks(input.JumpPressedThisFrame);
-            UpdateVerticalVelocity(input.DeltaTime);
-            m_CC.Move(m_Velocity * input.DeltaTime);
-        }
+        if (playerCharacterUpdateData is not FirstPersonPlayerCharacterUpdateData input) return;
+        UpdateRotation(input.CameraRotation);
+        CollisionChecks();
+        UpdateTimers(input.DeltaTime);
+        UpdateHorizontalVelocity(input.MovementInput);
+        JumpChecks(input.JumpPressedThisFrame);
+        UpdateVerticalVelocity(input.DeltaTime);
+        m_CC.Move(m_Velocity * input.DeltaTime);
     }
 
     void UpdateRotation(Quaternion rotation)

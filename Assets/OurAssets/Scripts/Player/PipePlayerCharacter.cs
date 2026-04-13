@@ -52,27 +52,24 @@ public class PipePlayerCharacter : PlayerCharacter
     public override void Init(IPlayerCharacterInitData playerCharacterInitData)
     {
         Util.Sys.Assert(playerCharacterInitData is PipePlayerCharacterInitData, "playerCharacterInitData must be type PipePlayerCharacterInitData");
+        if (playerCharacterInitData is not PipePlayerCharacterInitData) return;
         if (playerCharacterInitData is PipePlayerCharacterInitData)
-        {
 #if !UNITY_EDITOR
         m_Debug = false;
 #endif
-            m_CellIndicator = Instantiate(m_CellIndicatorPrefab);
-            m_CurrentlySelectedPipe = m_Debug && m_PlaceablePipes.Count > 0 ? m_PlaceablePipes[0] : m_EmptyPipe;
-            FullyCleanPlaceablePipes(); // Just in case
-            foreach (PipeSO pipe in m_PlaceablePipes)
-                m_PipeQuantities.Add(pipe, (m_Debug ? 1u : 0u));
-        }
+        m_CellIndicator = Instantiate(m_CellIndicatorPrefab);
+        m_CurrentlySelectedPipe = m_Debug && m_PlaceablePipes.Count > 0 ? m_PlaceablePipes[0] : m_EmptyPipe;
+        FullyCleanPlaceablePipes(); // Just in case
+        foreach (PipeSO pipe in m_PlaceablePipes)
+            m_PipeQuantities.Add(pipe, (m_Debug ? 1u : 0u));
     }
 
     public override void UpdateCharacter(ref IPlayerCharacterUpdateData playerCharacterUpdateData)
     {
         Util.Sys.Assert(playerCharacterUpdateData is PipePlayerCharacterUpdateData, "playerCharacterUpdateData must be type PipePlayerCharacterUpdateData");
-        if (playerCharacterUpdateData is PipePlayerCharacterUpdateData input)
-        {
-            DoGridFunctions(ref input);
-            input.ClickedThisFrame = false;
-        }
+        if (playerCharacterUpdateData is not PipePlayerCharacterUpdateData input) return;
+        DoGridFunctions(ref input);
+        input.ClickedThisFrame = false;
     }
 
     void DoGridFunctions(ref PipePlayerCharacterUpdateData input)

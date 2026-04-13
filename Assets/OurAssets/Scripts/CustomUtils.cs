@@ -53,37 +53,13 @@ namespace Util
         public static bool IsInRangeInclusive(float value, float min, float max, bool bNearlyEqual = false) => IsInRange(value, min, max, bNearlyEqual, RangeBounds.InclusiveMinInclusiveMax);
     }
     
-    public static class Types
+    public static class Objects
     {
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool CompareType(Type type1, Type type2) => type1 == type2;
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool CompareType<T>(Type type) => CompareType(type, typeof(T));
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool CompareType<T>(Type type, T t) => CompareType(type, typeof(T));
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool CompareType<T>(T t, Type type) => CompareType(typeof(T), type);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool CompareType<T1, T2>() => CompareType(typeof(T1), typeof(T2));
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool CompareType<T1, T2>(T1 t1) => CompareType(typeof(T1), typeof(T2));
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool CompareType<T1, T2>(T2 t2) => CompareType(typeof(T1), typeof(T2));
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool CompareType<T1, T2>(T1 t1, T2 t2) => CompareType(typeof(T1), typeof(T2));
-
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsValidObject<T>() => typeof(T) is object o && o != null;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsValidObject<T>(T t) => typeof(T) is object o && o != null;
+        public static bool IsValidObject<T>(T t) => t is object o && o != null;
     }
 
     public static class Arrays
@@ -120,7 +96,7 @@ namespace Util
             if (array == null) return new int[1] { -1 };
             int[] indices = new int[array.Rank];
             Array.Fill(indices, -1);
-            if (!Types.CompareType<T>(GetType(array)) || !Types.IsValidObject<T>()) return indices;
+            if (GetType(array) is not T || !Objects.IsValidObject<T>()) return indices;
             InternalIndexOf(array, ref indices, 0, value);
             return indices;
         }
