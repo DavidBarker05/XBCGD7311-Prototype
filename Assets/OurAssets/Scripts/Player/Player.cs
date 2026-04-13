@@ -142,53 +142,25 @@ public class Player : MonoBehaviour
 
     public void HandleMoveInput(InputAction.CallbackContext ctx)
     {
-        switch (ctx.action.actionMap.name)
-        {
-            case "Player":
-                SetDataValue<FirstPersonPlayerCharacterUpdateData>(input => input.MovementInput = ctx.ReadValue<Vector2>());
-                break;
-            default:
-                break;
-        }
+        SetDataValue<FirstPersonPlayerCharacterUpdateData>(input => input.MovementInput = ctx.ReadValue<Vector2>());
     }
 
     public void HandleLookInput(InputAction.CallbackContext ctx)
     {
-        if (!m_CurrentPlayerCharacter.DoCameraRotation)
-        {
-            if (m_CameraInput.LookInput != Vector2.zero) m_CameraInput.LookInput = Vector2.zero;
-            if (m_CameraInput.LookDevice != null) m_CameraInput.LookDevice = null;
-            return;
-        }
+        if (!m_CurrentPlayerCharacter.DoCameraRotation) return;
         m_CameraInput.LookInput = ctx.ReadValue<Vector2>();
         m_CameraInput.LookDevice = ctx.control.device;
     }
 
     public void HandleJumpInput(InputAction.CallbackContext ctx)
     {
-        switch (ctx.action.actionMap.name)
-        {
-            case "Player":
-                SetDataValue<FirstPersonPlayerCharacterUpdateData>(input => input.JumpPressedThisFrame = ctx.action.WasPressedThisFrame());
-                break;
-            default:
-                break;
-        }
+        SetDataValue<FirstPersonPlayerCharacterUpdateData>(input => input.JumpPressedThisFrame = ctx.action.WasPressedThisFrame());
     }
 
     public void HandleClickInput(InputAction.CallbackContext ctx)
     {
-        switch (ctx.action.actionMap.name)
-        {
-            case "PipePlayer":
-                SetDataValue<PipePlayerCharacterUpdateData>(input => input.ClickedThisFrame |= ctx.started);
-                break;
-            case "WirePlayer":
-                SetDataValue<WirePlayerCharacterUpdateData>(input => input.ClickedThisFrame = ctx.action.WasPressedThisFrame());
-                break;
-            default:
-                break;
-        }
+        SetDataValue<PipePlayerCharacterUpdateData>(input => input.ClickedThisFrame |= ctx.started);
+        SetDataValue<WirePlayerCharacterUpdateData>(input => input.ClickedThisFrame = ctx.action.WasPressedThisFrame());
     }
 
     #region Control Scheme Change
