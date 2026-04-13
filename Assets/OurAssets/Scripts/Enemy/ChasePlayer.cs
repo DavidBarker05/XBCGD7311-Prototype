@@ -15,7 +15,7 @@ public class ChasePlayer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(player != null)
+        if (player != null && !enemy.pathPending && Vector3.Distance(transform.position, player.position) > enemy.stoppingDistance)
         {
             enemy.SetDestination(player.position);
         }
