@@ -102,13 +102,13 @@ float3 AdditionalLightLoop(InputData inputData)
         
 float3 ToonTint(float4 positionHCS, InputData inputData)
 {
-    float3 tint = _ToonShadowTint;
+    float3 tint = 0;
     Light mainLight = MainLight(positionHCS, inputData.positionWS);
     tint += ToonTintSingle(mainLight, inputData);
     #if defined(_ADDITIONAL_LIGHTS)
         tint += AdditionalLightLoop(inputData);
     #endif
     float ssao = SampleAmbientOcclusion(inputData.normalizedScreenSpaceUV);
-    return tint * ToonSSAO(ssao);
+    return _ToonShadowTint + tint * ToonSSAO(ssao);
 }
 #endif
