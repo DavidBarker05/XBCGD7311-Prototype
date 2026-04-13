@@ -1,17 +1,24 @@
 using UnityEngine;
+using UnityEngine.AI;
 
 public class ChasePlayer : MonoBehaviour
 {
-    public Transform targetObj;
+    public NavMeshAgent enemy;
+    public Transform player;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        enemy = GetComponent<NavMeshAgent>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        transform.position = Vector3.MoveTowards(this.transform.position, targetObj.position, 1 * Time.deltaTime);
+        if(player != null)
+        {
+            enemy.SetDestination(player.position);
+        }
+        
     }
 }
