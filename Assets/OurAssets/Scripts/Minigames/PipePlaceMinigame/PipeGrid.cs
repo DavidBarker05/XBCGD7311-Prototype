@@ -75,10 +75,10 @@ public class PipeGrid : MonoBehaviour
         if (gameObject.activeSelf) InitCells(ref m_PipeCells, ref m_Grid, Size);
         else gameObject.SetActive(true);
         Pipe startPipe = GetPipe(startX, startY);
-        CustomUtils.Sys.Assert(startPipe, $"({startX}, {startY}) was not a valid index");
+        OwnUtils.Sys.Assert(startPipe, $"({startX}, {startY}) was not a valid index");
         m_StartPipe = new StartEndPipe() { PipeCell = startPipe, EntranceExitSide = entranceSide };
         Pipe endPipe = GetPipe(endX, endY);
-        CustomUtils.Sys.Assert(endPipe, $"({endX}, {endY}) was not a valid index");
+        OwnUtils.Sys.Assert(endPipe, $"({endX}, {endY}) was not a valid index");
         m_EndPipe = new StartEndPipe() { PipeCell = endPipe, EntranceExitSide = exitSide };
     }
 
@@ -98,13 +98,13 @@ public class PipeGrid : MonoBehaviour
     #region GetIndex & GetPipe
     public (int x, int y) GetIndexOf(Pipe pipe)
     {
-        int[] indices = CustomUtils.Arrays.IndexOf(m_PipeCells, pipe);
+        int[] indices = OwnUtils.Arrays.IndexOf(m_PipeCells, pipe);
         int x = indices[0], y = indices[1];
         return (x, y);
     }
 
     #region GetPipe
-    public Pipe GetPipe(int x, int y) => CustomUtils.Arrays.IsValidIndex(m_PipeCells, x, y) ? m_PipeCells[x, y] : null;
+    public Pipe GetPipe(int x, int y) => OwnUtils.Arrays.IsValidIndex(m_PipeCells, x, y) ? m_PipeCells[x, y] : null;
 
     public Pipe GetPipe(Vector3Int cellPosition)
     {
@@ -255,7 +255,7 @@ public class PipeGrid : MonoBehaviour
         {
             bool bIsValid = true;
             (int oX, int oY) = IndexOfCellOnSide(side, x, y);
-            if (!CustomUtils.Arrays.IsValidIndex(m_PipeCells, oX, oY))
+            if (!OwnUtils.Arrays.IsValidIndex(m_PipeCells, oX, oY))
             {
                 bIsValid = false;
                 oX = -1;

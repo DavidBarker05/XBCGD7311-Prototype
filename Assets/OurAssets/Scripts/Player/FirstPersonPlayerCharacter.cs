@@ -42,13 +42,13 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
 
     public override void Init(IPlayerCharacterInitData playerCharacterInitData)
     {
-        CustomUtils.Sys.Assert(playerCharacterInitData is FirstPersonPlayerCharacterInitData, "playerCharacterInitData must be type FirstPersonPlayerCharacterInitData");
+        OwnUtils.Sys.Assert(playerCharacterInitData is FirstPersonPlayerCharacterInitData, "playerCharacterInitData must be type FirstPersonPlayerCharacterInitData");
         if (playerCharacterInitData is FirstPersonPlayerCharacterInitData initData) m_CharacterSettings = initData.CharacterSettings;
     }
 
     public override void UpdateCharacter(ref IPlayerCharacterUpdateData playerCharacterUpdateData)
     {
-        CustomUtils.Sys.Assert(playerCharacterUpdateData is FirstPersonPlayerCharacterUpdateData, "playerCharacterUpdateData must be type FirstPersonPlayerCharacterUpdateData");
+        OwnUtils.Sys.Assert(playerCharacterUpdateData is FirstPersonPlayerCharacterUpdateData, "playerCharacterUpdateData must be type FirstPersonPlayerCharacterUpdateData");
         if (playerCharacterUpdateData is FirstPersonPlayerCharacterUpdateData input)
         {
             UpdateRotation(input.CameraRotation);

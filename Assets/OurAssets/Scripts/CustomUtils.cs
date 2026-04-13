@@ -2,7 +2,7 @@ using System;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
-namespace CustomUtils
+namespace OwnUtils
 {
     public static class RangeCheck
     {

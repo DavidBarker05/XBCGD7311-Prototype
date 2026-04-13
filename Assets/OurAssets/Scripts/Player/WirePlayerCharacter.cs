@@ -19,11 +19,11 @@ public class WirePlayerCharacter : PlayerCharacter
 
     public override void Init(IPlayerCharacterInitData playerCharacterInitData)
     {
-        CustomUtils.Sys.Assert(playerCharacterInitData is WirePlayerCharacterInitData, "playerCharacterInitData must be type WirePlayerCharacterInitData");
+        OwnUtils.Sys.Assert(playerCharacterInitData is WirePlayerCharacterInitData, "playerCharacterInitData must be type WirePlayerCharacterInitData");
     }
 
     public override void UpdateCharacter(ref IPlayerCharacterUpdateData playerCharacterUpdateData)
     {
-        CustomUtils.Sys.Assert(playerCharacterUpdateData is WirePlayerCharacterUpdateData, "playerCharacterUpdateData must be type WirePlayerCharacterUpdateData");
+        OwnUtils.Sys.Assert(playerCharacterUpdateData is WirePlayerCharacterUpdateData, "playerCharacterUpdateData must be type WirePlayerCharacterUpdateData");
     }
 }
