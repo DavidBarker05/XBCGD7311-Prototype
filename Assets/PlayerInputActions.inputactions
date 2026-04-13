@@ -734,6 +734,34 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "WirePlayer",
+            "id": "3f9a7e01-2b77-4378-a258-ac59e65745d2",
+            "actions": [
+                {
+                    "name": "Click",
+                    "type": "Button",
+                    "id": "d1cb710e-2a92-4987-bae7-d6c5be047d97",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "cf9a5fa6-32ab-400f-a89e-a434961aa82c",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "Click",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": [

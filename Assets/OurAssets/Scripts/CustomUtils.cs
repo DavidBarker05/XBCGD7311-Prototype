@@ -160,8 +160,14 @@ namespace CustomUtils
 #endif
         }
 
+        /// <summary>
+        /// Tests if the condition is valid. If the condition is not valid it logs an error
+        /// message and exits the game.
+        /// </summary>
+        /// <param name="condition">The condition to test</param>
+        /// <param name="message">The error message to log</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void Assert(bool condition, string message)
+        public static void Assert(bool condition, string message = "Assert condition failed")
         {
             if (condition) return;
             Debug.LogError(message);

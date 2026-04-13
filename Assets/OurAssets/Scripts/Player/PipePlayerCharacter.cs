@@ -1,18 +1,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public struct PipeCharacterInput
+public struct PipePlayerCharacterInitData : IPlayerCharacterInitData { }
+
+public struct PipePlayerCharacterUpdateData : IPlayerCharacterUpdateData
 {
-    public bool bClickedThisFrame;
-    public MouseInfo PipeMouseInfo;
+    public float DeltaTime { get; set; }
+    public Quaternion CameraRotation { get; set; }
+    public MouseInfo MouseInfo { get; set; }
+
+    public bool ClickedThisFrame { get; set; }
 }
 
-public class PipePlayerCharacter : MonoBehaviour
+public class PipePlayerCharacter : PlayerCharacter
 {
-    [field: SerializeField]
-    public Transform CameraTarget { get; private set; }
-    [field: SerializeField]
-    public LayerMask HitLayer { get; private set; }
+    public override bool MouseVisible => true;
+
+    public override bool DoCameraRotation => false;
+
+    public override bool UseMouseScreenPosition => true;
+
     [SerializeField]
     GameObject m_CellIndicatorPrefab;
     [SerializeField]
@@ -44,33 +51,41 @@ public class PipePlayerCharacter : MonoBehaviour
         RemoveDuplicatePlaceablePipes();
     }
 
-    public void Init()
+    public override void Init(IPlayerCharacterInitData playerCharacterInitData)
     {
+        CustomUtils.Sys.Assert(playerCharacterInitData is PipePlayerCharacterInitData, "playerCharacterInitData must be type PipePlayerCharacterInitData");
+        if (playerCharacterInitData is PipePlayerCharacterInitData)
+        {
 #if !UNITY_EDITOR
         m_Debug = false;
 #endif
-        m_CellIndicator = Instantiate(m_CellIndicatorPrefab);
-        m_CurrentlySelectedPipe = m_Debug && m_PlaceablePipes.Count > 0 ? m_PlaceablePipes[0] : m_EmptyPipe;
-        FullyCleanPlaceablePipes(); // Just in case
-        foreach (PipeSO pipe in m_PlaceablePipes)
-            m_PipeQuantities.Add(pipe, (m_Debug ? 1u : 0u));
+            m_CellIndicator = Instantiate(m_CellIndicatorPrefab);
+            m_CurrentlySelectedPipe = m_Debug && m_PlaceablePipes.Count > 0 ? m_PlaceablePipes[0] : m_EmptyPipe;
+            FullyCleanPlaceablePipes(); // Just in case
+            foreach (PipeSO pipe in m_PlaceablePipes)
+                m_PipeQuantities.Add(pipe, (m_Debug ? 1u : 0u));
+        }
     }
 
-    public void UpdatePipeCharacter(ref PipeCharacterInput input)
+    public override void UpdateCharacter(ref IPlayerCharacterUpdateData playerCharacterUpdateData)
     {
-        DoGridFunctions(ref input);
-        input.bClickedThisFrame = false;
+        CustomUtils.Sys.Assert(playerCharacterUpdateData is PipePlayerCharacterUpdateData, "playerCharacterUpdateData must be type PipePlayerCharacterUpdateData");
+        if (playerCharacterUpdateData is PipePlayerCharacterUpdateData input)
+        {
+            DoGridFunctions(ref input);
+            input.ClickedThisFrame = false;
+        }
     }
 
-    void DoGridFunctions(ref PipeCharacterInput input)
+    void DoGridFunctions(ref PipePlayerCharacterUpdateData input)
     {
-        if (!input.PipeMouseInfo.bHitObject) return;
-        RaycastHit hit = input.PipeMouseInfo.HitInfo;
+        if (!input.MouseInfo.DidHitObject) return;
+        RaycastHit hit = input.MouseInfo.HitInfo;
         Grid grid = CustomUtils.UnityFuncs.GetComponent<Grid>(hit);
         if (!grid) return;
         Vector3Int cp = grid.WorldToCell(hit.point);
         MoveCellIndicator(ref grid, cp, hit.normal);
-        if (input.bClickedThisFrame)
+        if (input.ClickedThisFrame)
         {
             PipeGrid pipeGrid = CustomUtils.UnityFuncs.GetComponent<PipeGrid>(hit);
             if (!pipeGrid) return;
