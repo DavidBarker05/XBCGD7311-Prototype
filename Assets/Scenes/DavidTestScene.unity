@@ -149,22 +149,34 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7034629881604420953, guid: 2288494715f42ad4a8ce262dee2b745b, type: 3}
       propertyPath: m_DefaultActionMap
-      value: 22d17d0b-d246-4ca6-b763-0eccf5f28c98
+      value: 9ed7da19-16b5-4f48-aec9-4629a0e68e26
       objectReference: {fileID: 0}
     - target: {fileID: 7034629881604420953, guid: 2288494715f42ad4a8ce262dee2b745b, type: 3}
       propertyPath: m_ActionEvents.Array.size
-      value: 15
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 7034629881604420953, guid: 2288494715f42ad4a8ce262dee2b745b, type: 3}
       propertyPath: m_ActionEvents.Array.data[14].m_ActionId
       value: d1cb710e-2a92-4987-bae7-d6c5be047d97
       objectReference: {fileID: 0}
     - target: {fileID: 7034629881604420953, guid: 2288494715f42ad4a8ce262dee2b745b, type: 3}
+      propertyPath: m_ActionEvents.Array.data[15].m_ActionId
+      value: 790d022c-cdf5-4080-9aa6-8358960bc439
+      objectReference: {fileID: 0}
+    - target: {fileID: 7034629881604420953, guid: 2288494715f42ad4a8ce262dee2b745b, type: 3}
       propertyPath: m_ActionEvents.Array.data[14].m_ActionName
       value: 'WirePlayer/Click[/Mouse/leftButton]'
       objectReference: {fileID: 0}
     - target: {fileID: 7034629881604420953, guid: 2288494715f42ad4a8ce262dee2b745b, type: 3}
+      propertyPath: m_ActionEvents.Array.data[15].m_ActionName
+      value: 'Player/Sprint[/Keyboard/leftShift]'
+      objectReference: {fileID: 0}
+    - target: {fileID: 7034629881604420953, guid: 2288494715f42ad4a8ce262dee2b745b, type: 3}
       propertyPath: m_ActionEvents.Array.data[14].m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7034629881604420953, guid: 2288494715f42ad4a8ce262dee2b745b, type: 3}
+      propertyPath: m_ActionEvents.Array.data[15].m_PersistentCalls.m_Calls.Array.size
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7034629881604420953, guid: 2288494715f42ad4a8ce262dee2b745b, type: 3}
@@ -172,7 +184,15 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7034629881604420953, guid: 2288494715f42ad4a8ce262dee2b745b, type: 3}
+      propertyPath: m_ActionEvents.Array.data[15].m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7034629881604420953, guid: 2288494715f42ad4a8ce262dee2b745b, type: 3}
       propertyPath: m_ActionEvents.Array.data[14].m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 61024624}
+    - target: {fileID: 7034629881604420953, guid: 2288494715f42ad4a8ce262dee2b745b, type: 3}
+      propertyPath: m_ActionEvents.Array.data[15].m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 61024624}
     - target: {fileID: 7034629881604420953, guid: 2288494715f42ad4a8ce262dee2b745b, type: 3}
@@ -180,15 +200,31 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7034629881604420953, guid: 2288494715f42ad4a8ce262dee2b745b, type: 3}
+      propertyPath: m_ActionEvents.Array.data[15].m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7034629881604420953, guid: 2288494715f42ad4a8ce262dee2b745b, type: 3}
       propertyPath: m_ActionEvents.Array.data[14].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: HandleClickInput
+      objectReference: {fileID: 0}
+    - target: {fileID: 7034629881604420953, guid: 2288494715f42ad4a8ce262dee2b745b, type: 3}
+      propertyPath: m_ActionEvents.Array.data[15].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: HandleSprintInput
       objectReference: {fileID: 0}
     - target: {fileID: 7034629881604420953, guid: 2288494715f42ad4a8ce262dee2b745b, type: 3}
       propertyPath: m_ActionEvents.Array.data[14].m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: Player, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 7034629881604420953, guid: 2288494715f42ad4a8ce262dee2b745b, type: 3}
+      propertyPath: m_ActionEvents.Array.data[15].m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Player, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 7034629881604420953, guid: 2288494715f42ad4a8ce262dee2b745b, type: 3}
       propertyPath: m_ActionEvents.Array.data[14].m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 7034629881604420953, guid: 2288494715f42ad4a8ce262dee2b745b, type: 3}
+      propertyPath: m_ActionEvents.Array.data[15].m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 7145391857435746388, guid: 2288494715f42ad4a8ce262dee2b745b, type: 3}

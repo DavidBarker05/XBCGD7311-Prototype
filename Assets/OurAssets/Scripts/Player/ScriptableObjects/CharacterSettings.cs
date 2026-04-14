@@ -3,8 +3,12 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "CharacterSettings", menuName = "Player/Character Settings")]
 public class CharacterSettings : ScriptableObject
 {
+    [field: SerializeField]
+    public bool CanSprintInAir { get; private set; } = true;
     [field: SerializeField, Min(1f)]
     public float MovementSpeed { get; private set; } = 4.5f;
+    [field: SerializeField, Min(1f)]
+    public float SprintSpeed { get; private set; } = 10f;
     [field: SerializeField, Min(0f)]
     public float JumpHeight { get; private set; } = 1f;
     [field: SerializeField, Min(0f)]

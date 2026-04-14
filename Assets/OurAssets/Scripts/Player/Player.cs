@@ -89,6 +89,7 @@ public class Player : MonoBehaviour
         m_CurrentPlayerCharacter = ChangePlayerCharacter(actionMap);
         m_CurrentPlayerCharacterUpdateData = ChangeCharacterUpdateData(actionMap);
         m_PlayerCamera.ChangeCameraTarget(m_CurrentPlayerCharacter.CameraTarget);
+        SetCursorVisibility(m_CurrentPlayerCharacter.MouseVisible);
     }
     #endregion Change Character
     #endregion Change Action Map
@@ -150,6 +151,11 @@ public class Player : MonoBehaviour
         if (!m_CurrentPlayerCharacter.DoCameraRotation) return;
         m_CameraInput.LookInput = ctx.ReadValue<Vector2>();
         m_CameraInput.LookDevice = ctx.control.device;
+    }
+
+    public void HandleSprintInput(InputAction.CallbackContext ctx)
+    {
+        SetDataValue<FirstPersonPlayerCharacterUpdateData>(input => input.SprintPressedThisFrame = ctx.action.WasPressedThisFrame());
     }
 
     public void HandleJumpInput(InputAction.CallbackContext ctx)

@@ -13,6 +13,7 @@ public class FirstPersonPlayerCharacterUpdateData : IPlayerCharacterUpdateData
 
     public Vector2 MovementInput { get; set; }
     public bool JumpPressedThisFrame { get; set; }
+    public bool SprintPressedThisFrame { get; set; }
 }
 
 [RequireComponent(typeof(CharacterController))]
@@ -34,6 +35,8 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
     float m_CurrentJumpBufferTimer;
     float m_CurrentCoyoteTimer;
 
+    float m_MovementSpeed;
+
     public override bool MouseVisible => false;
     public override bool DoCameraRotation => true;
     public override bool UseMouseScreenPosition => false;
@@ -53,6 +56,7 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
         UpdateRotation(input.CameraRotation);
         CollisionChecks();
         UpdateTimers(input.DeltaTime);
+        UpdateMovementSpeed(input.SprintPressedThisFrame);
         UpdateHorizontalVelocity(input.MovementInput);
         JumpChecks(input.JumpPressedThisFrame);
         UpdateVerticalVelocity(input.DeltaTime);
@@ -84,14 +88,20 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
         else m_CurrentCoyoteTimer = 0f;
     }
 
+    void UpdateMovementSpeed(bool bSprintPressedThisFrame)
+    {
+        bool bIsSprinting = ((m_bIsGrounded && !m_bIsFalling) || m_CharacterSettings.CanSprintInAir) && bSprintPressedThisFrame;
+        m_MovementSpeed = bIsSprinting ? m_CharacterSettings.SprintSpeed : m_CharacterSettings.MovementSpeed;
+    }
+
     void UpdateHorizontalVelocity(Vector2 movementInput)
     {
         float xIn = movementInput.x;
         float zIn = movementInput.y;
         Vector3 hIn = Vector3.ClampMagnitude(xIn * transform.right + zIn * transform.forward, 1f);
         hIn = hIn.sqrMagnitude > s_SqrEpsilon ? hIn : Vector3.zero;
-        m_Velocity.x = hIn.x * m_CharacterSettings.MovementSpeed;
-        m_Velocity.z = hIn.z * m_CharacterSettings.MovementSpeed;
+        m_Velocity.x = hIn.x * m_MovementSpeed;
+        m_Velocity.z = hIn.z * m_MovementSpeed;
     }
 
     #region Jumping

@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b274cb73b6dc2d54a8264b9a834df21d, type: 3}
   m_Name: CharacterSettings
   m_EditorClassIdentifier: Assembly-CSharp::CharacterSettings
+  <CanSprintInAir>k__BackingField: 1
   <MovementSpeed>k__BackingField: 4.5
+  <SprintSpeed>k__BackingField: 10
   <JumpHeight>k__BackingField: 1
   <TimeToReachJumpHeight>k__BackingField: 0.25
   <JumpBuffer>k__BackingField: 0.125
