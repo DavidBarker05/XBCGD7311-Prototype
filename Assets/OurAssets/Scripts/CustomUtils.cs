@@ -4,6 +4,7 @@ using UnityEngine;
 using Util.RangeCheckUtils;
 using Util.ObjectUtils;
 using Util.ArrayUtils;
+using System.Collections.Generic;
 
 namespace Util
 {
@@ -115,6 +116,9 @@ namespace Util
 
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
 			public static object GetValueJagged(this Array array, int[] index) => throw new NotImplementedException("Jagged array implementation hasn't been added");
+
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			public static void SetValueJagged(this Array array, object value) => throw new NotImplementedException("Jagged array implementation hasn't been added");
 
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
 			public static T GetValue<T>(this Array array, int index)
@@ -292,10 +296,32 @@ namespace Util
 				public static int GetRandomIndexSingleDimensional(Array array) => UnityEngine.Random.Range(0, array.Length);
 
 				[MethodImpl(MethodImplOptions.AggressiveInlining)]
-				public static int[] GetRandomIndexJagged(Array array) => throw new NotImplementedException("Jagged array implementation hasn't been added");
+				public static int[] GetRandomIndexJagged(Array array)
+				{
+					List<int> index = new List<int>();
+					index.Add(array.GetRandomIndex());
+					object[] arrayIteration = (object[])array;
+					while (arrayIteration != null)
+					{
+						int randomIndex = arrayIteration.GetRandomIndex();
+						index.Add(randomIndex);
+						arrayIteration = arrayIteration.GetType().GetElementType().IsArray ? (object[])arrayIteration.GetValue(randomIndex) : null;
+					}
+					return index.ToArray();
+				}
 
 				[MethodImpl(MethodImplOptions.AggressiveInlining)]
-				public static int[] GetRandomIndexMultidimensional(Array array) => throw new NotImplementedException("Multidimensional array implementation hasn't been added");
+				public static int[] GetRandomIndexMultidimensional(Array array)
+				{
+					int[] index = new int[array.Rank];
+					for (int i = 0; i < index.Length; ++i)
+					{
+						int dimensionLength = array.GetLength(i);
+						if (dimensionLength == 0) throw new ArgumentException("Array contains empty dimensions");
+						index[i] = UnityEngine.Random.Range(0, dimensionLength);
+					}
+					return index;
+				}
 			}
 		}
 	}
