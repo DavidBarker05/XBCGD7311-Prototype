@@ -1,5 +1,6 @@
 using UnityEngine;
-using Util;
+using Util.SystemUtils;
+using Util.UnityUtils;
 
 public class WirePlayerCharacterInitData : IPlayerCharacterInitData { }
 

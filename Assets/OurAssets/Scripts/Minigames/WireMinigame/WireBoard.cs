@@ -1,5 +1,7 @@
 using UnityEngine;
-using Util;
+using Util.SystemUtils;
+using Util.ArrayUtils;
+using Util.ComparisonUtils;
 
 public class WireBoard : MonoBehaviour
 {

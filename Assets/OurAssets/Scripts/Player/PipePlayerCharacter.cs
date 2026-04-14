@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
-using Util;
+using Util.SystemUtils;
+using Util.UnityUtils;
 
 public class PipePlayerCharacterInitData : IPlayerCharacterInitData { }
 
@@ -67,7 +68,7 @@ public class PipePlayerCharacter : PlayerCharacter
 
     public override void UpdateCharacter(ref IPlayerCharacterUpdateData playerCharacterUpdateData)
     {
-        Sys.Assert(playerCharacterUpdateData is PipePlayerCharacterUpdateData, "playerCharacterUpdateData must be type PipePlayerCharacterUpdateData")
+        Sys.Assert(playerCharacterUpdateData is PipePlayerCharacterUpdateData, "playerCharacterUpdateData must be type PipePlayerCharacterUpdateData");
         if (playerCharacterUpdateData is not PipePlayerCharacterUpdateData input) return;
         DoGridFunctions(ref input);
         input.ClickedThisFrame = false;

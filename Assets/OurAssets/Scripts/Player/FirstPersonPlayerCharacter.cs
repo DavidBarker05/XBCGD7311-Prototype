@@ -1,4 +1,6 @@
 using UnityEngine;
+using Util.SystemUtils;
+using Util.UnityUtils;
 
 public class FirstPersonPlayerCharacterInitData : IPlayerCharacterInitData
 {
@@ -48,7 +50,7 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
 
     public override void Init(IPlayerCharacterInitData playerCharacterInitData)
     {
-        Util.Sys.Assert(playerCharacterInitData is FirstPersonPlayerCharacterInitData, "playerCharacterInitData must be type FirstPersonPlayerCharacterInitData");
+        Sys.Assert(playerCharacterInitData is FirstPersonPlayerCharacterInitData, "playerCharacterInitData must be type FirstPersonPlayerCharacterInitData");
         if (playerCharacterInitData is not FirstPersonPlayerCharacterInitData initData) return;
         m_CharacterSettings = initData.CharacterSettings;
         m_InteractSettings = initData.InteractSettings;
@@ -56,7 +58,7 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
 
     public override void UpdateCharacter(ref IPlayerCharacterUpdateData playerCharacterUpdateData)
     {
-        Util.Sys.Assert(playerCharacterUpdateData is FirstPersonPlayerCharacterUpdateData, "playerCharacterUpdateData must be type FirstPersonPlayerCharacterUpdateData");
+        Sys.Assert(playerCharacterUpdateData is FirstPersonPlayerCharacterUpdateData, "playerCharacterUpdateData must be type FirstPersonPlayerCharacterUpdateData");
         if (playerCharacterUpdateData is not FirstPersonPlayerCharacterUpdateData input) return;
         HandleMovement(ref input);
         HandleInteraction(ref input);
@@ -180,7 +182,7 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
             layerMask: m_InteractSettings.InteractableLayer,
             queryTriggerInteraction: QueryTriggerInteraction.Collide))
         {
-            Interactable interactable = Util.UnityUtil.GetComponent<Interactable>(hit);
+            Interactable interactable = hit.GetComponent<Interactable>();
             if (interactable != null) interactable.Interact();
         }
     }

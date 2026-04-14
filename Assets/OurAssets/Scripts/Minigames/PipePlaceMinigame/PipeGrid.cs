@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
-using Util;
+using Util.SystemUtils;
+using Util.ArrayUtils;
 
 [RequireComponent(typeof(PlaneGridGenerator), typeof(Grid))]
 public class PipeGrid : MonoBehaviour
