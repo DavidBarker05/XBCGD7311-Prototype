@@ -143,7 +143,6 @@ namespace Util
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
 			public static void Shuffle(this Array array)
 			{
-				if (array == null) throw new NullReferenceException("The array you are trying to use hasn't been initialized");
 				if (array.IsJagged()) ArraysInternal.ShuffleJagged(array);
 				else if (array.IsMultidimensional()) ArraysInternal.ShuffleMultidimensional(array);
 				else ArraysInternal.ShuffleSingleDimensional(array);
@@ -152,7 +151,12 @@ namespace Util
 			private static class ArraysInternal
 			{
 				[MethodImpl(MethodImplOptions.AggressiveInlining)]
-				public static Type GetTypeJagged(Array array) => throw new NotImplementedException("Jagged array implementation hasn't been added");
+				public static Type GetTypeJagged(Array array)
+				{
+					Type type = array.GetType().GetElementType();
+					do type = type.GetElementType(); while (type.IsArray);
+					return type;
+				}
 
 				[MethodImpl(MethodImplOptions.AggressiveInlining)]
 				public static bool IsValidIndexJagged(Array array, int firstIndex, int secondIndex, params int[] remainingIndices) => throw new NotImplementedException("Jagged array implementation hasn't been added");
@@ -191,7 +195,7 @@ namespace Util
 				public static int[] IndexOfJagged<T>(Array array, T value) => throw new NotImplementedException("Jagged array implementation hasn't been added");
 
 				[MethodImpl(MethodImplOptions.AggressiveInlining)]
-				public static bool IndexOfMultidimensionalRecursion<T>(Array array, ref int[] indices, int currentDimension, T value)
+				private static bool IndexOfMultidimensionalRecursion<T>(Array array, ref int[] indices, int currentDimension, T value)
 				{
 					for (int i = 0; i < array.GetLength(currentDimension); ++i)
 					{
