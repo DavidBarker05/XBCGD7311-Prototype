@@ -7,4 +7,6 @@ public class PlayerSettings : ScriptableObject
     public CharacterSettings CharacterSettings { get; private set; }
     [field: SerializeField]
     public CameraSettings CameraSettings { get; private set; }
+    [field: SerializeField]
+    public InteractSettings InteractSettings { get; private set; }
 }

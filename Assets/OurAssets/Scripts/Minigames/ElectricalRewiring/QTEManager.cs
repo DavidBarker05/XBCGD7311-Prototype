@@ -12,7 +12,7 @@ public class QTEManager : MonoBehaviour
     {
         currentInteractable = interactable;
 
-        currentQTE = Instantiate(qtePrefab);
+        currentQTE = Instantiate(qtePrefab, transform);
         PointerController pointer = currentQTE.GetComponentInChildren<PointerController>();
         pointer.Begin(this);
         Time.timeScale = 0f;

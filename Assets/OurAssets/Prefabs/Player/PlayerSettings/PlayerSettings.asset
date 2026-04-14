@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerSettings
   <CharacterSettings>k__BackingField: {fileID: 11400000, guid: 22108a551220517499182be029771981, type: 2}
   <CameraSettings>k__BackingField: {fileID: 11400000, guid: 97ff678844a18c647be3d1f661594d33, type: 2}
+  <InteractSettings>k__BackingField: {fileID: 11400000, guid: 293d587bd5213f3458d97ab9a2e68e4d, type: 2}

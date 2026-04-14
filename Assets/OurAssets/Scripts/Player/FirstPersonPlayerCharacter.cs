@@ -2,7 +2,8 @@ using UnityEngine;
 
 public class FirstPersonPlayerCharacterInitData : IPlayerCharacterInitData
 {
-    public CharacterSettings CharacterSettings;
+    public CharacterSettings CharacterSettings { get; set; }
+    public InteractSettings InteractSettings { get; set; }
 }
 
 public class FirstPersonPlayerCharacterUpdateData : IPlayerCharacterUpdateData
@@ -14,6 +15,7 @@ public class FirstPersonPlayerCharacterUpdateData : IPlayerCharacterUpdateData
     public Vector2 MovementInput { get; set; }
     public bool JumpPressedThisFrame { get; set; }
     public bool SprintPressedThisFrame { get; set; }
+    public bool PressedInteract { get; set; }
 }
 
 [RequireComponent(typeof(CharacterController))]
@@ -23,6 +25,7 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
     static readonly float s_SqrEpsilon = s_Epsilon * s_Epsilon;
 
     CharacterSettings m_CharacterSettings;
+    InteractSettings m_InteractSettings;
     CharacterController m_CC;
 
     bool m_bIsGrounded;
@@ -46,13 +49,22 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
     public override void Init(IPlayerCharacterInitData playerCharacterInitData)
     {
         Util.Sys.Assert(playerCharacterInitData is FirstPersonPlayerCharacterInitData, "playerCharacterInitData must be type FirstPersonPlayerCharacterInitData");
-        if (playerCharacterInitData is FirstPersonPlayerCharacterInitData initData) m_CharacterSettings = initData.CharacterSettings;
+        if (playerCharacterInitData is not FirstPersonPlayerCharacterInitData initData) return;
+        m_CharacterSettings = initData.CharacterSettings;
+        m_InteractSettings = initData.InteractSettings;
     }
 
     public override void UpdateCharacter(ref IPlayerCharacterUpdateData playerCharacterUpdateData)
     {
         Util.Sys.Assert(playerCharacterUpdateData is FirstPersonPlayerCharacterUpdateData, "playerCharacterUpdateData must be type FirstPersonPlayerCharacterUpdateData");
         if (playerCharacterUpdateData is not FirstPersonPlayerCharacterUpdateData input) return;
+        HandleMovement(ref input);
+        HandleInteraction(ref input);
+    }
+
+    #region Movement
+    void HandleMovement(ref FirstPersonPlayerCharacterUpdateData input)
+    {
         UpdateRotation(input.CameraRotation);
         CollisionChecks();
         UpdateTimers(input.DeltaTime);
@@ -145,4 +157,32 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
         else if (!m_bIsGrounded) UpdateVerticalVelocityWhileFalling(deltaTime);
     }
     #endregion
+    #endregion Movement
+
+    #region Interaction
+    void HandleInteraction(ref FirstPersonPlayerCharacterUpdateData input)
+    {
+        if (input.PressedInteract)
+        {
+            Vector3 direction = input.CameraRotation * Vector3.forward; // Rotate forward vector by camera rotation to get camera's forward vector
+            DoInteraction(direction);
+        }
+        input.PressedInteract = false;
+    }
+
+    void DoInteraction(Vector3 direction)
+    {
+        if (Physics.Raycast(
+            origin: CameraTarget.position,
+            direction: direction,
+            hitInfo: out RaycastHit hit,
+            maxDistance: m_InteractSettings.InteractionDistance,
+            layerMask: m_InteractSettings.InteractableLayer,
+            queryTriggerInteraction: QueryTriggerInteraction.Collide))
+        {
+            Interactable interactable = Util.UnityUtil.GetComponent<Interactable>(hit);
+            if (interactable != null) interactable.Interact();
+        }
+    }
+    #endregion Interaction
 }

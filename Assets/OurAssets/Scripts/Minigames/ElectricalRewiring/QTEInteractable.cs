@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class QTEInteractable : MonoBehaviour
+public class QTEInteractable : Interactable
 {
     public QTEManager qteManager;
 
@@ -16,7 +16,15 @@ public class QTEInteractable : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (playerInRange && Input.GetKeyDown(KeyCode.E))
+        //if (playerInRange && Input.GetKeyDown(KeyCode.E))
+        //{
+        //    
+        //}
+    }
+
+    public override object[] Interact(params object[] inputParameters)
+    {
+        if (!hasTriggered)
         {
             if (!hasTriggered)
             {
@@ -24,6 +32,9 @@ public class QTEInteractable : MonoBehaviour
                 qteManager.StartQTE(this);
             }
         }
+        // David - Return nothing for now, if you want the player to receive information
+        // then output an array of objects instead
+        return null; 
     }
 
     public void OnQTESuccess()

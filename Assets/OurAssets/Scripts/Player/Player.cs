@@ -29,9 +29,9 @@ public class Player : MonoBehaviour
     void Awake()
     {
         m_PlayerInput = GetComponent<PlayerInput>();
-        m_PlayerCharacter.Init(new FirstPersonPlayerCharacterInitData() { CharacterSettings = m_PlayerSettings.CharacterSettings });
+        m_PlayerCharacter.Init(new FirstPersonPlayerCharacterInitData(){ CharacterSettings = m_PlayerSettings.CharacterSettings, InteractSettings = m_PlayerSettings.InteractSettings });
         m_PipePlayerCharacter.Init(new PipePlayerCharacterInitData());
-        //m_WirePlayerCharacter.Init(new WirePlayerCharacterInitData());
+        m_WirePlayerCharacter.Init(new WirePlayerCharacterInitData());
         m_PlayerCamera.Init(m_PlayerSettings.CameraSettings, m_PlayerCharacter.CameraTarget);
         m_CameraInput = new CameraInput();
         m_MouseInfo = new MouseInfo();
@@ -156,6 +156,11 @@ public class Player : MonoBehaviour
     public void HandleSprintInput(InputAction.CallbackContext ctx)
     {
         SetDataValue<FirstPersonPlayerCharacterUpdateData>(input => input.SprintPressedThisFrame = ctx.action.WasPressedThisFrame());
+    }
+
+    public void HandleInteractInput(InputAction.CallbackContext ctx)
+    {
+        SetDataValue<FirstPersonPlayerCharacterUpdateData>(input => { if (ctx.started) input.PressedInteract = true; });
     }
 
     public void HandleJumpInput(InputAction.CallbackContext ctx)

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PointerController : MonoBehaviour
 {
@@ -45,7 +46,8 @@ public class PointerController : MonoBehaviour
             direction = -1f;
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        //if (Input.GetKeyDown(KeyCode.Space))
+        if (InputSystem.actions.FindAction("Jump").WasPerformedThisFrame())
         {
             CheckSuccess();
         }
