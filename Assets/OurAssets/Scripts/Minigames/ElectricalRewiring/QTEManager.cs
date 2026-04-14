@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class QTEManager : MonoBehaviour
 {
-
+    public Canvas canvas;
     public GameObject qtePrefab;
     private GameObject currentQTE;
 
@@ -12,7 +12,7 @@ public class QTEManager : MonoBehaviour
     {
         currentInteractable = interactable;
 
-        currentQTE = Instantiate(qtePrefab, transform);
+        currentQTE = Instantiate(qtePrefab, canvas.transform);
         PointerController pointer = currentQTE.GetComponentInChildren<PointerController>();
         pointer.Begin(this);
         Time.timeScale = 0f;
