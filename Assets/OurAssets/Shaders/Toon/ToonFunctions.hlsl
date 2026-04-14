@@ -85,17 +85,28 @@ float3 ToonTintSingle(Light light, InputData inputData)
 float3 AdditionalLightLoop(InputData inputData)
 {
     float3 additionalTint = 0;
+    uint meshRenderingLayers = GetMeshRenderingLayer();
     #if USE_CLUSTER_LIGHT_LOOP
         UNITY_LOOP for (uint lightIndex = 0; lightIndex < min(URP_FP_DIRECTIONAL_LIGHTS_COUNT, MAX_VISIBLE_LIGHTS); ++lightIndex)
         {
             Light light = GetAdditionalLight(lightIndex, inputData.positionWS, inputData.shadowMask);
-            additionalTint += ToonTintSingle(light, inputData);
+            #ifdef _LIGHT_LAYERS
+            if (IsMatchingLightLayer(light.layerMask, meshRenderingLayers))
+            #endif
+            {
+                additionalTint += ToonTintSingle(light, inputData);
+            }
         }
     #endif
     uint pixelLightCount = GetAdditionalLightsCount();
     LIGHT_LOOP_BEGIN(pixelLightCount)
         Light light = GetAdditionalLight(lightIndex, inputData.positionWS, inputData.shadowMask);
-        additionalTint += ToonTintSingle(light, inputData);
+        #ifdef _LIGHT_LAYERS
+        if (IsMatchingLightLayer(light.layerMask, meshRenderingLayers))
+        #endif
+        {
+            additionalTint += ToonTintSingle(light, inputData);
+        }
     LIGHT_LOOP_END
     return additionalTint;
 }
@@ -104,7 +115,13 @@ float3 ToonTint(float4 positionHCS, InputData inputData)
 {
     float3 tint = 0;
     Light mainLight = MainLight(positionHCS, inputData.positionWS);
-    tint += ToonTintSingle(mainLight, inputData);
+    uint meshRenderingLayers = GetMeshRenderingLayer();
+    #ifdef _LIGHT_LAYERS
+    if (IsMatchingLightLayer(mainLight.layerMask, meshRenderingLayers))
+    #endif
+    {
+        tint += ToonTintSingle(mainLight, inputData);
+    }
     #if defined(_ADDITIONAL_LIGHTS)
         tint += AdditionalLightLoop(inputData);
     #endif
