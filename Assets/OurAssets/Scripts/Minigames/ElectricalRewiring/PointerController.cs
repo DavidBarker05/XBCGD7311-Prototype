@@ -12,6 +12,8 @@ public class PointerController : MonoBehaviour
     private RectTransform pointerTransform;
     private Vector3 targetPosition;
 
+    private QTEManager qteManager;
+    private bool isRunning;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -19,10 +21,17 @@ public class PointerController : MonoBehaviour
         targetPosition = pointB.position;
     }
 
+    public void Begin(QTEManager manager)
+    {
+        qteManager = manager;
+        isRunning = true;
+    }
+
     // Update is called once per frame
     void Update()
     {
-        pointerTransform.position = Vector3.MoveTowards(pointerTransform.position, targetPosition, moveSpeed * Time.deltaTime);
+        if (!isRunning) return;
+        pointerTransform.position = Vector3.MoveTowards(pointerTransform.position, targetPosition, moveSpeed * Time.unscaledDeltaTime);
 
         if(Vector3.Distance(pointerTransform.position, pointA.position) < 0.1f)
         {
