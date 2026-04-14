@@ -9007,6 +9007,11 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -5495902117074765545, guid: 013d4b2bd8872a04c935487aa414d44c, type: 3}
+--- !u!4 &1395975096 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5558182433297790033, guid: 2288494715f42ad4a8ce262dee2b745b, type: 3}
+  m_PrefabInstance: {fileID: 1342141880}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1399582613 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 013d4b2bd8872a04c935487aa414d44c, type: 3}
@@ -10496,7 +10501,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ChasePlayer
   enemy: {fileID: 1640123579}
-  player: {fileID: 0}
+  player: {fileID: 1395975096}
 --- !u!195 &1640123579
 NavMeshAgent:
   m_ObjectHideFlags: 0
