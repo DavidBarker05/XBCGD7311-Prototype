@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using Util;
 
 public class PipePlayerCharacterInitData : IPlayerCharacterInitData { }
 
@@ -51,7 +52,7 @@ public class PipePlayerCharacter : PlayerCharacter
 
     public override void Init(IPlayerCharacterInitData playerCharacterInitData)
     {
-        Util.Sys.Assert(playerCharacterInitData is PipePlayerCharacterInitData, "playerCharacterInitData must be type PipePlayerCharacterInitData");
+        Sys.Assert(playerCharacterInitData is PipePlayerCharacterInitData, "playerCharacterInitData must be type PipePlayerCharacterInitData");
         if (playerCharacterInitData is not PipePlayerCharacterInitData) return;
         if (playerCharacterInitData is PipePlayerCharacterInitData)
 #if !UNITY_EDITOR
@@ -66,7 +67,7 @@ public class PipePlayerCharacter : PlayerCharacter
 
     public override void UpdateCharacter(ref IPlayerCharacterUpdateData playerCharacterUpdateData)
     {
-        Util.Sys.Assert(playerCharacterUpdateData is PipePlayerCharacterUpdateData, "playerCharacterUpdateData must be type PipePlayerCharacterUpdateData");
+        Sys.Assert(playerCharacterUpdateData is PipePlayerCharacterUpdateData, "playerCharacterUpdateData must be type PipePlayerCharacterUpdateData")
         if (playerCharacterUpdateData is not PipePlayerCharacterUpdateData input) return;
         DoGridFunctions(ref input);
         input.ClickedThisFrame = false;
@@ -76,13 +77,13 @@ public class PipePlayerCharacter : PlayerCharacter
     {
         if (!input.MouseInfo.DidHitObject) return;
         RaycastHit hit = input.MouseInfo.HitInfo;
-        Grid grid = Util.UnityUtil.GetComponent<Grid>(hit);
+        Grid grid = hit.GetComponent<Grid>();
         if (!grid) return;
         Vector3Int cp = grid.WorldToCell(hit.point);
         MoveCellIndicator(ref grid, cp, hit.normal);
         if (input.ClickedThisFrame)
         {
-            PipeGrid pipeGrid = Util.UnityUtil.GetComponent<PipeGrid>(hit);
+            PipeGrid pipeGrid = hit.GetComponent<PipeGrid>();
             if (!pipeGrid) return;
             PlacePipe(ref pipeGrid, cp);
         }

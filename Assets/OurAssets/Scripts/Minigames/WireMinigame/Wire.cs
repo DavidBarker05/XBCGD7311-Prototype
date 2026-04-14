@@ -39,6 +39,7 @@ public class Wire : MonoBehaviour
         get => m_TipStartPosition;
         set
         {
+            SetLineEndPosition(value);
             m_TipStartPosition = value;
         }
     }
@@ -56,12 +57,17 @@ public class Wire : MonoBehaviour
         }
     }
 
-    public bool CanBeGrabbed { get; set; } = true;
-    public bool BeingHeld { get; set; } = false;
+    public bool CanBeGrabbed { get; private set; } = true;
+    bool m_bBeingHeld = false;
 
     LineRenderer m_Line;
 
-    void Awake() => m_Line = GetComponent<LineRenderer>();
+    void Awake()
+    {
+        m_Line = GetComponent<LineRenderer>();
+        m_Line.useWorldSpace = false;
+    }
+
     public void Init(Vector3 startPosition, Vector3 tipStartPosition, Vector3 endPosition, WireColour wireColour)
     {
         StartPosition = startPosition;
@@ -69,29 +75,30 @@ public class Wire : MonoBehaviour
         EndPosition = endPosition;
         Colour = wireColour;
         CanBeGrabbed = true;
-        BeingHeld = false;
+        m_bBeingHeld = false;
     }
 
     public void HoldWire(Vector3 holdPosition)
     {
-        if (CanBeGrabbed || BeingHeld)
+        if (CanBeGrabbed || m_bBeingHeld)
         {
-            if (CanBeGrabbed) CanBeGrabbed = false;
+            CanBeGrabbed = false;
+            m_bBeingHeld = true;
             SetLineEndPosition(holdPosition);
         }
     }
 
     public void ReleaseWire(bool snapToEnd)
     {
-        BeingHeld = false;
+        m_bBeingHeld = false;
         SetLineEndPosition(snapToEnd ? EndPosition : TipStartPosition);
         CanBeGrabbed = !snapToEnd;
     }
 
     void SetLineEndPosition(Vector3 endPosition)
     {
-        Vector3 lp = endPosition - m_StartPosition;
-        m_Line.SetPosition(m_Line.positionCount - 1, lp);
+        Vector3 localPosition = endPosition - transform.position;
+        m_Line.SetPosition(m_Line.positionCount - 1, localPosition);
     }
 
     void ChangeLineColour(WireColour wireColour)

@@ -80,7 +80,7 @@ public class Player : MonoBehaviour
     {
         "Player" => new FirstPersonPlayerCharacterUpdateData(),
         "PipePlayer" => new PipePlayerCharacterUpdateData(),
-        "WirePlayer" => new PipePlayerCharacterUpdateData(),
+        "WirePlayer" => new WirePlayerCharacterUpdateData(),
         _ => null
     };
 

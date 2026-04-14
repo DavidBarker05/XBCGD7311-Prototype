@@ -1,7 +1,10 @@
 using UnityEngine;
+using Util;
 
 public class WireBoard : MonoBehaviour
 {
+    [SerializeField]
+    bool m_Debug = false;
     [SerializeField]
     Transform m_UnscaledTransform;
     [SerializeField, Min(0f)]
@@ -29,12 +32,19 @@ public class WireBoard : MonoBehaviour
 
     void Awake()
     {
-        Util.Sys.Assert(Util.Compare.MultiEqual(m_WireStartingPositions.Length, m_WireTipStartingPositions.Length, m_WireEndPositions.Length), "Mismatched number of wire positions");
+        Sys.Assert(Arrays.IsValid(m_WireStartingPositions), "m_WireStartingPositions is not a valid array");
+        Sys.Assert(Arrays.IsValid(m_WireTipStartingPositions), "m_WireTipStartingPositions is not a valid array");
+        Sys.Assert(Arrays.IsValid(m_WireEndPositions), "m_WireEndPositions is not a valid array");
+        Sys.Assert(m_WireStartingPositions.Equals(m_WireTipStartingPositions.Length, m_WireEndPositions.Length), "Mismatched number of wire positions");
+#if !UNITY_EDITOR
+        m_Debug = false;
+#endif
+        if (m_Debug) StartWireMinigame(Random.Range(0, m_WireStartingPositions.Length) + 1);
     }
 
     public void StartWireMinigame(int numWires)
     {
-        Util.Sys.Assert(Util.Arrays.IsValidIndex(m_WireStartingPositions, numWires - 1), $"{numWires} is an invalid number of wires");
+        Sys.Assert(m_WireStartingPositions.ContainsIndex(numWires - 1), $"{numWires} is an invalid number of wires");
         m_Wires = new Wire[numWires];
         m_GrabPoints = new GrabReleasePoint[numWires];
         m_ReleasePoints = new GrabReleasePoint[numWires];
@@ -44,24 +54,24 @@ public class WireBoard : MonoBehaviour
             CreateGrabPoint(i);
             CreateReleasePoint(i);
         }
+		m_ReleasePoints.Shuffle();
     }
 
     void CreateWire(int index)
     {
-        if (!Util.Arrays.IsValidArray(m_WireStartingPositions) || !Util.Arrays.IsValidArray(m_WireTipStartingPositions) || !Util.Arrays.IsValidArray(m_WireEndPositions)) return;
-        if (!Util.Compare.MultiEqual(m_WireStartingPositions.Length, m_WireTipStartingPositions.Length, m_WireEndPositions.Length)) return;
-        if (!Util.Arrays.IsValidIndex(m_WireTipStartingPositions, index)) return;
+        Sys.Assert(Arrays.IsValid(m_Wires), "m_Wires is not a valid array");
+        Sys.Assert(m_Wires.ContainsIndex(index), $"{index} is not a valid index for m_Wires");
         GameObject go = new GameObject($"Wire ({index})");
         go.transform.SetParent(m_UnscaledTransform);
+        go.AddComponent<LineRenderer>();
         m_Wires[index] = go.AddComponent<Wire>();
         m_Wires[index].Init(m_WireStartingPositions[index].position, m_WireTipStartingPositions[index].position, m_WireEndPositions[index].position, WireColour.None); // TODO: Wire colour
     }
 
     void CreateGrabPoint(int index)
     {
-        if (!Util.Arrays.IsValidArray(m_WireStartingPositions) || !Util.Arrays.IsValidArray(m_WireTipStartingPositions) || !Util.Arrays.IsValidArray(m_GrabPoints)) return;
-        if (!Util.Compare.MultiEqual(m_WireStartingPositions.Length, m_WireTipStartingPositions.Length, m_GrabPoints.Length)) return;
-        if (!Util.Arrays.IsValidIndex(m_GrabPoints, index)) return;
+        Sys.Assert(Arrays.IsValid(m_GrabPoints), "m_GrabPoints is not a valid array");
+        Sys.Assert(m_GrabPoints.ContainsIndex(index), $"{index} is not a valid index for m_GrabPoints");
         m_GrabPoints[index] = new GrabReleasePoint()
         {
             Position = (m_WireStartingPositions[index].position + m_WireTipStartingPositions[index].position) / 2,
@@ -71,9 +81,8 @@ public class WireBoard : MonoBehaviour
 
     void CreateReleasePoint(int index)
     {
-        if (!Util.Arrays.IsValidArray(m_WireEndPositions) || !Util.Arrays.IsValidArray(m_ReleasePoints)) return;
-        if (m_WireEndPositions.Length != m_ReleasePoints.Length) return;
-        if (!Util.Arrays.IsValidIndex(m_ReleasePoints, index)) return;
+        Sys.Assert(Arrays.IsValid(m_ReleasePoints), "m_ReleasePoints is not a valid array");
+        Sys.Assert(m_ReleasePoints.ContainsIndex(index), $"{index} is not a valid index for m_ReleasePoints");
         m_ReleasePoints[index] = new GrabReleasePoint()
         {
             Position = m_WireEndPositions[index].position,
@@ -87,7 +96,7 @@ public class WireBoard : MonoBehaviour
         for (int i = 0; i < m_GrabPoints.Length; ++i)
         {
             Vector3 grabPosition = m_IgnoreDepthAxis ? Vector3.ProjectOnPlane(m_GrabPoints[i].Position, transform.up) : m_GrabPoints[i].Position;
-            if (Vector3.Distance(position, grabPosition) <= m_GrabTolerance) return m_Wires[i];
+            if (Vector3.Distance(position, grabPosition) <= m_GrabTolerance && m_Wires[i].CanBeGrabbed) return m_Wires[i];
         }
         return null;
     }

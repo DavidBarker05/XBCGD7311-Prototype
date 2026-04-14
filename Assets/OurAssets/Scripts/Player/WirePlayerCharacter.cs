@@ -1,4 +1,5 @@
 using UnityEngine;
+using Util;
 
 public class WirePlayerCharacterInitData : IPlayerCharacterInitData { }
 
@@ -23,23 +24,27 @@ public class WirePlayerCharacter : PlayerCharacter
 
     public override void Init(IPlayerCharacterInitData playerCharacterInitData)
     {
-        Util.Sys.Assert(playerCharacterInitData is WirePlayerCharacterInitData, "playerCharacterInitData must be type WirePlayerCharacterInitData");
+        Sys.Assert(playerCharacterInitData is WirePlayerCharacterInitData, "playerCharacterInitData must be type WirePlayerCharacterInitData");
     }
 
     public override void UpdateCharacter(ref IPlayerCharacterUpdateData playerCharacterUpdateData)
     {
-        Util.Sys.Assert(playerCharacterUpdateData is WirePlayerCharacterUpdateData, "playerCharacterUpdateData must be type WirePlayerCharacterUpdateData");
+        Sys.Assert(playerCharacterUpdateData is WirePlayerCharacterUpdateData, "playerCharacterUpdateData must be type WirePlayerCharacterUpdateData");
         if (playerCharacterUpdateData is not WirePlayerCharacterUpdateData input) return;
         if (!input.MouseInfo.DidHitObject)
         {
             if (m_CurrentlyHeldWire) ReleaseWire(Vector3.negativeInfinity);
             return;
         }
-        if (!input.ClickedThisFrame) return;
+        if (!input.ClickedThisFrame)
+        {
+            if (m_CurrentlyHeldWire) ReleaseWire(input.MouseInfo.HitInfo.point);
+            return;
+        }
         if (m_CurrentlyHeldWire) HoldWire(input.MouseInfo.HitInfo.point);
         else
         {
-            m_CurrentWireBoard = Util.UnityUtil.GetComponent<WireBoard>(input.MouseInfo.HitInfo);
+            m_CurrentWireBoard = input.MouseInfo.HitInfo.GetComponent<WireBoard>();
             GrabWire(input.MouseInfo.HitInfo.point);
         }
     }
