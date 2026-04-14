@@ -100,7 +100,7 @@ public class PipeGrid : MonoBehaviour
     #region GetIndex & GetPipe
     public (int x, int y) GetIndexOf(Pipe pipe)
     {
-        int[] indices = m_PipeCells.IndexOf(pipe);
+        int[] indices = m_PipeCells.MultiIndexOf(pipe);
         int x = indices[0], y = indices[1];
         return (x, y);
     }

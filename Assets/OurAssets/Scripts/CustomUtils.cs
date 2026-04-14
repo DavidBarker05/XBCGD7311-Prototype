@@ -103,7 +103,7 @@ namespace Util
 			public static bool IsValidIndex(int arrayLength, int index) => index.IsInRange(0, arrayLength, RangeCheck.RangeBounds.InclusiveMinExclusiveMax);
 
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
-			public static bool ContainsIndex(this Array array, int index) => array.IsSingleDimensional() && IsValidIndex(array.Length, index);
+			public static bool ContainsIndex(this Array array, int index) => !array.IsMultidimensional() && IsValidIndex(array.Length, index);
 
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
 			public static bool ContainsIndex(this Array array, int firstIndex, int secondIndex, params int[] remainingIndices)
@@ -111,6 +111,29 @@ namespace Util
 				if (array.IsJagged()) return ArraysInternal.IsValidIndexJagged(array, firstIndex, secondIndex, remainingIndices);
 				if (array.IsMultidimensional()) return ArraysInternal.IsValidIndexMultidimensional(array, firstIndex, secondIndex, remainingIndices);
 				return false; // One dimensional array
+			}
+
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			public static object GetValueJagged(this Array array, int[] index) => throw new NotImplementedException("Jagged array implementation hasn't been added");
+
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			public static T GetValue<T>(this Array array, int index)
+			{
+				if (array.IsMultidimensional()) throw new ArgumentException("This method should not be used with multidimensional arrays");
+				Type arrayType = array.IsJagged() ? array.GetType().GetElementType() : array.GetStoredType();
+				if (arrayType != typeof(T)) throw new ArgumentException("Return type does not match the type stored in the array");
+				return (T) array.GetValue(index);
+			}
+
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			public static T GetValue<T>(this Array array, int[] index)
+			{
+				if (!IsValid(index)) throw new ArgumentException("Index is an invalid array");
+				Type arrayType = array.IsJagged() ? array.GetType().GetElementType() : array.GetStoredType();
+				if (arrayType != typeof(T)) throw new ArgumentException("Return type does not match the type stored in the array");
+				if (array.IsMultidimensional()) return (T)array.GetValue(index);
+				if (array.IsJagged()) return (T)array.GetValueJagged(index);
+				return (T)array.GetValue(index[0]);
 			}
 
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -133,7 +156,7 @@ namespace Util
 			}
 
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
-			public static int[] IndexOf<T>(this Array array, T value)
+			public static int[] MultiIndexOf<T>(this Array array, T value)
 			{
 				if (array.IsJagged()) return ArraysInternal.IndexOfJagged(array, value);
 				if (array.IsMultidimensional()) return ArraysInternal.IndexOfMultidimensional(array, value);
@@ -147,6 +170,33 @@ namespace Util
 				else if (array.IsMultidimensional()) ArraysInternal.ShuffleMultidimensional(array);
 				else ArraysInternal.ShuffleSingleDimensional(array);
 			}
+
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			public static int GetRandomIndex(this Array array)
+			{
+				if (array.IsMultidimensional()) throw new ArgumentException("This method should not be used with multidimensional arrays");
+				return ArraysInternal.GetRandomIndexSingleDimensional(array);
+			}
+
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			public static int[] GetRandomMultiIndex(this Array array)
+			{
+				if (array.IsJagged()) return ArraysInternal.GetRandomIndexJagged(array);
+				if (array.IsMultidimensional()) return ArraysInternal.GetRandomIndexMultidimensional(array);
+				return new int[1] { ArraysInternal.GetRandomIndexSingleDimensional(array) };
+			}
+
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			public static object GetRandomElement(this Array array)
+			{
+				int[] randomIndex = array.GetRandomMultiIndex();
+				if (array.IsJagged()) return array.GetValueJagged(randomIndex);
+				if (array.IsMultidimensional()) return array.GetValue(randomIndex);
+				return array.GetValue(randomIndex[0]);
+			}
+
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			public static T GetRandomElement<T>(this Array array) => array.GetValue<T>(array.GetRandomMultiIndex());
 
 			private static class ArraysInternal
 			{
@@ -237,6 +287,15 @@ namespace Util
 
 				[MethodImpl(MethodImplOptions.AggressiveInlining)]
 				public static void ShuffleMultidimensional(Array array) => throw new NotImplementedException("Multidimensional array implementation hasn't been added");
+
+				[MethodImpl(MethodImplOptions.AggressiveInlining)]
+				public static int GetRandomIndexSingleDimensional(Array array) => UnityEngine.Random.Range(0, array.Length);
+
+				[MethodImpl(MethodImplOptions.AggressiveInlining)]
+				public static int[] GetRandomIndexJagged(Array array) => throw new NotImplementedException("Jagged array implementation hasn't been added");
+
+				[MethodImpl(MethodImplOptions.AggressiveInlining)]
+				public static int[] GetRandomIndexMultidimensional(Array array) => throw new NotImplementedException("Multidimensional array implementation hasn't been added");
 			}
 		}
 	}

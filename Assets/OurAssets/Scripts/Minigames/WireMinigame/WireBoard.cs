@@ -2,6 +2,7 @@ using UnityEngine;
 using Util.SystemUtils;
 using Util.ArrayUtils;
 using Util.ComparisonUtils;
+using System.Linq;
 
 public class WireBoard : MonoBehaviour
 {
@@ -9,6 +10,8 @@ public class WireBoard : MonoBehaviour
     bool m_Debug = false;
     [SerializeField]
     Transform m_UnscaledTransform;
+	[SerializeField]
+	Material m_WireMaterial;
     [SerializeField, Min(0f)]
     float m_GrabTolerance = 1f;
     [SerializeField, Min(0f)]
@@ -37,7 +40,7 @@ public class WireBoard : MonoBehaviour
         Sys.Assert(Arrays.IsValid(m_WireStartingPositions), "m_WireStartingPositions is not a valid array");
         Sys.Assert(Arrays.IsValid(m_WireTipStartingPositions), "m_WireTipStartingPositions is not a valid array");
         Sys.Assert(Arrays.IsValid(m_WireEndPositions), "m_WireEndPositions is not a valid array");
-        Sys.Assert(m_WireStartingPositions.Equals(m_WireTipStartingPositions.Length, m_WireEndPositions.Length), "Mismatched number of wire positions");
+        Sys.Assert(m_WireStartingPositions.Length.Equals(m_WireTipStartingPositions.Length, m_WireEndPositions.Length), "Mismatched number of wire positions");
 #if !UNITY_EDITOR
         m_Debug = false;
 #endif
@@ -65,9 +68,12 @@ public class WireBoard : MonoBehaviour
         Sys.Assert(m_Wires.ContainsIndex(index), $"{index} is not a valid index for m_Wires");
         GameObject go = new GameObject($"Wire ({index})");
         go.transform.SetParent(m_UnscaledTransform);
-        go.AddComponent<LineRenderer>();
+        LineRenderer lineRenderer = go.AddComponent<LineRenderer>();
+		lineRenderer.material = m_WireMaterial;
         m_Wires[index] = go.AddComponent<Wire>();
-        m_Wires[index].Init(m_WireStartingPositions[index].position, m_WireTipStartingPositions[index].position, m_WireEndPositions[index].position, WireColour.None); // TODO: Wire colour
+		WireColour[] colours = (WireColour[])System.Enum.GetValues(typeof(WireColour));
+		colours = colours.Skip(1).ToArray();
+        m_Wires[index].Init(m_WireStartingPositions[index].position, m_WireTipStartingPositions[index].position, m_WireEndPositions[index].position, colours.GetRandomElement<WireColour>()); // TODO: Wire colour
     }
 
     void CreateGrabPoint(int index)
