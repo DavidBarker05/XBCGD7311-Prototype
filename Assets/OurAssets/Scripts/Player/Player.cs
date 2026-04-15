@@ -134,7 +134,7 @@ public class Player : MonoBehaviour
 
     #region Handle PlayerInput Events
 
-    delegate void SetDataValueFunc<T>(T _);
+    delegate void SetDataValueFunc<T>(T _) where T : class, IPlayerCharacterUpdateData;
 
     void SetDataValue<T>(SetDataValueFunc<T> dataChangeFunction) where T : class, IPlayerCharacterUpdateData
     {
@@ -168,11 +168,17 @@ public class Player : MonoBehaviour
         SetDataValue<FirstPersonPlayerCharacterUpdateData>(input => input.JumpPressedThisFrame = ctx.action.WasPressedThisFrame());
     }
 
-    public void HandleClickInput(InputAction.CallbackContext ctx)
+    public void HandleLeftClickInput(InputAction.CallbackContext ctx)
     {
         SetDataValue<PipePlayerCharacterUpdateData>(input => input.ClickedThisFrame |= ctx.started);
         SetDataValue<WirePlayerCharacterUpdateData>(input => input.ClickedThisFrame = ctx.action.WasPressedThisFrame());
-    }
+		SetDataValue<WallKnockPlayerCharacterUpdateData>(input => input.LeftClickedThisFrame |= ctx.started);
+	}
+
+	public void HandleRightClickInput(InputAction.CallbackContext ctx)
+	{
+		SetDataValue<WallKnockPlayerCharacterUpdateData>(input => input.RightClickedThisFrame |= ctx.started);
+	}
 
     #region Control Scheme Change
     public InputDevice CurrentDevice { get; private set; }

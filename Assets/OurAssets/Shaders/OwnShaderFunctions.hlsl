@@ -1,12 +1,36 @@
 #ifndef OWNSHADERFUNCTIONS_HLSL
 #define OWNSHADERFUNCTIONS_HLSL
 
+#ifndef EMPTY
+#define EMPTY(type) (type)0
+#endif
+
 inline float3 ObjectScale()
 {
     float scaleX = length(float3(unity_ObjectToWorld[0].x, unity_ObjectToWorld[1].x, unity_ObjectToWorld[2].x));
     float scaleY = length(float3(unity_ObjectToWorld[0].y, unity_ObjectToWorld[1].y, unity_ObjectToWorld[2].y));
     float scaleZ = length(float3(unity_ObjectToWorld[0].z, unity_ObjectToWorld[1].z, unity_ObjectToWorld[2].z));
     return float3(scaleX, scaleY, scaleZ);
+}
+
+inline float Sqr(float x)
+{
+    return x * x;
+}
+
+inline float2 Sqr(float2 xy)
+{
+    return xy * xy;
+}
+
+inline float3 Sqr(float3 xyz)
+{
+    return xyz * xyz;
+}
+
+inline float4 Sqr(float4 xyzw)
+{
+    return xyzw * xyzw;
 }
 
 bool Float2Compare(float2 first, float2 second)

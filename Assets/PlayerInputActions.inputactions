@@ -824,6 +824,54 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "WallKnockPlayer",
+            "id": "747851f0-7e01-4bcc-bc08-541a6fc83d1c",
+            "actions": [
+                {
+                    "name": "Knock",
+                    "type": "Button",
+                    "id": "a85df738-edb5-445b-ac50-5c7b38be7d21",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Break",
+                    "type": "Button",
+                    "id": "2193f1a7-8ede-4d51-9819-3ea5f40015c9",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "811d5461-f612-482b-ba6e-7d54398223df",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "Knock",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3ec4ed52-38d3-43b7-a68b-46cc14d48f2f",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Break",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": [
