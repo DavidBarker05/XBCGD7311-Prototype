@@ -58,30 +58,19 @@ Shader "Custom/CellIndicatorShader"
                 return OUT;
             }
 
-            float Edge(float axis, float axisSize, float axisScale)
-            {
-                if (axisSize == 0 || axisScale == 0) return 1;
-                float halfSize = axisSize / 2;
-                float scaledHalfSize = halfSize * axisScale;
-                float scaledLineThickness = _LineThickness / scaledHalfSize;
-                float a = abs(axis);
-                float a1 = a / halfSize;
-                float a2 = 1 - a1;
-                return smoothstep(a2, scaledLineThickness, 0);
-            }
-
-            float Edges(float4 positionOS, float3 scale)
-            {
-                float x = Edge(positionOS.x, _DefaultSize.x, scale.x);
-                float y = Edge(positionOS.y, _DefaultSize.y, scale.y);
-                float z = Edge(positionOS.z, _DefaultSize.z, scale.z);
-                return 1 - (x * y * z);
-            }
+			float Square(float2 xy, float2 sideLengths, float2 scale, float lineThickness)
+			{
+				float2 scaledXY = xy * scale;
+				float2 scaledSideLengths = sideLengths * scale;
+				if (abs(scaledXY.x) >= scaledSideLengths.x / 2 - lineThickness) return 1;
+				if (abs(scaledXY.y) >= scaledSideLengths.y / 2 - lineThickness) return 1;
+				return 0;
+			}
 
             float4 frag(Varyings IN) : SV_Target
             {
-                float4 colour = _LineColour;
-                colour.a *= Edges(IN.positionOS, IN.scale);
+				float square = Square(IN.positionOS.xz, _DefaultSize.xz, IN.scale.xz, _LineThickness);
+                float4 colour = _LineColour * square;
                 return colour;
             }
             ENDHLSL
