@@ -50,7 +50,7 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
 
     public override void Init(IPlayerCharacterInitData playerCharacterInitData)
     {
-        Sys.Assert(playerCharacterInitData is FirstPersonPlayerCharacterInitData, "playerCharacterInitData must be type FirstPersonPlayerCharacterInitData");
+        Sys.AssertType<FirstPersonPlayerCharacterInitData>(playerCharacterInitData, nameof(playerCharacterInitData));
         if (playerCharacterInitData is not FirstPersonPlayerCharacterInitData initData) return;
         m_CharacterSettings = initData.CharacterSettings;
         m_InteractSettings = initData.InteractSettings;
@@ -58,7 +58,7 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
 
     public override void UpdateCharacter(ref IPlayerCharacterUpdateData playerCharacterUpdateData)
     {
-        Sys.Assert(playerCharacterUpdateData is FirstPersonPlayerCharacterUpdateData, "playerCharacterUpdateData must be type FirstPersonPlayerCharacterUpdateData");
+		Sys.AssertType<FirstPersonPlayerCharacterUpdateData>(playerCharacterUpdateData, nameof(playerCharacterUpdateData));
         if (playerCharacterUpdateData is not FirstPersonPlayerCharacterUpdateData input) return;
         HandleMovement(ref input);
         HandleInteraction(ref input);

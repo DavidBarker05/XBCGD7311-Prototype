@@ -357,10 +357,28 @@ namespace Util
 			/// <param name="condition">The condition to test</param>
 			/// <param name="message">The error message to log</param>
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
-			public static void Assert(bool condition, string message = "Assert condition failed")
+			public static void Assert(bool condition, string message = "Assertion failed")
 			{
 				if (condition) return;
-				Debug.LogError(message);
+				Debug.LogAssertion(message);
+				Exit(1);
+			}
+
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			public static void AssertType<T>(object value, string argumentName = "")
+			{
+				if (value is T) return;
+				argumentName = argumentName.Trim();
+				string message = argumentName == "" ? "Type assertion failed" : $"Type of {argumentName} does not match the type {typeof(T).FullName}";
+				Debug.LogAssertion(message);
+				Exit(1);
+			}
+
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			public static void AssertTypeMessage<T>(object value, string message = "Type assertion failed")
+			{
+				if (value is T) return;
+				Debug.LogAssertion(message);
 				Exit(1);
 			}
 		}

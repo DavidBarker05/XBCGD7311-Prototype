@@ -53,9 +53,8 @@ public class PipePlayerCharacter : PlayerCharacter
 
     public override void Init(IPlayerCharacterInitData playerCharacterInitData)
     {
-        Sys.Assert(playerCharacterInitData is PipePlayerCharacterInitData, "playerCharacterInitData must be type PipePlayerCharacterInitData");
+		Sys.AssertType<PipePlayerCharacterInitData>(playerCharacterInitData, nameof(playerCharacterInitData));
         if (playerCharacterInitData is not PipePlayerCharacterInitData) return;
-        if (playerCharacterInitData is PipePlayerCharacterInitData)
 #if !UNITY_EDITOR
         m_Debug = false;
 #endif
@@ -68,7 +67,7 @@ public class PipePlayerCharacter : PlayerCharacter
 
     public override void UpdateCharacter(ref IPlayerCharacterUpdateData playerCharacterUpdateData)
     {
-        Sys.Assert(playerCharacterUpdateData is PipePlayerCharacterUpdateData, "playerCharacterUpdateData must be type PipePlayerCharacterUpdateData");
+		Sys.AssertType<PipePlayerCharacterUpdateData>(playerCharacterUpdateData, nameof(playerCharacterUpdateData));
         if (playerCharacterUpdateData is not PipePlayerCharacterUpdateData input) return;
         DoGridFunctions(ref input);
         input.ClickedThisFrame = false;
