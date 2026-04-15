@@ -1711,7 +1711,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: b3cab38e9abd76b4cbbc4b8698c9746e, type: 2}
+  - {fileID: 2100000, guid: cea73851a4eeda844b52a65ff67a60b6, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1754,7 +1754,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 1
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1886,6 +1886,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WireBoard
   m_Debug: 1
   m_UnscaledTransform: {fileID: 442342409}
+  m_MinWires: 3
   m_WireMaterial: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   m_GrabTolerance: 0.5
   m_ReleaseTolerance: 0.5

@@ -61,13 +61,8 @@ Shader "Custom/GridShader"
 
             float GridLine(float axis, float axisSize, float axisScale)
             {
-                if (axisSize == 0 || axisScale == 0) return 1;
-                float scaledLineThickness = _LineThickness / axisScale;
-                float scaledAxisSize = axisSize / axisScale;
-                float a = abs(axis);
-                float a1 = abs(a + scaledLineThickness / 2);
-                float a2 = a1 % scaledAxisSize;
-                return smoothstep(a2, scaledLineThickness, 0);
+				if ((abs(axis * axisScale) + _LineThickness / 2) % axisSize >= _LineThickness) return 0;
+				return 1;
             }
 
             float Grid(float4 positionOS, float3 scale)
@@ -75,13 +70,13 @@ Shader "Custom/GridShader"
                 float x = GridLine(positionOS.x, _CellSize.x, scale.x);
                 float y = GridLine(positionOS.y, _CellSize.y, scale.y);
                 float z = GridLine(positionOS.z, _CellSize.z, scale.z);
-                return 1 - (x * y * z);
+				return saturate(x * y + y * z + z * x);
             }
 
             float4 frag(Varyings IN) : SV_Target
             {
-                float4 colour = _LineColour;
-                colour.a *= Grid(IN.positionOS, IN.scale);
+				float grid = Grid(IN.positionOS, IN.scale);
+                float4 colour = _LineColour * grid;
                 return colour;
             }
             ENDHLSL
