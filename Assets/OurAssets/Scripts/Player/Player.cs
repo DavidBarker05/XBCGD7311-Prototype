@@ -29,13 +29,10 @@ public class Player : MonoBehaviour
     void Awake()
     {
         m_PlayerInput = GetComponent<PlayerInput>();
-        m_PlayerCharacter.Init(new FirstPersonPlayerCharacterInitData(){ CharacterSettings = m_PlayerSettings.CharacterSettings, InteractSettings = m_PlayerSettings.InteractSettings });
-        m_PipePlayerCharacter.Init(new PipePlayerCharacterInitData());
-        m_WirePlayerCharacter.Init(new WirePlayerCharacterInitData());
+        ChangeCharacter(m_PlayerInput.currentActionMap.name);
         m_PlayerCamera.Init(m_PlayerSettings.CameraSettings, m_PlayerCharacter.CameraTarget);
         m_CameraInput = new CameraInput();
         m_MouseInfo = new MouseInfo();
-        ChangeCharacter(m_PlayerInput.currentActionMap.name);
     }
 
     void Update()
@@ -76,6 +73,15 @@ public class Player : MonoBehaviour
         _ => null
     };
 
+	IPlayerCharacterInitData CurrentPlayerCharacterInitData => m_CurrentPlayerCharacter switch
+	{
+		FirstPersonPlayerCharacter => new FirstPersonPlayerCharacterInitData() { CharacterSettings = m_PlayerSettings.CharacterSettings, InteractSettings = m_PlayerSettings.InteractSettings },
+		PipePlayerCharacter => new PipePlayerCharacterInitData(),
+		WirePlayerCharacter => new WirePlayerCharacterInitData(),
+		WallKnockPlayerCharacter => new WallKnockPlayerCharacterInitData(),
+		_ => null
+	};
+
     IPlayerCharacterUpdateData ChangeCharacterUpdateData(string actionMap) => actionMap switch
     {
         "Player" => new FirstPersonPlayerCharacterUpdateData(),
@@ -87,6 +93,7 @@ public class Player : MonoBehaviour
     void ChangeCharacter(string actionMap)
     {
         m_CurrentPlayerCharacter = ChangePlayerCharacter(actionMap);
+		if (!m_CurrentPlayerCharacter.HasBeenInitialised) m_CurrentPlayerCharacter.Init(CurrentPlayerCharacterInitData);
         m_CurrentPlayerCharacterUpdateData = ChangeCharacterUpdateData(actionMap);
         m_PlayerCamera.ChangeCameraTarget(m_CurrentPlayerCharacter.CameraTarget);
         SetCursorVisibility(m_CurrentPlayerCharacter.MouseVisible);

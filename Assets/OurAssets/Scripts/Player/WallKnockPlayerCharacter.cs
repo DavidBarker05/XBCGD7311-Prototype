@@ -15,19 +15,22 @@ class WallKnockPlayerCharacterUpdateData : IPlayerCharacterUpdateData
 
 public class WallKnockPlayerCharacter : PlayerCharacter
 {
-	public override bool MouseVisible => throw new System.NotImplementedException();
+	public override bool HasBeenInitialised { get; protected set; }
 
-	public override bool DoCameraRotation => throw new System.NotImplementedException();
+	public override bool MouseVisible => true;
+	public override bool DoCameraRotation => false;
+	public override bool UseMouseScreenPosition => true;
 
-	public override bool UseMouseScreenPosition => throw new System.NotImplementedException();
 
 	public override void Init(IPlayerCharacterInitData playerCharacterInitData)
 	{
 		Sys.AssertType<WallKnockPlayerCharacterInitData>(playerCharacterInitData, nameof(playerCharacterInitData));
+		HasBeenInitialised = true;
 	}
 
 	public override void UpdateCharacter(ref IPlayerCharacterUpdateData playerCharacterUpdateData)
 	{
+		Sys.Assert(HasBeenInitialised, "WallKnockPlayerCharacter hasn't been initialised");
 		Sys.AssertType<WallKnockPlayerCharacterUpdateData>(playerCharacterUpdateData, nameof(playerCharacterUpdateData));
 		if (playerCharacterUpdateData is not WallKnockPlayerCharacterUpdateData input) return;
 	}

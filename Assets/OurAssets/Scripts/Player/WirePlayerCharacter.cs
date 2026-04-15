@@ -15,6 +15,8 @@ public class WirePlayerCharacterUpdateData : IPlayerCharacterUpdateData
 
 public class WirePlayerCharacter : PlayerCharacter
 {
+	public override bool HasBeenInitialised { get; protected set; }
+
     public override bool MouseVisible => true;
     public override bool DoCameraRotation => false;
     public override bool UseMouseScreenPosition => true;
@@ -26,10 +28,12 @@ public class WirePlayerCharacter : PlayerCharacter
     public override void Init(IPlayerCharacterInitData playerCharacterInitData)
     {
 		Sys.AssertType<WirePlayerCharacterInitData>(playerCharacterInitData, nameof(playerCharacterInitData));
+		HasBeenInitialised = true;
     }
 
     public override void UpdateCharacter(ref IPlayerCharacterUpdateData playerCharacterUpdateData)
     {
+		Sys.Assert(HasBeenInitialised, "WirePlayerCharacter hasn't been initialised");
 		Sys.AssertType<WirePlayerCharacterUpdateData>(playerCharacterUpdateData, nameof(playerCharacterUpdateData));
         if (playerCharacterUpdateData is not WirePlayerCharacterUpdateData input) return;
         if (!input.MouseInfo.DidHitObject)

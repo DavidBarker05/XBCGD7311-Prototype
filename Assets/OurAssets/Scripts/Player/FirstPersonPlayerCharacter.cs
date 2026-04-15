@@ -42,6 +42,8 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
 
     float m_MovementSpeed;
 
+	public override bool HasBeenInitialised { get; protected set; }
+
     public override bool MouseVisible => false;
     public override bool DoCameraRotation => true;
     public override bool UseMouseScreenPosition => false;
@@ -54,10 +56,12 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
         if (playerCharacterInitData is not FirstPersonPlayerCharacterInitData initData) return;
         m_CharacterSettings = initData.CharacterSettings;
         m_InteractSettings = initData.InteractSettings;
+		HasBeenInitialised = true;
     }
 
     public override void UpdateCharacter(ref IPlayerCharacterUpdateData playerCharacterUpdateData)
     {
+		Sys.Assert(HasBeenInitialised, "FirstPersonPlayerCharacter hasn't been initialised");
 		Sys.AssertType<FirstPersonPlayerCharacterUpdateData>(playerCharacterUpdateData, nameof(playerCharacterUpdateData));
         if (playerCharacterUpdateData is not FirstPersonPlayerCharacterUpdateData input) return;
         HandleMovement(ref input);

@@ -25,6 +25,7 @@ public abstract class PlayerCharacter : MonoBehaviour
     [field: SerializeField]
     public float MouseHitDistance { get; protected set; } = 100f;
 
+	public abstract bool HasBeenInitialised { get; protected set; }
     public abstract bool MouseVisible { get; }
     public abstract bool DoCameraRotation { get; }
     public abstract bool UseMouseScreenPosition { get; }

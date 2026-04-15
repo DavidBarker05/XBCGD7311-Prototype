@@ -25,6 +25,8 @@ public class PipePlayerCharacter : PlayerCharacter
     [SerializeField]
     bool m_Debug = false;
 
+	public override bool HasBeenInitialised { get; protected set; }
+
     public override bool MouseVisible => true;
     public override bool DoCameraRotation => false;
     public override bool UseMouseScreenPosition => true;
@@ -63,10 +65,12 @@ public class PipePlayerCharacter : PlayerCharacter
         FullyCleanPlaceablePipes(); // Just in case
         foreach (PipeSO pipe in m_PlaceablePipes)
             m_PipeQuantities.Add(pipe, (m_Debug ? 1u : 0u));
+		HasBeenInitialised = true;
     }
 
     public override void UpdateCharacter(ref IPlayerCharacterUpdateData playerCharacterUpdateData)
     {
+		Sys.Assert(HasBeenInitialised, "PipePlayerCharacter hasn't been initialised");
 		Sys.AssertType<PipePlayerCharacterUpdateData>(playerCharacterUpdateData, nameof(playerCharacterUpdateData));
         if (playerCharacterUpdateData is not PipePlayerCharacterUpdateData input) return;
         DoGridFunctions(ref input);
