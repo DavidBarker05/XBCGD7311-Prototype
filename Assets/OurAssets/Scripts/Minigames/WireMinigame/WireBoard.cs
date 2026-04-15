@@ -10,6 +10,8 @@ public class WireBoard : MonoBehaviour
     bool m_Debug = false;
     [SerializeField]
     Transform m_UnscaledTransform;
+	[SerializeField, Min(0)]
+	int m_MinWires = 3;
 	[SerializeField]
 	Material m_WireMaterial;
     [SerializeField, Min(0f)]
@@ -36,7 +38,16 @@ public class WireBoard : MonoBehaviour
     GrabReleasePoint[] m_GrabPoints;
     GrabReleasePoint[] m_ReleasePoints;
 
-    void Awake()
+	void OnValidate() => EnsureMinWires();
+
+	void OnEnable() => EnsureMinWires();
+
+	void EnsureMinWires()
+	{
+		if (m_WireStartingPositions != null) m_MinWires = Mathf.Min(m_MinWires, m_WireStartingPositions.Length);
+	}
+
+	void Awake()
     {
         Sys.Assert(Arrays.IsValid(m_WireStartingPositions), "m_WireStartingPositions is not a valid array");
         Sys.Assert(Arrays.IsValid(m_WireTipStartingPositions), "m_WireTipStartingPositions is not a valid array");
@@ -45,11 +56,12 @@ public class WireBoard : MonoBehaviour
 #if !UNITY_EDITOR
         m_Debug = false;
 #endif
-        if (m_Debug) StartWireMinigame(Random.Range(0, m_WireStartingPositions.Length) + 1);
+        if (m_Debug) StartWireMinigame(Random.Range(m_MinWires - 1, m_WireStartingPositions.Length) + 1);
     }
 
     public void StartWireMinigame(int numWires)
     {
+		numWires = Mathf.Max(numWires, m_MinWires);
         Sys.Assert(m_WireStartingPositions.ContainsIndex(numWires - 1), $"{numWires} is an invalid number of wires");
 		m_CompletedWires = new HashSet<Wire>();
         m_Wires = new Wire[numWires];
