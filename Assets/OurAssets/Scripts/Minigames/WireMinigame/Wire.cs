@@ -3,36 +3,31 @@ using UnityEngine;
 
 public class WireColour
 {
-	public static readonly WireColour None = new WireColour();
-	public static readonly WireColour Red = new WireColour();
-	public static readonly WireColour Green = new WireColour();
-	public static readonly WireColour Blue = new WireColour();
-	public static readonly WireColour Yellow = new WireColour();
+	public static readonly WireColour None = new WireColour(Color.black);
+	public static readonly WireColour Red = new WireColour(Color.red);
+	public static readonly WireColour Green = new WireColour(Color.green);
+	public static readonly WireColour Blue = new WireColour(Color.blue);
+	public static readonly WireColour Yellow = new WireColour(Color.yellow);
+	public static readonly WireColour Pink = new WireColour(Color.pink);
 
-	public static readonly WireColour[] WireColours = new WireColour[5]
+	public static readonly WireColour[] WireColours = new WireColour[]
 	{
-		WireColour.None,
-		WireColour.Red,
-		WireColour.Green,
-		WireColour.Blue,
-		WireColour.Yellow,
+		None,
+		Red,
+		Green,
+		Blue,
+		Yellow,
+		Pink
 	};
 
-	private WireColour() { }
+	public Color Colour { get; private set; }
+
+	private WireColour(Color colour) { Colour = colour; }
 }
 
 [RequireComponent(typeof(LineRenderer))]
 public class Wire : MonoBehaviour
 {
-    public static readonly Dictionary<WireColour, Color> WireColours = new Dictionary<WireColour, Color>()
-    {
-        { WireColour.None, Color.black },
-        { WireColour.Red, Color.red },
-        { WireColour.Green, Color.green },
-        { WireColour.Blue, Color.blue },
-        { WireColour.Yellow, Color.yellow },
-    };
-
     Vector3 m_StartPosition;
     public Vector3 StartPosition
     {
@@ -114,8 +109,7 @@ public class Wire : MonoBehaviour
 
     void ChangeLineColour(WireColour wireColour)
     {
-        Color colour = WireColours[wireColour];
-        m_Line.startColor = colour;
-        m_Line.endColor = colour;
+        m_Line.startColor = wireColour.Colour;
+        m_Line.endColor = wireColour.Colour;
     }
 }
