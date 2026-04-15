@@ -33,19 +33,30 @@ inline float4 Sqr(float4 xyzw)
     return xyzw * xyzw;
 }
 
-bool Float2Compare(float2 first, float2 second)
+inline bool Float2Compare(float2 first, float2 second)
 {
     return first.r == second.r && first.g == second.g;
 }
 
-bool Float3Compare(float3 first, float3 second)
+inline bool Float3Compare(float3 first, float3 second)
 {
     return first.r == second.r && first.g == second.g && first.b == first.b;
 }
 
-bool Float4Compare(float4 first, float4 second)
+inline bool Float4Compare(float4 first, float4 second)
 {
     return first.r == second.r && first.g == second.g && first.b == first.b && first.a == second.a;
+}
+
+inline float3 ProjectVector(float3 a, float3 b)
+{
+    return b * (dot(a, b) / Sqr(length(b)));
+}
+
+inline float3 ProjectVectorOnPlane(float3 v, float3 n)
+{
+    n = normalize(n);
+    return v - n * dot(v, n);
 }
 
 #endif

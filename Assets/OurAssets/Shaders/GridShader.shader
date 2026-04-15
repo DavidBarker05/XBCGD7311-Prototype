@@ -33,6 +33,7 @@ Shader "Custom/GridShader"
             struct Attributes
             {
                 float4 positionOS : POSITION;
+				float3 normalOS : NORMAL;
             };
 
             struct Varyings
@@ -40,6 +41,8 @@ Shader "Custom/GridShader"
                 float4 positionHCS : SV_POSITION;
                 float4 positionOS : TEXCOORD0;
                 float3 scale : TEXCOORD1;
+				float3 normalOS : TEXCOORD2;
+				float3 positionWS : TEXCOORD3;
             };
 
             CBUFFER_START(UnityPerMaterial)
@@ -47,15 +50,16 @@ Shader "Custom/GridShader"
                 float _LineThickness;
                 float3 _CellSize;
                 float3 _Tiling;
+				bool _UseWorld;
             CBUFFER_END
 
             Varyings vert(Attributes IN)
             {
-                Varyings OUT;
-                ZERO_INITIALIZE(Varyings, OUT);
+                Varyings OUT = EMPTY(Varyings);
                 OUT.positionHCS = TransformObjectToHClip(IN.positionOS.xyz);
                 OUT.positionOS = IN.positionOS;
                 OUT.scale = ObjectScale();
+				OUT.normalOS = normalize(IN.normalOS);
                 return OUT;
             }
 
@@ -75,7 +79,8 @@ Shader "Custom/GridShader"
 
             float4 frag(Varyings IN) : SV_Target
             {
-				float grid = Grid(IN.positionOS, IN.scale);
+				float4 postionOSFace = float4(ProjectVectorOnPlane(IN.positionOS.xyz, IN.normalOS), 1);
+				float grid = Grid(postionOSFace, IN.scale);
                 float4 colour = _LineColour * grid;
                 return colour;
             }
