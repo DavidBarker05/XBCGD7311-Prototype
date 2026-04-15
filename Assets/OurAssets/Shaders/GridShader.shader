@@ -17,6 +17,8 @@ Shader "Custom/GridShader"
         }
 
         Blend SrcAlpha OneMinusSrcAlpha
+		ZWrite Off
+		Cull Off
 
         Pass
         {

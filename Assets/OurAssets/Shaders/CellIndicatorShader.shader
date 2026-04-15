@@ -17,6 +17,8 @@ Shader "Custom/CellIndicatorShader"
         }
 
         Blend SrcAlpha OneMinusSrcAlpha
+		ZWrite Off
+		Cull Off
 
         Pass
         {
