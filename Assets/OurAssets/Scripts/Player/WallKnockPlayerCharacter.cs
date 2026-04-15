@@ -1,5 +1,6 @@
 using UnityEngine;
 using Util.SystemUtils;
+using Util.UnityUtils;
 
 class WallKnockPlayerCharacterInitData : IPlayerCharacterInitData { }
 
@@ -21,7 +22,6 @@ public class WallKnockPlayerCharacter : PlayerCharacter
 	public override bool DoCameraRotation => false;
 	public override bool UseMouseScreenPosition => true;
 
-
 	public override void Init(IPlayerCharacterInitData playerCharacterInitData)
 	{
 		WallKnockPlayerCharacterInitData initData = Sys.AssertType<WallKnockPlayerCharacterInitData>(playerCharacterInitData, nameof(playerCharacterInitData));
@@ -32,5 +32,13 @@ public class WallKnockPlayerCharacter : PlayerCharacter
 	{
 		Sys.Assert(HasBeenInitialised, "WallKnockPlayerCharacter hasn't been initialised");
 		WallKnockPlayerCharacterUpdateData input = Sys.AssertType<WallKnockPlayerCharacterUpdateData>(playerCharacterUpdateData, nameof(playerCharacterUpdateData));
+		if (!input.MouseInfo.DidHitObject) return;
+		RaycastHit hit = input.MouseInfo.HitInfo;
+		Wall wall = hit.GetComponent<Wall>();
+		if (!wall) return;
+		if (input.LeftClickedThisFrame) wall.KnockWall(hit.point);
+		if (input.RightClickedThisFrame) wall.BreakWall(hit.point);
+		input.LeftClickedThisFrame = false;
+		input.RightClickedThisFrame = false;
 	}
 }

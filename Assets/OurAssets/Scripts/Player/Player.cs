@@ -12,6 +12,8 @@ public class Player : MonoBehaviour
     PipePlayerCharacter m_PipePlayerCharacter;
     [SerializeField]
     WirePlayerCharacter m_WirePlayerCharacter;
+	[SerializeField]
+	WallKnockPlayerCharacter m_WallKnockPlayerCharacter;
     [SerializeField]
     PlayerCamera m_PlayerCamera;
     [SerializeField]
@@ -70,6 +72,7 @@ public class Player : MonoBehaviour
         "Player" => m_PlayerCharacter,
         "PipePlayer" => m_PipePlayerCharacter,
         "WirePlayer" => m_WirePlayerCharacter,
+		"WallKnockPlayer" => m_WallKnockPlayerCharacter,
         _ => null
     };
 
@@ -87,6 +90,7 @@ public class Player : MonoBehaviour
         "Player" => new FirstPersonPlayerCharacterUpdateData(),
         "PipePlayer" => new PipePlayerCharacterUpdateData(),
         "WirePlayer" => new WirePlayerCharacterUpdateData(),
+		"WallKnockPlayer" => new WallKnockPlayerCharacterUpdateData(),
         _ => null
     };
 
