@@ -52,8 +52,7 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
 
     public override void Init(IPlayerCharacterInitData playerCharacterInitData)
     {
-        Sys.AssertType<FirstPersonPlayerCharacterInitData>(playerCharacterInitData, nameof(playerCharacterInitData));
-        if (playerCharacterInitData is not FirstPersonPlayerCharacterInitData initData) return;
+		FirstPersonPlayerCharacterInitData initData = Sys.AssertType<FirstPersonPlayerCharacterInitData>(playerCharacterInitData, nameof(playerCharacterInitData));
         m_CharacterSettings = initData.CharacterSettings;
         m_InteractSettings = initData.InteractSettings;
 		HasBeenInitialised = true;
@@ -62,8 +61,7 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
     public override void UpdateCharacter(ref IPlayerCharacterUpdateData playerCharacterUpdateData)
     {
 		Sys.Assert(HasBeenInitialised, "FirstPersonPlayerCharacter hasn't been initialised");
-		Sys.AssertType<FirstPersonPlayerCharacterUpdateData>(playerCharacterUpdateData, nameof(playerCharacterUpdateData));
-        if (playerCharacterUpdateData is not FirstPersonPlayerCharacterUpdateData input) return;
+		FirstPersonPlayerCharacterUpdateData input = Sys.AssertType<FirstPersonPlayerCharacterUpdateData>(playerCharacterUpdateData, nameof(playerCharacterUpdateData));
         HandleMovement(ref input);
         HandleInteraction(ref input);
     }

@@ -365,13 +365,14 @@ namespace Util
 			}
 
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
-			public static void AssertType<T>(object value, string argumentName = "")
+			public static T AssertType<T>(object value, string argumentName = "")
 			{
-				if (value is T) return;
+				if (value is T t) return t;
 				argumentName = argumentName.Trim();
 				string message = argumentName == "" ? "Type assertion failed" : $"Type of {argumentName} does not match the type {typeof(T).FullName}";
 				Debug.LogAssertion(message);
 				Exit(1);
+				return default;
 			}
 
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]

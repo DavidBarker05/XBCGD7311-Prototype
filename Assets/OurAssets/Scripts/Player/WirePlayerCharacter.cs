@@ -27,15 +27,14 @@ public class WirePlayerCharacter : PlayerCharacter
 
     public override void Init(IPlayerCharacterInitData playerCharacterInitData)
     {
-		Sys.AssertType<WirePlayerCharacterInitData>(playerCharacterInitData, nameof(playerCharacterInitData));
+		WirePlayerCharacterInitData initData = Sys.AssertType<WirePlayerCharacterInitData>(playerCharacterInitData, nameof(playerCharacterInitData));
 		HasBeenInitialised = true;
     }
 
     public override void UpdateCharacter(ref IPlayerCharacterUpdateData playerCharacterUpdateData)
     {
 		Sys.Assert(HasBeenInitialised, "WirePlayerCharacter hasn't been initialised");
-		Sys.AssertType<WirePlayerCharacterUpdateData>(playerCharacterUpdateData, nameof(playerCharacterUpdateData));
-        if (playerCharacterUpdateData is not WirePlayerCharacterUpdateData input) return;
+		WirePlayerCharacterUpdateData input = Sys.AssertType<WirePlayerCharacterUpdateData>(playerCharacterUpdateData, nameof(playerCharacterUpdateData));
         if (!input.MouseInfo.DidHitObject)
         {
             if (m_CurrentlyHeldWire) ReleaseWire(Vector3.negativeInfinity);

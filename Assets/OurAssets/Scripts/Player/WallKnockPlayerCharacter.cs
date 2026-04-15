@@ -24,14 +24,13 @@ public class WallKnockPlayerCharacter : PlayerCharacter
 
 	public override void Init(IPlayerCharacterInitData playerCharacterInitData)
 	{
-		Sys.AssertType<WallKnockPlayerCharacterInitData>(playerCharacterInitData, nameof(playerCharacterInitData));
+		WallKnockPlayerCharacterInitData initData = Sys.AssertType<WallKnockPlayerCharacterInitData>(playerCharacterInitData, nameof(playerCharacterInitData));
 		HasBeenInitialised = true;
 	}
 
 	public override void UpdateCharacter(ref IPlayerCharacterUpdateData playerCharacterUpdateData)
 	{
 		Sys.Assert(HasBeenInitialised, "WallKnockPlayerCharacter hasn't been initialised");
-		Sys.AssertType<WallKnockPlayerCharacterUpdateData>(playerCharacterUpdateData, nameof(playerCharacterUpdateData));
-		if (playerCharacterUpdateData is not WallKnockPlayerCharacterUpdateData input) return;
+		WallKnockPlayerCharacterUpdateData input = Sys.AssertType<WallKnockPlayerCharacterUpdateData>(playerCharacterUpdateData, nameof(playerCharacterUpdateData));
 	}
 }
