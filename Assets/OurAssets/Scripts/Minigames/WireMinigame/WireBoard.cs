@@ -2,7 +2,7 @@ using UnityEngine;
 using Util.SystemUtils;
 using Util.ArrayUtils;
 using Util.ComparisonUtils;
-using System.Linq;
+using System.Collections.Generic;
 
 public class WireBoard : MonoBehaviour
 {
@@ -31,6 +31,7 @@ public class WireBoard : MonoBehaviour
         public float Radius { get; set; }
     }
 
+	HashSet<Wire> m_CompletedWires;
     Wire[] m_Wires;
     GrabReleasePoint[] m_GrabPoints;
     GrabReleasePoint[] m_ReleasePoints;
@@ -50,6 +51,7 @@ public class WireBoard : MonoBehaviour
     public void StartWireMinigame(int numWires)
     {
         Sys.Assert(m_WireStartingPositions.ContainsIndex(numWires - 1), $"{numWires} is an invalid number of wires");
+		m_CompletedWires = new HashSet<Wire>();
         m_Wires = new Wire[numWires];
         m_GrabPoints = new GrabReleasePoint[numWires];
         m_ReleasePoints = new GrabReleasePoint[numWires];
@@ -62,6 +64,11 @@ public class WireBoard : MonoBehaviour
 		m_ReleasePoints.Shuffle();
     }
 
+	public void EndWireMinigame()
+	{
+		// TODO: End minigame
+	}
+
     void CreateWire(int index)
     {
         Sys.Assert(Arrays.IsValid(m_Wires), "m_Wires is not a valid array");
@@ -71,9 +78,8 @@ public class WireBoard : MonoBehaviour
         LineRenderer lineRenderer = go.AddComponent<LineRenderer>();
 		lineRenderer.material = m_WireMaterial;
         m_Wires[index] = go.AddComponent<Wire>();
-		WireColour[] colours = (WireColour[])System.Enum.GetValues(typeof(WireColour));
-		colours = colours.Skip(1).ToArray();
-        m_Wires[index].Init(m_WireStartingPositions[index].position, m_WireTipStartingPositions[index].position, m_WireEndPositions[index].position, colours.GetRandomElement<WireColour>()); // TODO: Wire colour
+		WireColour[] coloursNoNone = WireColour.WireColours.SubArray(1, WireColour.WireColours.Length - 1);
+        m_Wires[index].Init(m_WireStartingPositions[index].position, m_WireTipStartingPositions[index].position, m_WireEndPositions[index].position, coloursNoNone.GetRandomElement<WireColour>()); // TODO: Wire colour
     }
 
     void CreateGrabPoint(int index)
@@ -109,14 +115,26 @@ public class WireBoard : MonoBehaviour
         return null;
     }
 
-    public bool TryReleaseWire(Vector3 position)
+	public enum ReleaseStatus
+	{
+		SnapToStart,
+		SnapToEnd,
+		FinishGame
+	}
+
+    public ReleaseStatus TryReleaseWire(Vector3 position)
     {
         if (m_IgnoreDepthAxis) position = Vector3.ProjectOnPlane(position, transform.up);
         for (int i = 0;i < m_ReleasePoints.Length; ++i)
         {
+			if (m_CompletedWires.Contains(m_Wires[i])) continue;
             Vector3 releasePosition = m_IgnoreDepthAxis ? Vector3.ProjectOnPlane(m_ReleasePoints[i].Position, transform.up) : m_ReleasePoints[i].Position;
-            if (Vector3.Distance(position, releasePosition) <= m_ReleaseTolerance) return true;
+			if (Vector3.Distance(position, releasePosition) <= m_ReleaseTolerance)
+			{
+				m_CompletedWires.Add(m_Wires[i]);
+				return m_CompletedWires.Count == m_ReleasePoints.Length ? ReleaseStatus.FinishGame : ReleaseStatus.SnapToEnd;
+			}
         }
-        return false;
+        return ReleaseStatus.SnapToStart;
     }
 }

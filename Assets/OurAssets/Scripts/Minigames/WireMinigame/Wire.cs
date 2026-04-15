@@ -1,13 +1,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum WireColour
+public class WireColour
 {
-    None,
-    Red,
-    Green,
-    Blue,
-    Yellow
+	public static readonly WireColour None = new WireColour();
+	public static readonly WireColour Red = new WireColour();
+	public static readonly WireColour Green = new WireColour();
+	public static readonly WireColour Blue = new WireColour();
+	public static readonly WireColour Yellow = new WireColour();
+
+	public static readonly WireColour[] WireColours = new WireColour[5]
+	{
+		WireColour.None,
+		WireColour.Red,
+		WireColour.Green,
+		WireColour.Blue,
+		WireColour.Yellow,
+	};
+
+	private WireColour() { }
 }
 
 [RequireComponent(typeof(LineRenderer))]

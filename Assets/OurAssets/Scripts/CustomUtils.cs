@@ -123,7 +123,7 @@ namespace Util
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
 			public static T GetValue<T>(this Array array, int index)
 			{
-				if (array.IsMultidimensional()) throw new ArgumentException("This method should not be used with multidimensional arrays");
+				if (array.IsMultidimensional()) throw new ArgumentException("Array.GetValue<T>(int index) can't be used with multidimensional arrays");
 				Type arrayType = array.IsJagged() ? array.GetType().GetElementType() : array.GetStoredType();
 				if (arrayType != typeof(T)) throw new ArgumentException("Return type does not match the type stored in the array");
 				return (T) array.GetValue(index);
@@ -132,9 +132,8 @@ namespace Util
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
 			public static T GetValue<T>(this Array array, int[] index)
 			{
-				if (!IsValid(index)) throw new ArgumentException("Index is an invalid array");
-				Type arrayType = array.IsJagged() ? array.GetType().GetElementType() : array.GetStoredType();
-				if (arrayType != typeof(T)) throw new ArgumentException("Return type does not match the type stored in the array");
+				if (!IsValid(index)) throw new ArgumentException("Array.GetValue<T>(int[] index) can't be used with multidimensional arrays");
+				if (array.GetType().GetElementType() != typeof(T)) throw new ArgumentException("Return type does not match the type stored in the array");
 				if (array.IsMultidimensional()) return (T)array.GetValue(index);
 				if (array.IsJagged()) return (T)array.GetValueJagged(index);
 				return (T)array.GetValue(index[0]);
@@ -143,7 +142,7 @@ namespace Util
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
 			public static void Swap(this Array array, int firstIndex, int secondIndex)
 			{
-				if (array.IsMultidimensional()) throw new ArgumentException("This method should not be used with multidimensional arrays");
+				if (array.IsMultidimensional()) throw new ArgumentException("Array.Swap(int firstIndex, int secondIndex) can't be used with multidimensional arrays");
 				object o = array.GetValue(firstIndex);
 				array.SetValue(array.GetValue(secondIndex), firstIndex);
 				array.SetValue(o, secondIndex);
@@ -178,7 +177,7 @@ namespace Util
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
 			public static int GetRandomIndex(this Array array)
 			{
-				if (array.IsMultidimensional()) throw new ArgumentException("This method should not be used with multidimensional arrays");
+				if (array.IsMultidimensional()) throw new ArgumentException("Array.GetRandomIndex() can't be used with multidimensional arrays");
 				return ArraysInternal.GetRandomIndexSingleDimensional(array);
 			}
 
@@ -201,6 +200,15 @@ namespace Util
 
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
 			public static T GetRandomElement<T>(this Array array) => array.GetValue<T>(array.GetRandomMultiIndex());
+
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			public static T[] SubArray<T>(this T[] array, int startIndex, int length) where T : class
+			{
+				if (array.IsMultidimensional()) throw new ArgumentException("Array.SubArray(int startIndex, int length) can't be used with multidimensional arrays");
+				T[] subArray = new T[length];
+				Array.Copy(array, startIndex, subArray, 0, length);
+				return subArray;
+			}
 
 			private static class ArraysInternal
 			{

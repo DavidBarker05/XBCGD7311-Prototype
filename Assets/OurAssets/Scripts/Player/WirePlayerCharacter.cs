@@ -71,8 +71,13 @@ public class WirePlayerCharacter : PlayerCharacter
     void ReleaseWire(Vector3 position)
     {
         if (!m_CurrentWireBoard || !m_CurrentlyHeldWire) return;
-        if (position == Vector3.negativeInfinity) m_CurrentlyHeldWire.ReleaseWire(false);
-        else m_CurrentlyHeldWire.ReleaseWire(m_CurrentWireBoard.TryReleaseWire(position));
+		if (position == Vector3.negativeInfinity) m_CurrentlyHeldWire.ReleaseWire(false);
+		else
+		{
+			WireBoard.ReleaseStatus releaseStatus = m_CurrentWireBoard.TryReleaseWire(position);
+			m_CurrentlyHeldWire.ReleaseWire(releaseStatus != WireBoard.ReleaseStatus.SnapToStart);
+			if (releaseStatus == WireBoard.ReleaseStatus.FinishGame) m_CurrentWireBoard.EndWireMinigame();
+		}
         m_CurrentWireBoard = null;
         m_CurrentlyHeldWire = null;
     }
