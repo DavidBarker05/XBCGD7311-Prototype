@@ -1,4 +1,4 @@
-Shader "Custom/ToonShader"
+Shader "Toon/ToonShader"
 {
     Properties
     {
@@ -20,12 +20,6 @@ Shader "Custom/ToonShader"
         _ToonRimTint("Toon Rim Tint", Color) = (1, 1, 1)
         _ToonRimAmount("Toon Rim Amount", Range(0, 1)) = 0
         _ToonRimThreshold("Toon Rim Threshold", Range(0, 1)) = 0.1
-
-        [Toggle] _Outline("Outline", Integer) = 0
-        [Toggle] _Outline2("Second Outline", Integer) = 0 // This just makes hard edges look a bit more reasonable
-        [Toggle] _Outline3("Third Outline", Integer) = 0 // Same for this, it's just here to make it possibly look better
-        _OutlineThickness("Outline Thickness", Range(0, 0.1)) = 0.025
-        _OutlineColour("Outline Colour", Color) = (0, 0, 0, 1)
     }
 
     SubShader
@@ -101,165 +95,6 @@ Shader "Custom/ToonShader"
                 float3 toonTint = ToonTint(IN.positionHCS, inputData);
                 float4 tint = float4(toonTint, 1);
                 return colour * tint;
-            }
-            ENDHLSL
-        }
-        
-        Pass
-        {
-            Name "OutlinePass"
-            Tags
-            {
-                "LightMode" = "OutlinePass"
-            }
-        
-            Cull Front
-        
-            HLSLPROGRAM
-            #pragma vertex vert
-            #pragma fragment frag
-        
-            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
-            #include "Assets/OurAssets/Shaders/Toon/ToonAttributes.hlsl"
-            #include "Assets/OurAssets/Shaders/Toon/ToonInput.hlsl"
-            #include "Assets/OurAssets/Shaders/Toon/ToonFunctions.hlsl"
-        
-            struct Varyings
-            {
-                float4 positionHCS : SV_POSITION;
-                float2 uv : TEXCOORD0;
-            };
-        
-            Varyings vert(Attributes IN)
-            {
-                Varyings OUT;
-                ZERO_INITIALIZE(Varyings, OUT);
-                if (!_Outline) return OUT;
-                float4 positionHCS = TransformObjectToHClip(IN.positionOS.xyz);
-                float3 normalHCS = TransformWorldToHClipDir(TransformObjectToWorldNormal(IN.normalOS));
-                float numOutlines = 1;
-                if (_Outline2)
-                {
-                    numOutlines = 2;
-                    if (_Outline3) numOutlines = 3;
-                }
-                OUT.positionHCS = positionHCS + float4(normalHCS * _OutlineThickness / numOutlines, 0);
-                OUT.uv = TRANSFORM_TEX(IN.uv, _BaseMap);
-                return OUT;
-            }
-        
-            float4 frag(Varyings IN) : SV_Target
-            {
-                float4 colour = SAMPLE_BASE();
-                ALPHA_CLIP(colour.a, _AlphaClippingThreshold);
-                if (!_Outline) discard;
-                return _OutlineColour;
-            }
-            ENDHLSL
-        }
-        
-        Pass
-        {
-            Name "OutlinePass2"
-            Tags
-            {
-                "LightMode" = "OutlinePass2"
-            }
-        
-            Cull Front
-        
-            HLSLPROGRAM
-            #pragma vertex vert
-            #pragma fragment frag
-        
-            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
-            #include "Assets/OurAssets/Shaders/Toon/ToonAttributes.hlsl"
-            #include "Assets/OurAssets/Shaders/Toon/ToonInput.hlsl"
-            #include "Assets/OurAssets/Shaders/Toon/ToonFunctions.hlsl"
-        
-            struct Varyings
-            {
-                float4 positionHCS : SV_POSITION;
-                float2 uv : TEXCOORD0;
-            };
-        
-            Varyings vert(Attributes IN)
-            {
-                Varyings OUT;
-                ZERO_INITIALIZE(Varyings, OUT);
-                if (!_Outline || !_Outline2) return OUT;
-                float4 positionHCS = TransformObjectToHClip(IN.positionOS.xyz);
-                float3 normalHCS = TransformWorldToHClipDir(TransformObjectToWorldNormal(IN.normalOS));
-                float numOutlines = 1;
-                if (_Outline2)
-                {
-                    numOutlines = 2;
-                    if (_Outline3) numOutlines = 3;
-                }
-                OUT.positionHCS = positionHCS + float4(normalHCS * _OutlineThickness / numOutlines * 2, 0);
-                OUT.uv = TRANSFORM_TEX(IN.uv, _BaseMap);
-                return OUT;
-            }
-        
-            float4 frag(Varyings IN) : SV_Target
-            {
-                float4 colour = SAMPLE_BASE();
-                ALPHA_CLIP(colour.a, _AlphaClippingThreshold);
-                if (!_Outline || !_Outline2) discard;
-                return _OutlineColour;
-            }
-            ENDHLSL
-        }
-        
-        Pass
-        {
-            Name "OutlinePass3"
-            Tags
-            {
-                "LightMode" = "OutlinePass3"
-            }
-        
-            Cull Front
-        
-            HLSLPROGRAM
-            #pragma vertex vert
-            #pragma fragment frag
-        
-            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
-            #include "Assets/OurAssets/Shaders/Toon/ToonAttributes.hlsl"
-            #include "Assets/OurAssets/Shaders/Toon/ToonInput.hlsl"
-            #include "Assets/OurAssets/Shaders/Toon/ToonFunctions.hlsl"
-        
-            struct Varyings
-            {
-                float4 positionHCS : SV_POSITION;
-                float2 uv : TEXCOORD0;
-            };
-        
-            Varyings vert(Attributes IN)
-            {
-                Varyings OUT;
-                ZERO_INITIALIZE(Varyings, OUT);
-                if (!_Outline || !_Outline2 || !_Outline3) return OUT;
-                float4 positionHCS = TransformObjectToHClip(IN.positionOS.xyz);
-                float3 normalHCS = TransformWorldToHClipDir(TransformObjectToWorldNormal(IN.normalOS));
-                float numOutlines = 1;
-                if (_Outline2)
-                {
-                    numOutlines = 2;
-                    if (_Outline3) numOutlines = 3;
-                }
-                OUT.positionHCS = positionHCS + float4(normalHCS * _OutlineThickness / numOutlines * 3, 0);
-                OUT.uv = TRANSFORM_TEX(IN.uv, _BaseMap);
-                return OUT;
-            }
-        
-            float4 frag(Varyings IN) : SV_Target
-            {
-                float4 colour = SAMPLE_BASE();
-                ALPHA_CLIP(colour.a, _AlphaClippingThreshold);
-                if (!_Outline || !_Outline2 || !_Outline3) discard;
-                return _OutlineColour;
             }
             ENDHLSL
         }

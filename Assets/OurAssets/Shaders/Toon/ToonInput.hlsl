@@ -23,11 +23,5 @@ CBUFFER_START(UnityPerMaterial)
     float3 _ToonRimTint;
     float _ToonRimAmount;
     float _ToonRimThreshold;
-            
-    bool _Outline;
-    bool _Outline2;
-    bool _Outline3;
-    float _OutlineThickness;
-    float4 _OutlineColour;
 CBUFFER_END
 #endif
