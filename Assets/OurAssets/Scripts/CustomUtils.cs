@@ -400,6 +400,9 @@ namespace Util
 
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
 			public static T GetComponent<T>(this Collider collider) => collider.gameObject.GetComponent<T>();
+
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			public static bool IsNegativeInfinity(this Vector3 v) => v.Equals(Vector3.negativeInfinity);
 		}
 	}
 
