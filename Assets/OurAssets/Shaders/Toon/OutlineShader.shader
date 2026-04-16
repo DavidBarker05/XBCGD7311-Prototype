@@ -19,7 +19,7 @@ Shader "Toon/OutlineShader"
 
         Pass
         {
-            Name "CustomPass"
+            Name "OutlinePass"
             ZWrite Off
             Cull Off
 			ZTest Always
@@ -84,7 +84,7 @@ Shader "Toon/OutlineShader"
 				OUT.positionHCS = pos;
 				OUT.texcoord = DYNAMIC_SCALING_APPLY_SCALEBIAS(uv);
 
-				OUT.viewSpaceDirection = mul(unity_CameraInvProjection , OUT.positionHCS).xyz;
+				OUT.viewSpaceDirection = mul(unity_CameraInvProjection, OUT.positionHCS).xyz;
 
 				return OUT;
 			}
@@ -138,7 +138,7 @@ Shader "Toon/OutlineShader"
 				float3 normalFiniteDifference1 = normal3 - normal2;
 
 				float edgeNormal = sqrt(dot(normalFiniteDifference0, normalFiniteDifference0) + dot(normalFiniteDifference1, normalFiniteDifference1));
-				edgeNormal = edgeNormal >_NormalThreshold ? 1 : 0;
+				edgeNormal = edgeNormal > _NormalThreshold ? 1 : 0;
 
 				float edge = max(edgeDepth, edgeNormal);
 
