@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using Util.UnityUtils;
 
 public class WireColour
 {
@@ -50,8 +51,6 @@ public class Wire : MonoBehaviour
         }
     }
 
-    public Vector3 EndPosition { get; set; }
-
     WireColour m_WireColour = WireColour.None;
     public WireColour Colour
     {
@@ -74,11 +73,10 @@ public class Wire : MonoBehaviour
         m_Line.useWorldSpace = false;
     }
 
-    public void Init(Vector3 startPosition, Vector3 tipStartPosition, Vector3 endPosition, WireColour wireColour)
+    public void Init(Vector3 startPosition, Vector3 tipStartPosition, WireColour wireColour)
     {
         StartPosition = startPosition;
         TipStartPosition = tipStartPosition;
-        EndPosition = endPosition;
         Colour = wireColour;
         CanBeGrabbed = true;
         m_bBeingHeld = false;
@@ -94,11 +92,12 @@ public class Wire : MonoBehaviour
         }
     }
 
-    public void ReleaseWire(bool snapToEnd)
+    public void ReleaseWire(Vector3 snapPosition)
     {
         m_bBeingHeld = false;
-        SetLineEndPosition(snapToEnd ? EndPosition : TipStartPosition);
-        CanBeGrabbed = !snapToEnd;
+		if (snapPosition.IsNegativeInfinity()) SetLineEndPosition(TipStartPosition);
+		else SetLineEndPosition(snapPosition);
+        CanBeGrabbed = snapPosition.IsNegativeInfinity();
     }
 
     void SetLineEndPosition(Vector3 endPosition)

@@ -31,9 +31,10 @@ public class WireBoard : MonoBehaviour
     {
         public Vector3 Position { get; set; }
         public float Radius { get; set; }
+		public WireColour Colour { get; set; }
     }
 
-	HashSet<Wire> m_CompletedWires;
+	HashSet<GrabReleasePoint> m_UsedReleasePoints;
     Wire[] m_Wires;
     GrabReleasePoint[] m_GrabPoints;
     GrabReleasePoint[] m_ReleasePoints;
@@ -63,7 +64,7 @@ public class WireBoard : MonoBehaviour
     {
 		numWires = Mathf.Max(numWires, m_MinWires);
         Sys.Assert(m_WireStartingPositions.ContainsIndex(numWires - 1), $"{numWires} is an invalid number of wires");
-		m_CompletedWires = new HashSet<Wire>();
+		m_UsedReleasePoints = new HashSet<GrabReleasePoint>();
         m_Wires = new Wire[numWires];
         m_GrabPoints = new GrabReleasePoint[numWires];
         m_ReleasePoints = new GrabReleasePoint[numWires];
@@ -74,7 +75,11 @@ public class WireBoard : MonoBehaviour
             CreateReleasePoint(i);
         }
 		m_ReleasePoints.Shuffle();
-    }
+		for (int i = 0; i < m_ReleasePoints.Length; ++i)
+		{
+			m_ReleasePoints[i].Position = m_WireEndPositions[i].position;
+		}
+	}
 
 	public void EndWireMinigame()
 	{
@@ -91,7 +96,7 @@ public class WireBoard : MonoBehaviour
 		lineRenderer.material = m_WireMaterial;
         m_Wires[index] = go.AddComponent<Wire>();
 		WireColour[] coloursNoNone = WireColour.WireColours.SubArray(1, WireColour.WireColours.Length - 1);
-        m_Wires[index].Init(m_WireStartingPositions[index].position, m_WireTipStartingPositions[index].position, m_WireEndPositions[index].position, coloursNoNone.GetRandomElement<WireColour>()); // TODO: Wire colour
+        m_Wires[index].Init(m_WireStartingPositions[index].position, m_WireTipStartingPositions[index].position, coloursNoNone.GetRandomElement<WireColour>());
     }
 
     void CreateGrabPoint(int index)
@@ -101,7 +106,8 @@ public class WireBoard : MonoBehaviour
         m_GrabPoints[index] = new GrabReleasePoint()
         {
             Position = (m_WireStartingPositions[index].position + m_WireTipStartingPositions[index].position) / 2,
-            Radius = m_GrabTolerance
+            Radius = m_GrabTolerance,
+			Colour = m_Wires[index].Colour
         };
     }
 
@@ -111,9 +117,9 @@ public class WireBoard : MonoBehaviour
         Sys.Assert(m_ReleasePoints.ContainsIndex(index), $"{index} is not a valid index for m_ReleasePoints");
         m_ReleasePoints[index] = new GrabReleasePoint()
         {
-            Position = m_WireEndPositions[index].position,
-            Radius = m_ReleaseTolerance
-        };
+            Radius = m_ReleaseTolerance,
+			Colour = m_Wires[index].Colour
+		};
     }
 
     public Wire TryGrabWire(Vector3 position)
@@ -127,26 +133,23 @@ public class WireBoard : MonoBehaviour
         return null;
     }
 
-	public enum ReleaseStatus
-	{
-		SnapToStart,
-		SnapToEnd,
-		FinishGame
-	}
-
-    public ReleaseStatus TryReleaseWire(Vector3 position)
+    public (Vector3 snapPosition, bool bDidWin) TryReleaseWire(Wire wire, Vector3 position)
     {
         if (m_IgnoreDepthAxis) position = Vector3.ProjectOnPlane(position, transform.up);
-        for (int i = 0;i < m_ReleasePoints.Length; ++i)
+        for (int i = 0; i < m_ReleasePoints.Length; ++i)
         {
-			if (m_CompletedWires.Contains(m_Wires[i])) continue;
+			if (m_UsedReleasePoints.Contains(m_ReleasePoints[i])) continue;
             Vector3 releasePosition = m_IgnoreDepthAxis ? Vector3.ProjectOnPlane(m_ReleasePoints[i].Position, transform.up) : m_ReleasePoints[i].Position;
 			if (Vector3.Distance(position, releasePosition) <= m_ReleaseTolerance)
 			{
-				m_CompletedWires.Add(m_Wires[i]);
-				return m_CompletedWires.Count == m_ReleasePoints.Length ? ReleaseStatus.FinishGame : ReleaseStatus.SnapToEnd;
+				if (m_ReleasePoints[i].Colour == wire.Colour)
+				{
+					m_UsedReleasePoints.Add(m_ReleasePoints[i]);
+					return (m_ReleasePoints[i].Position, m_UsedReleasePoints.Count == m_Wires.Length);
+				}
+				else return (Vector3.negativeInfinity, false);
 			}
         }
-        return ReleaseStatus.SnapToStart;
+        return (Vector3.negativeInfinity, false);
     }
 }
