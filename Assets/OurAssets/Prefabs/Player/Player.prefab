@@ -82,12 +82,12 @@ MonoBehaviour:
     m_Bits: 8
   <MouseHitDistance>k__BackingField: 100
   m_CellIndicatorPrefab: {fileID: 787134959866969004, guid: 0df069d1b4529854abc6c7337b28050d, type: 3}
-  m_EmptyPipe: {fileID: 11400000, guid: e88076bfc8f42e34c9e6873dae1c6aa5, type: 2}
+  m_EmptyPipe: {fileID: 11400000, guid: e5cb456cff14c4b41ae710f55a2d571a, type: 2}
   m_PlaceablePipes:
-  - {fileID: 11400000, guid: 811678a0613b3f84db8306eaf4175c76, type: 2}
-  - {fileID: 11400000, guid: cf6c8b2fd82bf2a4fbb587b3231cd51a, type: 2}
-  - {fileID: 11400000, guid: 4185d6dbf4917744da79fad72d92b837, type: 2}
-  - {fileID: 11400000, guid: ad1c2c20d870f754da5945c45d3dd7a3, type: 2}
+  - {fileID: 11400000, guid: eb154e86b91c4f0488c9a884ee573a71, type: 2}
+  - {fileID: 11400000, guid: 62d51b70b3d53494ab7bd3e33950fa3b, type: 2}
+  - {fileID: 11400000, guid: a36059ba9d0fbf8438d79aec9e0db5fd, type: 2}
+  - {fileID: 11400000, guid: cfecd6a388c2f3b44891a4f756795326, type: 2}
   m_Debug: 1
 --- !u!1 &1704871231904178128
 GameObject:
@@ -726,6 +726,7 @@ MonoBehaviour:
   m_PlayerCharacter: {fileID: 5076510780398248523}
   m_PipePlayerCharacter: {fileID: 4464223845418608054}
   m_WirePlayerCharacter: {fileID: 3510863952642513572}
+  m_WallKnockPlayerCharacter: {fileID: 0}
   m_PlayerCamera: {fileID: 8232727930318256733}
   m_Camera: {fileID: 8156024979346219202}
 --- !u!1 &8916512990213848511

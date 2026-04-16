@@ -70,17 +70,17 @@ public class PipeGrid : MonoBehaviour
     #endregion Delete & Init
 
     #region Start & End Minigame
-	public void StartMinigame(PipeGridData pipeGridData)
+	public void StartMinigame(SerializablePipeGridData pipeGridData)
 	{
-		m_PlaneGrid.GridSize = pipeGridData.GridSize;
-		if (gameObject.activeSelf) InitCells(ref m_PipeCells, ref m_Grid, Size);
-		else gameObject.SetActive(true);
-		Pipe startPipe = GetPipe(pipeGridData.StartX, pipeGridData.StartY);
-		Sys.Assert(startPipe, $"({pipeGridData.StartX}, {pipeGridData.StartY}) was not a valid index");
-		m_StartPipe = new StartEndPipe() { PipeCell = startPipe, EntranceExitSide = pipeGridData.EntranceSide };
-		Pipe endPipe = GetPipe(pipeGridData.EndX, pipeGridData.EndY);
-		Sys.Assert(endPipe, $"({pipeGridData.EndX}, {pipeGridData.EndY}) was not a valid index");
-		m_EndPipe = new StartEndPipe() { PipeCell = endPipe, EntranceExitSide = pipeGridData.ExitSide };
+		//m_PlaneGrid.GridSize = pipeGridData.GridSize;
+		//if (gameObject.activeSelf) InitCells(ref m_PipeCells, ref m_Grid, Size);
+		//else gameObject.SetActive(true);
+		//Pipe startPipe = GetPipe(pipeGridData.StartX, pipeGridData.StartY);
+		//Sys.Assert(startPipe, $"({pipeGridData.StartX}, {pipeGridData.StartY}) was not a valid index");
+		//m_StartPipe = new StartEndPipe() { PipeCell = startPipe, EntranceExitSide = pipeGridData.EntranceSide };
+		//Pipe endPipe = GetPipe(pipeGridData.EndX, pipeGridData.EndY);
+		//Sys.Assert(endPipe, $"({pipeGridData.EndX}, {pipeGridData.EndY}) was not a valid index");
+		//m_EndPipe = new StartEndPipe() { PipeCell = endPipe, EntranceExitSide = pipeGridData.ExitSide };
 	}
 
 	void EndMinigame(List<Pipe> path) // path is in case we want to do some kind of flowing animation

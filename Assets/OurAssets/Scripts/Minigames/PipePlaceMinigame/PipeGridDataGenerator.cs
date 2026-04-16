@@ -41,7 +41,7 @@ public class PipeGridDataGenerator : MonoBehaviour
 		}
 		try
 		{
-			m_PipeGridData = JsonUtility.FromJson<PipeGridData>(json.text);
+			m_PipeGridData = JsonUtility.FromJson<SerializablePipeGridData>(json.text).Deserialized;
 			Debug.Log($"Successfully loaded data from \"{FileName}.json\"");
 		}
 		catch (ArgumentException)
@@ -52,7 +52,7 @@ public class PipeGridDataGenerator : MonoBehaviour
 
 	public void SaveFile()
 	{
-		string json = JsonUtility.ToJson(m_PipeGridData, prettyPrint: true);
+		string json = JsonUtility.ToJson(m_PipeGridData.Serialized, prettyPrint: true);
 		string message = $"Successfully {(File.Exists(m_SaveDeleteFilePath) ? "modified" : "created")} \"{FileName}.json\"";
 		File.WriteAllText(m_SaveDeleteFilePath, json);
 		Debug.Log(message);

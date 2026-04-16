@@ -1,0 +1,30 @@
+{
+    "gridSize": {
+        "x": 6,
+        "y": 6
+    },
+    "startPipe": {
+        "cellPosition": {
+            "x": 0,
+            "y": 3
+        },
+        "entranceExitSide": 0
+    },
+    "endPipe": {
+        "cellPosition": {
+            "x": 5,
+            "y": 3
+        },
+        "entranceExitSide": 2
+    },
+    "pipes": [
+        {
+            "pipeType": "PipeScriptableObjects/StraightPipe",
+            "pipeQuantity": 4
+        },
+        {
+            "pipeType": "PipeScriptableObjects/LPipe",
+            "pipeQuantity": 4
+        }
+    ]
+}
