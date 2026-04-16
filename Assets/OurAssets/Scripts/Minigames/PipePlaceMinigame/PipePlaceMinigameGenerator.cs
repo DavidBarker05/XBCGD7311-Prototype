@@ -1,16 +1,31 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PipePlaceMinigameGenerator : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+	// Only going to use pre-generated puzzles for now
+	//[SerializeField]
+	//bool m_UsePreGeneratedPuzzles = true;
+	//[SerializeField]
+	//bool m_UseProcedurallyGeneratedPuzzles = true;
+	[SerializeField]
+	PipeGrid m_PipeGrid;
+	[SerializeField]
+	Player m_Player;
+	[SerializeField]
+	PipePlayerCharacter m_PipePlayerCharacter;
+	[SerializeField]
+	List<TextAsset> m_PreGeneratedPuzzles;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+	public void StartPipeMinigame()
+	{
+		int puzzleNumber = Random.Range(0, m_PreGeneratedPuzzles.Count);
+		PipeGridData gridData = JsonUtility.FromJson<SerializablePipeGridData>(m_PreGeneratedPuzzles[puzzleNumber].text).Deserialized;
+		foreach (PipeData pipe in gridData.Pipes)
+		{
+			m_PipePlayerCharacter.SetPipeQuantity(pipe.PipeType, pipe.PipeQuantity);
+		}
+		m_PipeGrid.StartMinigame(gridData);
+		m_Player.ChangeActionMap("PipePlayer");
+	}
 }

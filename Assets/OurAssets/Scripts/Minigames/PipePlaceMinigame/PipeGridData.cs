@@ -40,7 +40,7 @@ public struct SerializablePipeData
 {
 	// Fields to be serialised
 	public string pipeType;
-	public int pipeQuantity;
+	public uint pipeQuantity;
 
 	// Property to read the fields as meaningful data, don't serialise
 	public PipeData Deserialized => new PipeData() { PipeType = Resources.Load<PipeSO>(pipeType), PipeQuantity = pipeQuantity };
@@ -52,7 +52,7 @@ public struct PipeData
 	[field: SerializeField]
 	public PipeSO PipeType { get; set; }
 	[field: SerializeField]
-	public int PipeQuantity { get; set; }
+	public uint PipeQuantity { get; set; }
 
 	public SerializablePipeData Serialized
 	{
