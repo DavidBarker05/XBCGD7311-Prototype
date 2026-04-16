@@ -84,7 +84,7 @@ Shader "Toon/OutlineShader"
 				OUT.positionHCS = pos;
 				OUT.texcoord = DYNAMIC_SCALING_APPLY_SCALEBIAS(uv);
 
-				OUT.viewSpaceDirection = mul(UNITY_MATRIX_I_P, OUT.positionHCS).xyz;
+				OUT.viewSpaceDirection = mul(unity_CameraInvProjection , OUT.positionHCS).xyz;
 
 				return OUT;
 			}
@@ -112,12 +112,13 @@ Shader "Toon/OutlineShader"
 				float depth2 = SampleSceneDepth(bottomRightUV);
 				float depth3 = SampleSceneDepth(topLeftUV);
 
-				float3 normal0 = SampleSceneNormals(bottomLeftUV);
-				float3 normal1 = SampleSceneNormals(topRightUV);
-				float3 normal2 = SampleSceneNormals(bottomRightUV);
-				float3 normal3 = SampleSceneNormals(topLeftUV);
+				float3x3 worldNormalToViewMatrix = (float3x3)UNITY_MATRIX_MV;
+				float3 normal0 = mul(worldNormalToViewMatrix, SampleSceneNormals(bottomLeftUV));
+				float3 normal1 = mul(worldNormalToViewMatrix, SampleSceneNormals(topRightUV));
+				float3 normal2 = mul(worldNormalToViewMatrix, SampleSceneNormals(bottomRightUV));
+				float3 normal3 = mul(worldNormalToViewMatrix, SampleSceneNormals(topLeftUV));
 
-				float3 normal = SampleSceneNormals(uv);
+				float3 normal = mul(worldNormalToViewMatrix, SampleSceneNormals(uv));
 				float3 viewNormal = normal * 2 - 1;
 				float NdotV = 1 - dot(viewNormal, -IN.viewSpaceDirection);
 
