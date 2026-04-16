@@ -144,7 +144,7 @@ Shader "Toon/OutlineShader"
 
 				if (edge == 0) discard;
 
-				return _OutlineColour;
+				return float4(_OutlineColour.rgb, 1);
             }
             ENDHLSL
         }
