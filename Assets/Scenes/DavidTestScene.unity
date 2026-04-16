@@ -2063,8 +2063,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 623b77e77e81bbf4ba2a9bc4763adb94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PipeGridDataGenerator
+  m_ClearOnDelete: 1
   <FileName>k__BackingField: 
-  m_DoNotDeleteDataOnNameChange: 0
   m_PipeGridData:
     gridSize:
       x: 0

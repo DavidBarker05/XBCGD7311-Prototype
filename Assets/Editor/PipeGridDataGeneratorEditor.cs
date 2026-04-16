@@ -15,6 +15,7 @@ public class PipeGridDataGeneratorEditor : Editor
 		{
 			if (GUILayout.Button($"Load \"{generator.FileName}.json\"")) generator.LoadFile();
 			if (GUILayout.Button($"Create/Modify \"{generator.FileName}.json\"")) generator.SaveFile();
+			if (GUILayout.Button($"Delete \"{generator.FileName}.json\"")) generator.DeleteFile();
 		}
 		EditorUtility.SetDirty(target);
 	}
