@@ -231,7 +231,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -0}
-  m_LocalScale: {x: 0.6, y: 1, z: 0.6}
+  m_LocalScale: {x: 0.8, y: 1, z: 0.8}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1142796510}
@@ -272,7 +272,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 809d01eaf61193b439a1e4f1ad9bb38c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlaneGridGenerator
-  m_GridSize: {x: 6, y: 6}
+  m_GridSize: {x: 8, y: 8}
 --- !u!114 &253860358
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2064,20 +2064,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PipeGridDataGenerator
   m_ClearOnDelete: 1
-  <FileName>k__BackingField: PipePuzzle1
+  <FileName>k__BackingField: 
   m_PipeGridData:
-    <GridSize>k__BackingField: {x: 6, y: 6}
+    <GridSize>k__BackingField: {x: 0, y: 0}
     <StartPipe>k__BackingField:
-      <CellPosition>k__BackingField: {x: 1, y: 5}
-      <EntranceExitSide>k__BackingField: 1
+      <CellPosition>k__BackingField: {x: 0, y: 0}
+      <EntranceExitSide>k__BackingField: 0
     <EndPipe>k__BackingField:
-      <CellPosition>k__BackingField: {x: 4, y: 0}
-      <EntranceExitSide>k__BackingField: 3
-    <Pipes>k__BackingField:
-    - <PipeType>k__BackingField: {fileID: 11400000, guid: 62d51b70b3d53494ab7bd3e33950fa3b, type: 2}
-      <PipeQuantity>k__BackingField: 7
-    - <PipeType>k__BackingField: {fileID: 11400000, guid: cfecd6a388c2f3b44891a4f756795326, type: 2}
-      <PipeQuantity>k__BackingField: 4
+      <CellPosition>k__BackingField: {x: 0, y: 0}
+      <EntranceExitSide>k__BackingField: 0
+    <Pipes>k__BackingField: []
 --- !u!4 &2098654442
 Transform:
   m_ObjectHideFlags: 0
