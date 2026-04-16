@@ -8,7 +8,7 @@ public class WireColour
 	public static readonly WireColour Green = new WireColour(Color.green);
 	public static readonly WireColour Blue = new WireColour(Color.blue);
 	public static readonly WireColour Yellow = new WireColour(Color.yellow);
-	public static readonly WireColour Pink = new WireColour(Color.pink);
+	public static readonly WireColour Magenta = new WireColour(Color.magenta);
 
 	public static readonly WireColour[] WireColours = new WireColour[]
 	{
@@ -17,7 +17,7 @@ public class WireColour
 		Green,
 		Blue,
 		Yellow,
-		Pink
+		Magenta
 	};
 
 	public Color Colour { get; private set; }
