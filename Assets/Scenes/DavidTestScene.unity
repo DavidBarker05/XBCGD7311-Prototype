@@ -1159,7 +1159,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: e334f31605e2440448ab91d03a805d78, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1304,7 +1304,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1142796510
 Transform:
   m_ObjectHideFlags: 0
@@ -1780,7 +1780,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1783830761
 Transform:
   m_ObjectHideFlags: 0
@@ -2252,7 +2252,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 966743820705505671, guid: 2288494715f42ad4a8ce262dee2b745b, type: 3}
       propertyPath: m_DefaultActionMap
-      value: 22d17d0b-d246-4ca6-b763-0eccf5f28c98
+      value: 747851f0-7e01-4bcc-bc08-541a6fc83d1c
       objectReference: {fileID: 0}
     - target: {fileID: 3510863952642513572, guid: 2288494715f42ad4a8ce262dee2b745b, type: 3}
       propertyPath: <MouseHitLayer>k__BackingField.m_Bits
