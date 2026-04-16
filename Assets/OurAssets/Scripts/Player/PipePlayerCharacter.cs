@@ -118,6 +118,12 @@ public class PipePlayerCharacter : PlayerCharacter
         if (pipe && pipe != m_EmptyPipe) m_CurrentlySelectedPipe = pipe;
     }
 
+	public uint GetPipeQuantity(PipeSO pipe)
+	{
+		if (!pipe || pipe == m_EmptyPipe || !m_PipeQuantities.ContainsKey(pipe)) return 0;
+		return m_PipeQuantities[pipe];
+	}
+
     public void PlacePipe(ref PipeGrid pipeGrid, Vector3Int cellPosition) // public in case need to access in another class
     {
         if (!pipeGrid || !m_CurrentlySelectedPipe || m_CurrentlySelectedPipe == m_EmptyPipe || !m_PipeQuantities.ContainsKey(m_CurrentlySelectedPipe) || (m_PipeQuantities[m_CurrentlySelectedPipe] == 0 && !m_Debug)) return;
