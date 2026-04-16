@@ -70,28 +70,20 @@ public class PipeGrid : MonoBehaviour
     #endregion Delete & Init
 
     #region Start & End Minigame
-    #region Start Minigame
-    public void StartMinigame(Vector2Int gridSize, int startX, int startY, PipeSide entranceSide, int endX, int endY, PipeSide exitSide)
-    {
-        m_PlaneGrid.GridSize = gridSize;
-        if (gameObject.activeSelf) InitCells(ref m_PipeCells, ref m_Grid, Size);
-        else gameObject.SetActive(true);
-        Pipe startPipe = GetPipe(startX, startY);
-        Sys.Assert(startPipe, $"({startX}, {startY}) was not a valid index");
-        m_StartPipe = new StartEndPipe() { PipeCell = startPipe, EntranceExitSide = entranceSide };
-        Pipe endPipe = GetPipe(endX, endY);
-        Sys.Assert(endPipe, $"({endX}, {endY}) was not a valid index");
-        m_EndPipe = new StartEndPipe() { PipeCell = endPipe, EntranceExitSide = exitSide };
-    }
+	public void StartMinigame(PipeGridData pipeGridData)
+	{
+		m_PlaneGrid.GridSize = pipeGridData.GridSize;
+		if (gameObject.activeSelf) InitCells(ref m_PipeCells, ref m_Grid, Size);
+		else gameObject.SetActive(true);
+		Pipe startPipe = GetPipe(pipeGridData.StartX, pipeGridData.StartY);
+		Sys.Assert(startPipe, $"({pipeGridData.StartX}, {pipeGridData.StartY}) was not a valid index");
+		m_StartPipe = new StartEndPipe() { PipeCell = startPipe, EntranceExitSide = pipeGridData.EntranceSide };
+		Pipe endPipe = GetPipe(pipeGridData.EndX, pipeGridData.EndY);
+		Sys.Assert(endPipe, $"({pipeGridData.EndX}, {pipeGridData.EndY}) was not a valid index");
+		m_EndPipe = new StartEndPipe() { PipeCell = endPipe, EntranceExitSide = pipeGridData.ExitSide };
+	}
 
-    public void StartMinigame(int width, int height, int startX, int startY, PipeSide entranceSide, int endX, int endY, PipeSide exitSide)
-    {
-        Vector2Int gridSize = new Vector2Int(width, height);
-        StartMinigame(gridSize, startX, startY, entranceSide, endX, endY, exitSide);
-    }
-    #endregion Start Minigame
-
-    void EndMinigame(List<Pipe> path) // path is in case we want to do some kind of flowing animation
+	void EndMinigame(List<Pipe> path) // path is in case we want to do some kind of flowing animation
     {
         // TODO: End minigame
     }

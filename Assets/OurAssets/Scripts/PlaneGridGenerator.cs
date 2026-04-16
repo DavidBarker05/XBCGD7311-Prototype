@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[RequireComponent(typeof(MeshCollider))]
 public class PlaneGridGenerator : MonoBehaviour
 {
     [SerializeField]
