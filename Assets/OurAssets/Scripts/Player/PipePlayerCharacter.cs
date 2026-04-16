@@ -67,7 +67,6 @@ public class PipePlayerCharacter : PlayerCharacter
         foreach (PipeSO pipe in m_PlaceablePipes)
             m_PipeQuantities.Add(pipe, (m_Debug ? 1u : 0u));
 		HasBeenInitialised = true;
-		Debug.Log(PipeSide.Left.ToString());
     }
 
     public override void UpdateCharacter(ref IPlayerCharacterUpdateData playerCharacterUpdateData)
