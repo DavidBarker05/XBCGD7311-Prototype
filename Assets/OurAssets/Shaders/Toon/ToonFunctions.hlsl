@@ -45,11 +45,6 @@ float LightIntensity(Light light, float NdotL)
     float shadow = Shadow(light);
     return smoothstep(0, _ToonShadowSmoothness, NdotL * shadow);
 }
-
-float ToonSSAO(float ssao)
-{
-    return smoothstep(saturate(_SSAOStrength - _ToonShadowSmoothness), saturate(_SSAOStrength + _ToonShadowSmoothness), ssao);
-}
         
 float3 SpecularTint(Light light, float lightIntensity, InputData inputData)
 {
@@ -125,7 +120,6 @@ float3 ToonTint(float4 positionHCS, InputData inputData)
     #if defined(_ADDITIONAL_LIGHTS)
         tint += AdditionalLightLoop(inputData);
     #endif
-    float ssao = SampleAmbientOcclusion(inputData.normalizedScreenSpaceUV);
-    return _ToonShadowTint + tint * ToonSSAO(ssao);
+    return _ToonShadowTint + tint;
 }
 #endif

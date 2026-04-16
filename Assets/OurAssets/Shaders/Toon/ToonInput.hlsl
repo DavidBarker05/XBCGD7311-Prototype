@@ -15,7 +15,6 @@ CBUFFER_START(UnityPerMaterial)
             
     float3 _ToonShadowTint;
     float _ToonShadowSmoothness;
-    float _SSAOStrength;
             
     float3 _ToonSpecularTint;
     float _ToonGlossiness;

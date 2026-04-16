@@ -12,7 +12,6 @@ Shader "Toon/ToonShader"
 
         _ToonShadowTint("Toon Shadow Tint", Color) = (0.4, 0.4, 0.4)
         _ToonShadowSmoothness("Toon Shadow Smoothness", Range(0, 1)) = 0.01
-        _SSAOStrength("SSAO Strength", Range(0, 0.5)) = 0.25
 
         _ToonSpecularTint("Toon Specular Tint", Color) = (0.9, 0.9, 0.9)
         _ToonGlossiness("Toon Glossiness", Range(0, 1)) = 0
