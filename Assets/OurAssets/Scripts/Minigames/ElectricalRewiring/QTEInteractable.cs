@@ -29,7 +29,7 @@ public class QTEInteractable : Interactable
 		if (inputParameters.Length != 2)
 		{
 #if UNITY_EDITOR
-			Debug.LogWarning($"WARNING: QTEInteractable objects needs 1 input parameter. Received {inputParameters.Length} input parameters");
+			Debug.LogWarning($"WARNING: QTEInteractable objects needs 2 input parameters. Received {inputParameters.Length} input parameters");
 #endif
 		}
 		else
