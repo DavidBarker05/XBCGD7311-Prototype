@@ -38,7 +38,7 @@ public class ChasePlayer : MonoBehaviour
 
 	private void OnCollisionEnter(Collision collision)
 	{
-		if (collision.gameObject.CompareTag("Player")) ChaseMinigameStarter.Instance.StartChaseMinigame();
+		if (collision.collider.gameObject.CompareTag("Player")) ChaseMinigameStarter.Instance.StartChaseMinigame();
 	}
 
 	public void ResetToStart()
