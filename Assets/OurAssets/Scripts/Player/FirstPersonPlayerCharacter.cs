@@ -194,6 +194,7 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
             Interactable interactable = hit.GetComponent<Interactable>();
 			if (interactable == null) return;
 			if (interactable is QTEInteractable) interactable.Interact(m_Player, m_QTEPlayerCharacter);
+			else if (interactable is WireMinigameInteractable or WallKnockInteractable) interactable.Interact();
         }
     }
     #endregion Interaction
