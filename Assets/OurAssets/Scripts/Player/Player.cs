@@ -14,6 +14,8 @@ public class Player : MonoBehaviour
     WirePlayerCharacter m_WirePlayerCharacter;
 	[SerializeField]
 	WallKnockPlayerCharacter m_WallKnockPlayerCharacter;
+	[SerializeField]
+	QTEPlayerCharacter m_QTEPlayerCharacter;
     [SerializeField]
     PlayerCamera m_PlayerCamera;
     [SerializeField]
@@ -77,24 +79,33 @@ public class Player : MonoBehaviour
         "PipePlayer" => m_PipePlayerCharacter,
         "WirePlayer" => m_WirePlayerCharacter,
 		"WallKnockPlayer" => m_WallKnockPlayerCharacter,
+		"QTEPlayer" => m_QTEPlayerCharacter,
         _ => null
     };
 
 	IPlayerCharacterInitData CurrentPlayerCharacterInitData => m_CurrentPlayerCharacter switch
 	{
-		FirstPersonPlayerCharacter => new FirstPersonPlayerCharacterInitData() { CharacterSettings = m_PlayerSettings.CharacterSettings, InteractSettings = m_PlayerSettings.InteractSettings },
+		FirstPersonPlayerCharacter => new FirstPersonPlayerCharacterInitData()
+		{
+			CharacterSettings = m_PlayerSettings.CharacterSettings,
+			InteractSettings = m_PlayerSettings.InteractSettings,
+			Player = this,
+			QTEPlayerCharacter = m_QTEPlayerCharacter
+		},
 		PipePlayerCharacter => new PipePlayerCharacterInitData(),
 		WirePlayerCharacter => new WirePlayerCharacterInitData(),
 		WallKnockPlayerCharacter => new WallKnockPlayerCharacterInitData(),
+		QTEPlayerCharacter => new QTEPlayerCharacterInitData(),
 		_ => null
 	};
 
-    IPlayerCharacterUpdateData ChangeCharacterUpdateData(string actionMap) => actionMap switch
+    IPlayerCharacterUpdateData CurrentPlayerCharacterUpdateData => m_CurrentPlayerCharacter switch
     {
-        "Player" => new FirstPersonPlayerCharacterUpdateData(),
-        "PipePlayer" => new PipePlayerCharacterUpdateData(),
-        "WirePlayer" => new WirePlayerCharacterUpdateData(),
-		"WallKnockPlayer" => new WallKnockPlayerCharacterUpdateData(),
+		FirstPersonPlayerCharacter => new FirstPersonPlayerCharacterUpdateData(),
+		PipePlayerCharacter => new PipePlayerCharacterUpdateData(),
+		WirePlayerCharacter => new WirePlayerCharacterUpdateData(),
+		WallKnockPlayerCharacter => new WallKnockPlayerCharacterUpdateData(),
+		QTEPlayerCharacter => new QTEPlayerCharacterUpdateData(),
         _ => null
     };
 
@@ -102,7 +113,7 @@ public class Player : MonoBehaviour
     {
         m_CurrentPlayerCharacter = ChangePlayerCharacter(actionMap);
 		if (!m_CurrentPlayerCharacter.HasBeenInitialised) m_CurrentPlayerCharacter.Init(CurrentPlayerCharacterInitData);
-        m_CurrentPlayerCharacterUpdateData = ChangeCharacterUpdateData(actionMap);
+        m_CurrentPlayerCharacterUpdateData = CurrentPlayerCharacterUpdateData;
         m_PlayerCamera.ChangeCameraTarget(m_CurrentPlayerCharacter.CameraTarget);
         SetCursorVisibility(m_CurrentPlayerCharacter.MouseVisible);
     }
@@ -193,6 +204,11 @@ public class Player : MonoBehaviour
 	public void HandleRightClickInput(InputAction.CallbackContext ctx)
 	{
 		SetDataValue<WallKnockPlayerCharacterUpdateData>(input => input.RightClickedThisFrame |= ctx.started);
+	}
+
+	public void HandleDoQTEInput(InputAction.CallbackContext ctx)
+	{
+		SetDataValue<QTEPlayerCharacterUpdateData>(input => input.DidQTEInput |= ctx.started);
 	}
 
     #region Control Scheme Change

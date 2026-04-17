@@ -872,6 +872,34 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "QTEPlayer",
+            "id": "d18a7ee3-f951-4942-850f-21d504b01bcc",
+            "actions": [
+                {
+                    "name": "DoQTE",
+                    "type": "Button",
+                    "id": "7a586f44-2f6f-45d6-b83a-7ab11cb3c34a",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "5105134a-2bc1-4368-b942-d08e099a8cd7",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "DoQTE",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": [

@@ -6,6 +6,8 @@ public class FirstPersonPlayerCharacterInitData : IPlayerCharacterInitData
 {
     public CharacterSettings CharacterSettings { get; set; }
     public InteractSettings InteractSettings { get; set; }
+	public Player Player { get; set; }
+	public QTEPlayerCharacter QTEPlayerCharacter { get; set; }
 }
 
 public class FirstPersonPlayerCharacterUpdateData : IPlayerCharacterUpdateData
@@ -48,6 +50,9 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
     public override bool DoCameraRotation => true;
     public override bool UseMouseScreenPosition => false;
 
+	Player m_Player;
+	QTEPlayerCharacter m_QTEPlayerCharacter;
+
     void Awake() => m_CC = GetComponent<CharacterController>();
 
     public override void Init(IPlayerCharacterInitData playerCharacterInitData)
@@ -55,6 +60,8 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
 		FirstPersonPlayerCharacterInitData initData = Sys.AssertType<FirstPersonPlayerCharacterInitData>(playerCharacterInitData, nameof(playerCharacterInitData));
         m_CharacterSettings = initData.CharacterSettings;
         m_InteractSettings = initData.InteractSettings;
+		m_Player = initData.Player;
+		m_QTEPlayerCharacter = initData.QTEPlayerCharacter;
 		HasBeenInitialised = true;
     }
 
@@ -185,7 +192,8 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
             queryTriggerInteraction: QueryTriggerInteraction.Collide))
         {
             Interactable interactable = hit.GetComponent<Interactable>();
-            if (interactable != null) interactable.Interact();
+			if (interactable == null) return;
+			if (interactable is QTEInteractable) interactable.Interact(m_Player, m_QTEPlayerCharacter);
         }
     }
     #endregion Interaction

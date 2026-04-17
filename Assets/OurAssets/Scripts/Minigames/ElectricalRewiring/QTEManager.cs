@@ -14,7 +14,7 @@ public class QTEManager : MonoBehaviour
 
         currentQTE = Instantiate(qtePrefab, canvas.transform);
         PointerController pointer = currentQTE.GetComponentInChildren<PointerController>();
-        pointer.Begin(this);
+        pointer.Begin(this, currentInteractable.QTEPlayer);
         Time.timeScale = 0f;
     }
 

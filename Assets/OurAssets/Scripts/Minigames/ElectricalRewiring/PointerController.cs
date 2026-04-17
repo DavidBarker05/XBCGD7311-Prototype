@@ -15,16 +15,22 @@ public class PointerController : MonoBehaviour
 
     private QTEManager qteManager;
     private bool isRunning;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+
+	private QTEPlayerCharacter qtePlayer;
+	private bool didQTEInput;
+
+	// Start is called once before the first execution of Update after the MonoBehaviour is created
+	void Start()
     {
         pointerTransform = GetComponent<RectTransform>();
         targetPosition = pointB.position;
     }
 
-    public void Begin(QTEManager manager)
+    public void Begin(QTEManager manager, QTEPlayerCharacter player)
     {
         qteManager = manager;
+		qtePlayer = player;
+		qtePlayer.OnQTEInput.AddListener(DoQTEInput);
         isRunning = true;
     }
 
@@ -32,6 +38,7 @@ public class PointerController : MonoBehaviour
     void Update()
     {
         if (!isRunning) return;
+		
         pointerTransform.position = Vector3.MoveTowards(pointerTransform.position, targetPosition, moveSpeed * Time.unscaledDeltaTime);
 
         if(Vector3.Distance(pointerTransform.position, pointA.position) < 0.1f)
@@ -47,14 +54,22 @@ public class PointerController : MonoBehaviour
         }
 
         //if (Input.GetKeyDown(KeyCode.Space))
-        if (InputSystem.actions.FindAction("Jump").WasPerformedThisFrame())
+        if (didQTEInput)
         {
+			didQTEInput = false;
             CheckSuccess();
         }
     }
 
+	void DoQTEInput()
+	{
+		didQTEInput = true;
+	}
+
     void CheckSuccess()
     {
+		qtePlayer.OnQTEInput.RemoveListener(DoQTEInput);
+		qtePlayer = null;
         if (RectTransformUtility.RectangleContainsScreenPoint(safeZone, pointerTransform.position, null))
         {
             Debug.Log("Success!");
@@ -65,5 +80,5 @@ public class PointerController : MonoBehaviour
             Debug.Log("Failure!");
             qteManager.Falilure();
         }
-    }
+	}
 }

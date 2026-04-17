@@ -257,6 +257,55 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!1 &3709016064921035408
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1890197567793900115}
+  - component: {fileID: 2815631382616995679}
+  m_Layer: 6
+  m_Name: QTECharacter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1890197567793900115
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3709016064921035408}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5558182433297790033}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2815631382616995679
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3709016064921035408}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10b8fdb3ad23e874fb9972c643a8e010, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::QTEPlayerCharacter
+  <CameraTarget>k__BackingField: {fileID: 6429161227438163874}
+  <MouseHitLayer>k__BackingField:
+    serializedVersion: 2
+    m_Bits: 0
+  <MouseHitDistance>k__BackingField: 100
 --- !u!1 &3903378173616976415
 GameObject:
   m_ObjectHideFlags: 0
@@ -290,6 +339,7 @@ Transform:
   m_Children:
   - {fileID: 562070759169559720}
   - {fileID: 6429161227438163874}
+  - {fileID: 1890197567793900115}
   m_Father: {fileID: 3524224750697147432}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!143 &1686821880297824360
@@ -359,7 +409,7 @@ Transform:
   m_GameObject: {fileID: 5839737489753522125}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 30, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -445,7 +495,7 @@ MonoBehaviour:
   <CameraTarget>k__BackingField: {fileID: 8811864408363043882}
   <MouseHitLayer>k__BackingField:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1
   <MouseHitDistance>k__BackingField: 100
 --- !u!1 &7002874808214083310
 GameObject:
@@ -481,6 +531,7 @@ Transform:
   - {fileID: 5558182433297790033}
   - {fileID: 952612267495967325}
   - {fileID: 8511552614904638590}
+  - {fileID: 7314950976730013109}
   - {fileID: 145719061603609728}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -705,6 +756,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 2193f1a7-8ede-4d51-9819-3ea5f40015c9
     m_ActionName: 'WallKnockPlayer/Break[/Mouse/leftButton]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8184540134110917077}
+        m_TargetAssemblyTypeName: Player, Assembly-CSharp
+        m_MethodName: HandleDoQTEInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 7a586f44-2f6f-45d6-b83a-7ab11cb3c34a
+    m_ActionName: 'QTEPlayer/DoQTE[/Keyboard/space]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -726,9 +793,91 @@ MonoBehaviour:
   m_PlayerCharacter: {fileID: 5076510780398248523}
   m_PipePlayerCharacter: {fileID: 4464223845418608054}
   m_WirePlayerCharacter: {fileID: 3510863952642513572}
-  m_WallKnockPlayerCharacter: {fileID: 0}
+  m_WallKnockPlayerCharacter: {fileID: 4580089456610293175}
+  m_QTEPlayerCharacter: {fileID: 2815631382616995679}
   m_PlayerCamera: {fileID: 8232727930318256733}
   m_Camera: {fileID: 8156024979346219202}
+--- !u!1 &8133211469211323686
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2970865359398681773}
+  m_Layer: 6
+  m_Name: CameraTarget
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2970865359398681773
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8133211469211323686}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 30, z: -10}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7314950976730013109}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8244313341775524186
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7314950976730013109}
+  - component: {fileID: 4580089456610293175}
+  m_Layer: 6
+  m_Name: WallKnockCharacter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7314950976730013109
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8244313341775524186}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2970865359398681773}
+  m_Father: {fileID: 3524224750697147432}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4580089456610293175
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8244313341775524186}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db772accadd4ae84594135b53f30a529, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WallKnockPlayerCharacter
+  <CameraTarget>k__BackingField: {fileID: 2970865359398681773}
+  <MouseHitLayer>k__BackingField:
+    serializedVersion: 2
+    m_Bits: 1
+  <MouseHitDistance>k__BackingField: 100
 --- !u!1 &8916512990213848511
 GameObject:
   m_ObjectHideFlags: 0
