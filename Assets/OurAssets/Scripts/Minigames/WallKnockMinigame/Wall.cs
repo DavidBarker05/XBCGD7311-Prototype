@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using Util.SystemUtils;
 
@@ -17,6 +18,8 @@ public class Wall : MonoBehaviour
 	Transform m_UnscaledTransform;
 	[SerializeField]
 	Player m_Player;
+	[SerializeField]
+	GameObject m_HolePrefab;
 	[SerializeField, Min(1)]
 	int m_MaxTries = 3;
 	[SerializeField]
@@ -24,7 +27,7 @@ public class Wall : MonoBehaviour
 	[SerializeField]
 	Vector3 m_PipeSpawnUpperBound;
 	[SerializeField, Min(0.01f)]
-	float m_BreakTolerance = 2f;
+	float m_BreakTolerance = 0.675f;
 	[SerializeField]
 	WallEcho m_WallEchoPrefab;
 	[SerializeField]
@@ -35,6 +38,8 @@ public class Wall : MonoBehaviour
 	EchoIntensity m_FurthestIntensity;
 
 	bool m_bAlreadyPlaying;
+
+	List<GameObject> m_Holes = new List<GameObject>();
 
 	Vector3 RandomPipePosition
 	{
@@ -119,6 +124,7 @@ public class Wall : MonoBehaviour
 		m_bAlreadyPlaying = true;
 		m_AvailableTries = m_MaxTries;
 		m_PipePosition = RandomPipePosition;
+
 	}
 
 	void EndWallKnockMinigame(bool bWon)
@@ -129,8 +135,28 @@ public class Wall : MonoBehaviour
 		{
 			if (!m_Player) m_Player = FindAnyObjectByType<Player>();
 			Sys.Assert(m_Player, "Player doesn't exist");
-			m_Player.ChangeActionMap("PipePlayer");
+			m_Player.OnMinigameBeaten();
+			m_Player.ChangeActionMap("Player");
+			ClearHoles();
+			m_UnscaledTransform.gameObject.SetActive(false);
+			//m_Player.ChangeActionMap("PipePlayer");
 		}
+		if (!bWon) ResetMinigame();
+	}
+
+	void ClearHoles()
+	{
+		for (int i = m_Holes.Count - 1; i >= 0; --i)
+		{
+			Destroy(m_Holes[i]);
+		}
+		m_Holes.Clear();
+	}
+
+	void ResetMinigame()
+	{
+		ClearHoles();
+		StartWallKnockMinigame();
 	}
 
 	public void KnockWall(Vector3 position)
@@ -143,6 +169,10 @@ public class Wall : MonoBehaviour
 	public void BreakWall(Vector3 position)
 	{
 		--m_AvailableTries;
+		GameObject hole = Instantiate(m_HolePrefab, m_UnscaledTransform);
+		hole.transform.position = position + transform.up * 0.02f;
+		hole.GetComponent<Renderer>().material.SetFloat("_HoleSize", m_BreakTolerance);
+		m_Holes.Add(hole);
 		if (Vector3.Distance(position, m_PipePosition) <= m_BreakTolerance) EndWallKnockMinigame(true);
 		else if (m_AvailableTries <= 0) EndWallKnockMinigame(false);
 	}
