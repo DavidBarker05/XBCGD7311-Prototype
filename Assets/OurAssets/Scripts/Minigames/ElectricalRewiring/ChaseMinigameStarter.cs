@@ -27,7 +27,9 @@ public class ChaseMinigameStarter : MonoBehaviour
 	public void StartChaseMinigame()
 	{
 		ChaseMinigameIsRunning = true;
+		m_FPPCharacter.GetComponent<CharacterController>().enabled = false;
 		m_FPPCharacter.gameObject.transform.position = m_ChaseSpawn.position;
+		m_FPPCharacter.GetComponent<CharacterController>().enabled = true;
 		numInteractables = 0;
 		numInteractablesBeaten = 0;
 		QTEInteractable[] interactables = FindObjectsByType<QTEInteractable>();
@@ -51,7 +53,9 @@ public class ChaseMinigameStarter : MonoBehaviour
 
 	public void EndChaseMinigame()
 	{
+		m_FPPCharacter.GetComponent<CharacterController>().enabled = false;
 		m_FPPCharacter.transform.position = m_HouseSpawn.position;
+		m_FPPCharacter.GetComponent<CharacterController>().enabled = true;
 		m_Player.OnMinigameBeaten();
 		ChaseMinigameIsRunning = false;
 	}

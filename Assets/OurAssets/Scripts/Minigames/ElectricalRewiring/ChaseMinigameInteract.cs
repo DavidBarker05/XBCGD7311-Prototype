@@ -17,7 +17,10 @@ public class ChaseMinigameInteract : Interactable
 		}
 		else
 		{
-			if ((!m_HasBeenPlayed || m_CanBePlayedAgain) && !ChaseMinigameStarter.Instance.ChaseMinigameIsRunning) ChaseMinigameStarter.Instance.StartChaseMinigame();
+			if ((!m_HasBeenPlayed || m_CanBePlayedAgain) && !ChaseMinigameStarter.Instance.ChaseMinigameIsRunning)
+			{
+				ChaseMinigameStarter.Instance.StartChaseMinigame();
+			}
 			m_HasBeenPlayed = true;
 		}
 		return null;
