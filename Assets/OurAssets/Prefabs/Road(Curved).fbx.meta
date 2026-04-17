@@ -3,7 +3,47 @@ guid: f533a3ad07f049d4f9e408314dc15dac
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.003
+    second: {fileID: 2100000, guid: 5d13a43ae1df029439a0885d307ca615, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.004
+    second: {fileID: 2100000, guid: 8865c49596072fc4e9b0c7b09ff0572a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.005
+    second: {fileID: 2100000, guid: 3e8873c3539bcab44ab6beb2452392cc, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: MidStripes
+    second: {fileID: 2100000, guid: 78fca5e40ecb96947928604dfb53f61c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Road
+    second: {fileID: 2100000, guid: 72eef49e3452fef46b5edddd35986ca7, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Side(R)
+    second: {fileID: 2100000, guid: 28ca218c86d147c4e94c661f16855e1c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: SideStripes
+    second: {fileID: 2100000, guid: 5e8ab9f4a570dd04e95b315a634d3624, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: grass
+    second: {fileID: 2100000, guid: 603da0014ba324d4abdcd7da429d93f3, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
