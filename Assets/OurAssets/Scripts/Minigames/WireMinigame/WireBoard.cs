@@ -3,6 +3,7 @@ using Util.SystemUtils;
 using Util.ArrayUtils;
 using Util.ComparisonUtils;
 using System.Collections.Generic;
+using System.Collections;
 
 public class WireBoard : MonoBehaviour
 {
@@ -10,6 +11,10 @@ public class WireBoard : MonoBehaviour
     bool m_Debug = false;
     [SerializeField]
     Transform m_UnscaledTransform;
+	[SerializeField]
+	Player m_Player;
+	[SerializeField, Range(0f, 1f)]
+	float m_TimeActiveAfterCompleted = 0.3f;
 	[SerializeField, Min(0)]
 	int m_MinWires = 3;
 	[SerializeField]
@@ -26,6 +31,10 @@ public class WireBoard : MonoBehaviour
     Transform[] m_WireTipStartingPositions;
     [SerializeField]
     Transform[] m_WireEndPositions;
+	[SerializeField]
+	LineRenderer[] m_WireStarts;
+	[SerializeField]
+	LineRenderer[] m_WireEnds;
 
     public struct GrabReleasePoint
     {
@@ -38,6 +47,9 @@ public class WireBoard : MonoBehaviour
     Wire[] m_Wires;
     GrabReleasePoint[] m_GrabPoints;
     GrabReleasePoint[] m_ReleasePoints;
+	Dictionary<WireColour, int> m_WireColoursUsed;
+
+	bool m_bIsAlreadyPlaying = false;
 
 	void OnValidate() => EnsureMinWires();
 
@@ -53,37 +65,57 @@ public class WireBoard : MonoBehaviour
         Sys.Assert(Arrays.IsValid(m_WireStartingPositions), "m_WireStartingPositions is not a valid array");
         Sys.Assert(Arrays.IsValid(m_WireTipStartingPositions), "m_WireTipStartingPositions is not a valid array");
         Sys.Assert(Arrays.IsValid(m_WireEndPositions), "m_WireEndPositions is not a valid array");
-        Sys.Assert(m_WireStartingPositions.Length.Equals(m_WireTipStartingPositions.Length, m_WireEndPositions.Length), "Mismatched number of wire positions");
+		Sys.Assert(Arrays.IsValid(m_WireStarts), "m_WireStarts is not a valid array");
+		Sys.Assert(Arrays.IsValid(m_WireEnds), "m_WireEnds is not a valid array");
+        Sys.Assert(m_WireStartingPositions.Length.Equals(m_WireTipStartingPositions.Length, m_WireEndPositions.Length, m_WireStarts.Length, m_WireEnds.Length), "Mismatched array lengths");
 #if !UNITY_EDITOR
         m_Debug = false;
 #endif
-        if (m_Debug) StartWireMinigame(Random.Range(m_MinWires - 1, m_WireStartingPositions.Length) + 1);
+        if (m_Debug) CreateWires(Random.Range(m_MinWires - 1, m_WireStartingPositions.Length) + 1);
     }
 
-    public void StartWireMinigame(int numWires)
+	public void StartWireMinigame()
+	{
+		if (m_bIsAlreadyPlaying) return;
+		m_bIsAlreadyPlaying = true;
+		CreateWires(Random.Range(m_MinWires, m_WireStartingPositions.Length + 1));
+		m_UnscaledTransform.gameObject.SetActive(true);
+	}
+
+	void EndWireMinigame()
+	{
+		m_Player.OnMinigameBeaten();
+		StartCoroutine(CloseMinigame());
+	}
+
+	IEnumerator CloseMinigame()
+	{
+		yield return new WaitForSeconds(m_TimeActiveAfterCompleted);
+		m_bIsAlreadyPlaying = false;
+		m_Player.ChangeActionMap("Player");
+		for (int i = m_Wires.Length - 1; i >= 0; --i)
+		{
+			Destroy(m_Wires[i].gameObject);
+		}
+		m_UnscaledTransform.gameObject.SetActive(false);
+	}
+
+	void CreateWires(int numWires)
     {
-		numWires = Mathf.Max(numWires, m_MinWires);
-        Sys.Assert(m_WireStartingPositions.ContainsIndex(numWires - 1), $"{numWires} is an invalid number of wires");
 		m_UsedReleasePoints = new HashSet<GrabReleasePoint>();
         m_Wires = new Wire[numWires];
         m_GrabPoints = new GrabReleasePoint[numWires];
         m_ReleasePoints = new GrabReleasePoint[numWires];
+		m_WireColoursUsed = new Dictionary<WireColour, int>();
         for (int i = 0; i < numWires; ++i)
         {
             CreateWire(i);
             CreateGrabPoint(i);
             CreateReleasePoint(i);
         }
-		m_ReleasePoints.Shuffle();
-		for (int i = 0; i < m_ReleasePoints.Length; ++i)
-		{
-			m_ReleasePoints[i].Position = m_WireEndPositions[i].position;
-		}
-	}
-
-	public void EndWireMinigame()
-	{
-		// TODO: End minigame
+		ShuffleReleasePoints();
+		CreateWireStarts(numWires);
+		CreateWireEnds(numWires);
 	}
 
     void CreateWire(int index)
@@ -94,9 +126,18 @@ public class WireBoard : MonoBehaviour
         go.transform.SetParent(m_UnscaledTransform);
         LineRenderer lineRenderer = go.AddComponent<LineRenderer>();
 		lineRenderer.material = m_WireMaterial;
+		lineRenderer.startWidth = 0.5f;
+		lineRenderer.endWidth = 0.5f;
         m_Wires[index] = go.AddComponent<Wire>();
 		WireColour[] coloursNoNone = WireColour.WireColours.SubArray(1, WireColour.WireColours.Length - 1);
-        m_Wires[index].Init(m_WireStartingPositions[index].position, m_WireTipStartingPositions[index].position, coloursNoNone.GetRandomElement<WireColour>());
+		WireColour randomColour;
+		do
+		{
+			randomColour = coloursNoNone.GetRandomElement<WireColour>();
+			if (!m_WireColoursUsed.ContainsKey(randomColour)) m_WireColoursUsed.Add(randomColour, 0);
+		} while (m_WireColoursUsed[randomColour] >= m_Wires.Length / 2);
+		++m_WireColoursUsed[randomColour];
+		m_Wires[index].Init(m_WireStartingPositions[index].position, m_WireTipStartingPositions[index].position, randomColour);
     }
 
     void CreateGrabPoint(int index)
@@ -122,6 +163,46 @@ public class WireBoard : MonoBehaviour
 		};
     }
 
+	void ShuffleReleasePoints()
+	{
+		Sys.Assert(Arrays.IsValid(m_ReleasePoints), "m_ReleasePoints is not a valid array");
+		m_ReleasePoints.Shuffle();
+		for (int i = 0; i < m_ReleasePoints.Length; ++i)
+		{
+			m_ReleasePoints[i].Position = m_WireEndPositions[i].position;
+		}
+	}
+
+	void CreateWireStarts(int numWires)
+	{
+		for (int i = 0; i < m_WireEnds.Length; ++i)
+		{
+			if (i >= numWires)
+			{
+				m_WireStarts[i].gameObject.SetActive(false);
+				continue;
+			}
+			m_WireStarts[i].gameObject.SetActive(true);
+			m_WireStarts[i].startColor = m_GrabPoints[i].Colour.Colour;
+			m_WireStarts[i].endColor = m_GrabPoints[i].Colour.Colour;
+		}
+	}
+
+	void CreateWireEnds(int numWires)
+	{
+		for (int i = 0; i < m_WireEnds.Length; ++i)
+		{
+			if (i >= numWires)
+			{
+				m_WireEnds[i].gameObject.SetActive(false);
+				continue;
+			}
+			m_WireEnds[i].gameObject.SetActive(true);
+			m_WireEnds[i].startColor = m_ReleasePoints[i].Colour.Colour;
+			m_WireEnds[i].endColor = m_ReleasePoints[i].Colour.Colour;
+		}
+	}
+
     public Wire TryGrabWire(Vector3 position)
     {
         if (m_IgnoreDepthAxis) position = Vector3.ProjectOnPlane(position, transform.up);
@@ -133,7 +214,7 @@ public class WireBoard : MonoBehaviour
         return null;
     }
 
-    public (Vector3 snapPosition, bool bDidWin) TryReleaseWire(Wire wire, Vector3 position)
+    public Vector3 TryReleaseWire(Wire wire, Vector3 position)
     {
         if (m_IgnoreDepthAxis) position = Vector3.ProjectOnPlane(position, transform.up);
         for (int i = 0; i < m_ReleasePoints.Length; ++i)
@@ -145,11 +226,12 @@ public class WireBoard : MonoBehaviour
 				if (m_ReleasePoints[i].Colour == wire.Colour)
 				{
 					m_UsedReleasePoints.Add(m_ReleasePoints[i]);
-					return (m_ReleasePoints[i].Position, m_UsedReleasePoints.Count == m_Wires.Length);
+					if (m_UsedReleasePoints.Count == m_Wires.Length) EndWireMinigame();
+					return m_ReleasePoints[i].Position;
 				}
-				else return (Vector3.negativeInfinity, false);
+				else return Vector3.negativeInfinity;
 			}
         }
-        return (Vector3.negativeInfinity, false);
+        return Vector3.negativeInfinity;
     }
 }

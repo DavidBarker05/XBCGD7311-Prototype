@@ -77,9 +77,8 @@ public class WirePlayerCharacter : PlayerCharacter
 		if (position.IsNegativeInfinity()) m_CurrentlyHeldWire.ReleaseWire(Vector3.negativeInfinity);
 		else
 		{
-			(Vector3 snapPosition, bool bDidWin) = m_CurrentWireBoard.TryReleaseWire(m_CurrentlyHeldWire, position);
+			Vector3 snapPosition = m_CurrentWireBoard.TryReleaseWire(m_CurrentlyHeldWire, position);
 			m_CurrentlyHeldWire.ReleaseWire(snapPosition);
-			if (bDidWin) m_CurrentWireBoard.EndWireMinigame();
 		}
         m_CurrentWireBoard = null;
         m_CurrentlyHeldWire = null;
