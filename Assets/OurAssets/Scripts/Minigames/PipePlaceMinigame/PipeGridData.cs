@@ -58,10 +58,10 @@ public struct PipeData
 	{
 		get
 		{
-			string path = AssetDatabase.GetAssetPath(PipeType);
-			string relative = path.Substring("Assets/Resources/".Length);
-			string noExtension = Path.ChangeExtension(relative, null);
-			return new SerializablePipeData() { pipeType = noExtension, pipeQuantity = PipeQuantity };
+			//string path = AssetDatabase.GetAssetPath(PipeType);
+			//string relative = path.Substring("Assets/Resources/".Length);
+			//string noExtension = Path.ChangeExtension(relative, null);
+			return new SerializablePipeData();// { pipeType = noExtension, pipeQuantity = PipeQuantity };
 		}
 	}
 }

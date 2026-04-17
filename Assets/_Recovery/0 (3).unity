@@ -47294,10 +47294,6 @@ PrefabInstance:
       propertyPath: m_Player
       value: 
       objectReference: {fileID: 833965921}
-    - target: {fileID: 8576653749103443807, guid: 1e3188f2c0138d44a8252b06e9b6ba97, type: 3}
-      propertyPath: m_MinWires
-      value: 3
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

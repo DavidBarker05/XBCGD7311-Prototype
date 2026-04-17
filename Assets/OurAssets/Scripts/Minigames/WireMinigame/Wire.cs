@@ -102,6 +102,7 @@ public class Wire : MonoBehaviour
 
     void SetLineEndPosition(Vector3 endPosition)
     {
+		if (!m_Line) m_Line = GetComponent<LineRenderer>();
         Vector3 localPosition = endPosition - transform.position;
         m_Line.SetPosition(m_Line.positionCount - 1, localPosition);
     }

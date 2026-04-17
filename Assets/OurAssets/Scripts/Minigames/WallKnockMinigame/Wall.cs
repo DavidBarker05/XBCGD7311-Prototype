@@ -125,7 +125,7 @@ public class Wall : MonoBehaviour
 		m_bAlreadyPlaying = true;
 		m_AvailableTries = m_MaxTries;
 		m_PipePosition = RandomPipePosition;
-
+		m_UnscaledTransform.gameObject.SetActive(true);
 	}
 
 	void EndWallKnockMinigame(bool bWon)
