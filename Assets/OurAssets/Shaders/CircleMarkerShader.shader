@@ -14,14 +14,15 @@ Shader "Custom/CircleMarkerShader"
 		{
 			"RenderPipeline" = "UniversalPipeline"
 			"RenderType" = "Opaque"
-			"Queue" = "Transparent"
 		}
 
         Pass
         {
-			Blend SrcAlpha OneMinusSrcAlpha
-			ZWrite Off
-			Cull Off
+			Name "ForwardPass"
+			Tags
+			{
+				"LightMode" = "UniversalForward"
+			}
 
             HLSLPROGRAM
 
@@ -29,6 +30,7 @@ Shader "Custom/CircleMarkerShader"
             #pragma fragment frag
 
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DeclareDepthTexture.hlsl"
 			#include "Assets/OurAssets/Shaders/OwnShaderFunctions.hlsl"
 
             struct Attributes
@@ -39,8 +41,9 @@ Shader "Custom/CircleMarkerShader"
             struct Varyings
             {
                 float4 positionHCS : SV_POSITION;
-				float4 positionOS : TEXCOORD0;
-				float3 size : TEXCOORD1;
+				float4 positionSS : TEXCOORD0;
+				float4 positionOS : TEXCOORD1;
+				float3 size : TEXCOORD2;
             };
 
             CBUFFER_START(UnityPerMaterial)
@@ -54,18 +57,16 @@ Shader "Custom/CircleMarkerShader"
             {
                 Varyings OUT = EMPTY(Varyings);
                 OUT.positionHCS = TransformObjectToHClip(IN.positionOS.xyz);
+				OUT.positionSS = ComputeScreenPos(OUT.positionHCS);
 				OUT.positionOS = IN.positionOS;
 				OUT.size = ObjectScale();
                 return OUT;
             }
 
-			float Circle(float2 xy, float radius, float lineThickness)
-			{
-				return Sqr(xy.x) + Sqr(xy.y) >= Sqr(radius - lineThickness) && Sqr(xy.x) + Sqr(xy.y) <= Sqr(radius + lineThickness) ? 1 : 0;
-			}
-
             float4 frag(Varyings IN) : SV_Target
             {
+				float2 uv = IN.positionSS.xy / IN.positionSS.w;
+				float rawDepth = SampleSceneDepth(uv);
 				float baseHalfExtents = abs(_SquareSize) / 2 - _MaxLineThickness;
 				float size = IN.size.x;
 				float radius = (baseHalfExtents / float(_NumCircles));
@@ -73,10 +74,10 @@ Shader "Custom/CircleMarkerShader"
 				float circle = 0;
 				for (int i = 1; i <= _NumCircles && circle == 0; ++i)
 				{
-					circle = Circle(IN.positionOS.xz, radius * i, lineThickness);
+					circle = CircleMask(IN.positionOS.xz, radius * i, lineThickness);
 				}
-                float4 color = _BaseColor * circle;
-                return color;
+				if (rawDepth == 0 || circle == 0) discard;
+                return _BaseColor;
             }
             ENDHLSL
         }

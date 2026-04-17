@@ -33,6 +33,16 @@ inline float4 Sqr(float4 xyzw)
     return xyzw * xyzw;
 }
 
+inline float CircleMask(float2 xy, float radius)
+{
+    return Sqr(xy.x) + Sqr(xy.y) <= Sqr(radius) ? 1 : 0;
+}
+
+inline float CircleMask(float2 xy, float radius, float lineThickness)
+{
+    return Sqr(xy.x) + Sqr(xy.y) >= Sqr(radius - lineThickness) && Sqr(xy.x) + Sqr(xy.y) <= Sqr(radius + lineThickness) ? 1 : 0;
+}
+
 inline bool Float2Compare(float2 first, float2 second)
 {
     return first.r == second.r && first.g == second.g;
