@@ -71,7 +71,7 @@ public class WireBoard : MonoBehaviour
 #if !UNITY_EDITOR
         m_Debug = false;
 #endif
-        if (m_Debug) CreateWires(Random.Range(m_MinWires - 1, m_WireStartingPositions.Length) + 1);
+        //if (m_Debug) CreateWires(Random.Range(m_MinWires - 1, m_WireStartingPositions.Length) + 1);
     }
 
 	public void StartWireMinigame()

@@ -63,6 +63,7 @@ public class QTEInteractable : Interactable
 		player.ChangeActionMap("Player");
 		player = null;
 		QTEPlayer = null;
+		ChaseMinigameStarter.Instance.InteractableBeaten();
         gameObject.SetActive(false);
     }
 

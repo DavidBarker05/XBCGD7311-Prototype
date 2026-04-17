@@ -17,7 +17,7 @@ public class WireMinigameInteractable : Interactable
 		}
 		else
 		{
-			if (!m_HasBeenPlayed || m_CanBePlayedAgain) WallKnockMinigameStarter.Instance.StartWallKnockMinigame();
+			if (!m_HasBeenPlayed || m_CanBePlayedAgain) WireMinigameStarter.Instance.StartWireMinigame();
 			m_HasBeenPlayed = true;
 		}
 		return null;
