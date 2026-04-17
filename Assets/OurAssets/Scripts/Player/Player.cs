@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Util.SystemUtils;
 
 [RequireComponent(typeof(PlayerInput))]
 public class Player : MonoBehaviour
@@ -209,6 +210,11 @@ public class Player : MonoBehaviour
 	public void HandleDoQTEInput(InputAction.CallbackContext ctx)
 	{
 		SetDataValue<QTEPlayerCharacterUpdateData>(input => input.DidQTEInput |= ctx.started);
+	}
+
+	public void HandleQuitInput(InputAction.CallbackContext ctx)
+	{
+		if (ctx.started) Sys.Exit(0);
 	}
 
     #region Control Scheme Change
