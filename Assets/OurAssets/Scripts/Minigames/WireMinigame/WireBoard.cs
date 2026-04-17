@@ -126,8 +126,8 @@ public class WireBoard : MonoBehaviour
         go.transform.SetParent(m_UnscaledTransform);
         LineRenderer lineRenderer = go.AddComponent<LineRenderer>();
 		lineRenderer.material = m_WireMaterial;
-		lineRenderer.startWidth = 0.5f;
-		lineRenderer.endWidth = 0.5f;
+		lineRenderer.startWidth = m_WireStarts[index].startWidth;
+		lineRenderer.endWidth = m_WireStarts[index].endWidth;
         m_Wires[index] = go.AddComponent<Wire>();
 		WireColour[] coloursNoNone = WireColour.WireColours.SubArray(1, WireColour.WireColours.Length - 1);
 		WireColour randomColour;
@@ -183,8 +183,7 @@ public class WireBoard : MonoBehaviour
 				continue;
 			}
 			m_WireStarts[i].gameObject.SetActive(true);
-			m_WireStarts[i].startColor = m_GrabPoints[i].Colour.Colour;
-			m_WireStarts[i].endColor = m_GrabPoints[i].Colour.Colour;
+			m_WireStarts[i].material.color = m_GrabPoints[i].Colour.Colour;
 		}
 	}
 
@@ -198,8 +197,7 @@ public class WireBoard : MonoBehaviour
 				continue;
 			}
 			m_WireEnds[i].gameObject.SetActive(true);
-			m_WireEnds[i].startColor = m_ReleasePoints[i].Colour.Colour;
-			m_WireEnds[i].endColor = m_ReleasePoints[i].Colour.Colour;
+			m_WireEnds[i].material.color = m_ReleasePoints[i].Colour.Colour;
 		}
 	}
 
