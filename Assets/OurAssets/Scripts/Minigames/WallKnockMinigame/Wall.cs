@@ -41,13 +41,16 @@ public class Wall : MonoBehaviour
 
 	List<GameObject> m_Holes = new List<GameObject>();
 
+	Vector3 m_GlobalPipeSpawnLowerBound;
+	Vector3 m_GlobalPipeSpawnUpperBound;
+
 	Vector3 RandomPipePosition
 	{
 		get
 		{
-			float xPos = Random.Range(m_PipeSpawnLowerBound.x, m_PipeSpawnUpperBound.x);
-			float yPos = Random.Range(m_PipeSpawnLowerBound.y, m_PipeSpawnUpperBound.y);
-			float zPos = Random.Range(m_PipeSpawnLowerBound.z, m_PipeSpawnUpperBound.z);
+			float xPos = Random.Range(m_GlobalPipeSpawnLowerBound.x, m_GlobalPipeSpawnUpperBound.x);
+			float yPos = Random.Range(m_GlobalPipeSpawnLowerBound.y, m_GlobalPipeSpawnUpperBound.y);
+			float zPos = Random.Range(m_GlobalPipeSpawnLowerBound.z, m_GlobalPipeSpawnUpperBound.z);
 			return new Vector3(xPos, yPos, zPos);
 		}
 	}
@@ -62,10 +65,8 @@ public class Wall : MonoBehaviour
 
 	void EnsureBoundsAreValid()
 	{
-		m_PipeSpawnLowerBound = Vector3.ProjectOnPlane(m_PipeSpawnLowerBound, transform.up.normalized);
-		m_PipeSpawnLowerBound += transform.up * 0.01f;
-		m_PipeSpawnUpperBound = Vector3.ProjectOnPlane(m_PipeSpawnUpperBound, transform.up.normalized);
-		m_PipeSpawnUpperBound += transform.up * 0.01f;
+		m_GlobalPipeSpawnLowerBound = transform.position + m_PipeSpawnLowerBound + transform.up * 0.01f;
+		m_GlobalPipeSpawnUpperBound = transform.position + m_PipeSpawnUpperBound + transform.up * 0.01f;
 		float dot0 = Vector3.Dot(transform.right, (m_PipeSpawnUpperBound - m_PipeSpawnLowerBound).normalized);
 		float dot1 = Vector3.Dot(transform.forward, (m_PipeSpawnUpperBound - m_PipeSpawnLowerBound).normalized);
 		if (dot0 <= 0f || dot1 <= 0f) m_PipeSpawnUpperBound = m_PipeSpawnLowerBound + transform.forward + transform.right;
@@ -76,8 +77,8 @@ public class Wall : MonoBehaviour
 #if UNITY_EDITOR
 	void OnDrawGizmosSelected()
 	{
-		Gizmos.DrawSphere(m_PipeSpawnLowerBound, 0.1f);
-		Gizmos.DrawSphere(m_PipeSpawnUpperBound, 0.1f);
+		Gizmos.DrawSphere(m_GlobalPipeSpawnLowerBound, 0.1f);
+		Gizmos.DrawSphere(m_GlobalPipeSpawnUpperBound, 0.1f);
 		if (!m_GizmoMesh) m_GizmoMesh = new Mesh();
 		m_GizmoMesh.vertices = GizmoMeshVertices;
 		m_GizmoMesh.normals = GizmoMeshNormals;
@@ -90,8 +91,8 @@ public class Wall : MonoBehaviour
 	{
 		get
 		{
-			Vector3 p0 = m_PipeSpawnLowerBound;
-			Vector3 p1 = m_PipeSpawnUpperBound;
+			Vector3 p0 = m_GlobalPipeSpawnLowerBound;
+			Vector3 p1 = m_GlobalPipeSpawnUpperBound;
 			float angleP0P1 = Vector3.Angle(transform.right, (p1 - p0).normalized);
 			float distP0P1 = Vector3.Distance(p0, p1);
 			float distP0P2 = Mathf.Cos(Mathf.Deg2Rad * angleP0P1) * distP0P1;

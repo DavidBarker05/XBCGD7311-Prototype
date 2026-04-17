@@ -96,6 +96,10 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: b5876bca7341f3349a68f52d3e0a2fd2, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: b5876bca7341f3349a68f52d3e0a2fd2, type: 3}
       propertyPath: m_Name
       value: StraightPipe

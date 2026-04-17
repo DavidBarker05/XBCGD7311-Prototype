@@ -393,6 +393,9 @@ namespace Util
 			public static GameObject GetParentObject(this GameObject go) => go.transform.parent.gameObject;
 
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			public static GameObject GetParentObject(this MonoBehaviour mb) => mb.transform.parent.gameObject;
+
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
 			public static GameObject GetGameObject(this RaycastHit hitInfo) => hitInfo.collider.gameObject;
 
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
