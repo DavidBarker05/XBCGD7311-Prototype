@@ -115,8 +115,8 @@ MonoBehaviour:
   m_Player: {fileID: 0}
   m_HolePrefab: {fileID: 4869659471843458809, guid: 508b793c3d8ac92438c1a5f7dc9e603a, type: 3}
   m_MaxTries: 3
-  m_PipeSpawnLowerBound: {x: -9, y: -5.5, z: -0.009999345}
-  m_PipeSpawnUpperBound: {x: 9, y: 5.5, z: -0.010000656}
+  m_PipeSpawnLowerBound: {x: -9.5, y: -5.5, z: 0}
+  m_PipeSpawnUpperBound: {x: 9.5, y: 5.5, z: 0}
   m_BreakTolerance: 0.675
   m_WallEchoPrefab: {fileID: 3500153299824405778, guid: 72f0a16b348b3884b85bf15b6465aead, type: 3}
   m_DistanceCurve:

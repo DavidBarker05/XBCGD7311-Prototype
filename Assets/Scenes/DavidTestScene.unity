@@ -1555,6 +1555,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wall
       objectReference: {fileID: 0}
+    - target: {fileID: 4403911489859600020, guid: 19521dc185da0c94e88dfe69a4cff5a8, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5304736747382252985, guid: 19521dc185da0c94e88dfe69a4cff5a8, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1596,20 +1600,24 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7185897417062289680, guid: 19521dc185da0c94e88dfe69a4cff5a8, type: 3}
+      propertyPath: m_PipeSpawnLowerBound.x
+      value: -9.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7185897417062289680, guid: 19521dc185da0c94e88dfe69a4cff5a8, type: 3}
       propertyPath: m_PipeSpawnLowerBound.z
-      value: -0.009999345
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7185897417062289680, guid: 19521dc185da0c94e88dfe69a4cff5a8, type: 3}
       propertyPath: m_PipeSpawnUpperBound.x
-      value: -8
+      value: 9.5
       objectReference: {fileID: 0}
     - target: {fileID: 7185897417062289680, guid: 19521dc185da0c94e88dfe69a4cff5a8, type: 3}
       propertyPath: m_PipeSpawnUpperBound.y
-      value: 25.5
+      value: 5.5
       objectReference: {fileID: 0}
     - target: {fileID: 7185897417062289680, guid: 19521dc185da0c94e88dfe69a4cff5a8, type: 3}
       propertyPath: m_PipeSpawnUpperBound.z
-      value: -0.010003041
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
