@@ -1492,7 +1492,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6263342162399775146, guid: 1e3188f2c0138d44a8252b06e9b6ba97, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7135223587995993542, guid: 1e3188f2c0138d44a8252b06e9b6ba97, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1554,6 +1554,10 @@ PrefabInstance:
     - target: {fileID: 1463569256843133250, guid: 19521dc185da0c94e88dfe69a4cff5a8, type: 3}
       propertyPath: m_Name
       value: Wall
+      objectReference: {fileID: 0}
+    - target: {fileID: 1463569256843133250, guid: 19521dc185da0c94e88dfe69a4cff5a8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4403911489859600020, guid: 19521dc185da0c94e88dfe69a4cff5a8, type: 3}
       propertyPath: m_Enabled
@@ -1638,7 +1642,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 145719061603609728, guid: 2288494715f42ad4a8ce262dee2b745b, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -10
+      value: -1.5
       objectReference: {fileID: 0}
     - target: {fileID: 966743820705505671, guid: 2288494715f42ad4a8ce262dee2b745b, type: 3}
       propertyPath: m_DefaultActionMap
