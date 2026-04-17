@@ -57,7 +57,7 @@ public class Wire : MonoBehaviour
         get => m_WireColour;
         set
         {
-            ChangeLineColour(value);
+			m_Line.material.color = value.Colour;
             m_WireColour = value;
         }
     }
@@ -104,11 +104,5 @@ public class Wire : MonoBehaviour
     {
         Vector3 localPosition = endPosition - transform.position;
         m_Line.SetPosition(m_Line.positionCount - 1, localPosition);
-    }
-
-    void ChangeLineColour(WireColour wireColour)
-    {
-        m_Line.startColor = wireColour.Colour;
-        m_Line.endColor = wireColour.Colour;
     }
 }
