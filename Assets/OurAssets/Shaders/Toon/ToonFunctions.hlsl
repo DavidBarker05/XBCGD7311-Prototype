@@ -71,12 +71,12 @@ float3 ToonTintMain(Light light, InputData inputData)
 {
     if (Float3Compare(light.color, 0)) return 0;
     float NdotL = dot(inputData.normalWS, normalize(light.direction));
-#if defined(_MAIN_LIGHT_SHADOWS_CASCADE) || defined(_MAIN_LIGHT_SHADOWS)
-        float shadow = light.shadowAttenuation;
+#if defined(_ADDITIONAL_LIGHT_SHADOWS_CASCADE) || defined(_ADDITIONAL_LIGHT_SHADOWS)
+        float shadow = smoothstep(0.6 - _ToonShadowSmoothness, 0.6 + _ToonShadowSmoothness, light.shadowAttenuation);
 #else
     float shadow = 1;
 #endif
-    float lightIntensity = smoothstep(0, _ToonShadowSmoothness, NdotL * shadow);
+    float lightIntensity = smoothstep(0, _ToonShadowSmoothness, NdotL) * shadow;
     float3 lightTint = light.color * lightIntensity;
     float3 specularTint = SpecularTint(light, lightIntensity, inputData);
     float3 rimTint = RimTint(inputData, NdotL);
@@ -116,11 +116,11 @@ float3 ToonTintAdditional(uint lightIndex, InputData inputData)
     float NdotL = dot(inputData.normalWS, normalize(light.direction));
     float attenuation = AdditionalLightAttenuation(lightIndex, inputData.positionWS, _AdditionalLightBands);
 #if defined(_ADDITIONAL_LIGHT_SHADOWS_CASCADE) || defined(_ADDITIONAL_LIGHT_SHADOWS)
-        float shadow = light.shadowAttenuation;
+        float shadow = smoothstep(0.6 - _ToonShadowSmoothness, 0.6 + _ToonShadowSmoothness, light.shadowAttenuation);
 #else
     float shadow = 1;
 #endif
-    float lightIntensity = smoothstep(0, _ToonShadowSmoothness, NdotL * shadow) * attenuation;
+    float lightIntensity = smoothstep(0, _ToonShadowSmoothness, NdotL) * shadow * attenuation;
     float3 lightTint = light.color * lightIntensity;
     float3 specularTint = SpecularTint(light, lightIntensity, inputData);
     float3 rimTint = RimTint(inputData, NdotL);
