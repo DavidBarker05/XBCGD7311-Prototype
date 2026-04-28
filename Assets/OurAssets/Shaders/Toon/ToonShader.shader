@@ -10,6 +10,7 @@ Shader "Toon/ToonShader"
         [MainColor] _BaseColor("Base Color", Color) = (1, 1, 1, 1)
         [MainTexture] _BaseMap("Base Map", 2D) = "white" {}
 
+		_AdditionalLightBands("Additional Light Bands", Range(1, 5)) = 3
         _ToonShadowTint("Toon Shadow Tint", Color) = (0.4, 0.4, 0.4)
         _ToonShadowSmoothness("Toon Shadow Smoothness", Range(0, 1)) = 0.01
 

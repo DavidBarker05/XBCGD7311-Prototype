@@ -95,6 +95,7 @@ Material:
     - _Outline3: 0
     m_Floats:
     - _AddPrecomputedVelocity: 0
+    - _AdditionalLightBands: 3
     - _AlphaClip: 0
     - _AlphaClippingThreshold: 0.001
     - _AlphaToMask: 0

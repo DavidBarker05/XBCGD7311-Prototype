@@ -12,7 +12,8 @@ CBUFFER_START(UnityPerMaterial)
             
     float4 _BaseColor;
     float4 _BaseMap_ST;
-            
+    
+    float _AdditionalLightBands;
     float3 _ToonShadowTint;
     float _ToonShadowSmoothness;
             
