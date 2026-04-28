@@ -94290,6 +94290,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7185897417062289680, guid: 19521dc185da0c94e88dfe69a4cff5a8, type: 3}
+      propertyPath: m_Indicator
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7185897417062289680, guid: 19521dc185da0c94e88dfe69a4cff5a8, type: 3}
+      propertyPath: m_PipeSpawnUpperBound.x
+      value: 9.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7185897417062289680, guid: 19521dc185da0c94e88dfe69a4cff5a8, type: 3}
+      propertyPath: m_PipeSpawnUpperBound.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7185897417062289680, guid: 19521dc185da0c94e88dfe69a4cff5a8, type: 3}
+      propertyPath: m_PipeSpawnUpperBound.z
+      value: 5.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

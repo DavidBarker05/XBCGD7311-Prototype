@@ -65,11 +65,13 @@ public class Wall : MonoBehaviour
 
 	void EnsureBoundsAreValid()
 	{
-		m_GlobalPipeSpawnLowerBound = transform.position + m_PipeSpawnLowerBound + transform.up * 0.01f;
-		m_GlobalPipeSpawnUpperBound = transform.position + m_PipeSpawnUpperBound + transform.up * 0.01f;
-		float dot0 = Vector3.Dot(transform.right, (m_PipeSpawnUpperBound - m_PipeSpawnLowerBound).normalized);
-		float dot1 = Vector3.Dot(transform.forward, (m_PipeSpawnUpperBound - m_PipeSpawnLowerBound).normalized);
-		if (dot0 <= 0f || dot1 <= 0f) m_PipeSpawnUpperBound = m_PipeSpawnLowerBound + transform.forward + transform.right;
+		float dot0 = Vector3.Dot(Vector3.right, (m_PipeSpawnUpperBound - m_PipeSpawnLowerBound).normalized);
+		float dot1 = Vector3.Dot(Vector3.forward, (m_PipeSpawnUpperBound - m_PipeSpawnLowerBound).normalized);
+		if (dot0 <= 0f || dot1 <= 0f) m_PipeSpawnUpperBound = m_PipeSpawnLowerBound + Vector3.forward + Vector3.right;
+		Vector3 lower = transform.rotation * m_PipeSpawnLowerBound;
+		Vector3 upper = transform.rotation * m_PipeSpawnUpperBound;
+		m_GlobalPipeSpawnLowerBound = transform.position + lower + transform.up * 0.01f;
+		m_GlobalPipeSpawnUpperBound = transform.position + upper + transform.up * 0.01f;
 	}
 
 	Mesh m_GizmoMesh;
@@ -116,7 +118,7 @@ public class Wall : MonoBehaviour
 
 	void Start()
 	{
-		StartWallKnockMinigame();
+		//StartWallKnockMinigame();
 	}
 
 	public void StartWallKnockMinigame()
@@ -124,6 +126,7 @@ public class Wall : MonoBehaviour
 		if (m_bAlreadyPlaying) return;
 		m_bAlreadyPlaying = true;
 		m_AvailableTries = m_MaxTries;
+		EnsureBoundsAreValid();
 		m_PipePosition = RandomPipePosition;
 		m_UnscaledTransform.gameObject.SetActive(true);
 	}
@@ -172,7 +175,9 @@ public class Wall : MonoBehaviour
 		--m_AvailableTries;
 		GameObject hole = Instantiate(m_HolePrefab, m_UnscaledTransform);
 		hole.transform.position = position + transform.up * 0.02f;
-		hole.GetComponent<Renderer>().material.SetFloat("_HoleSize", m_BreakTolerance);
+		MaterialPropertyBlock materialPropertyBlock = new MaterialPropertyBlock();
+		materialPropertyBlock.SetFloat("_HoleSize", m_BreakTolerance);
+		hole.GetComponent<Renderer>().SetPropertyBlock(materialPropertyBlock);
 		m_Holes.Add(hole);
 		if (Vector3.Distance(position, m_PipePosition) <= m_BreakTolerance) EndWallKnockMinigame(true);
 		else if (m_AvailableTries <= 0) EndWallKnockMinigame(false);
