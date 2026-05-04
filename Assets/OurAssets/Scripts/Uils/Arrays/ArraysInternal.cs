@@ -54,6 +54,26 @@ namespace Util
 
 				[MethodImpl(MethodImplOptions.AggressiveInlining)]
 				public static int[] IndexOfJagged<T>(Array array, T value) => throw new NotImplementedException("Jagged array implementation hasn't been added");
+				//{
+				//	List<int> index = new List<int>();
+				//	if (value is Array)
+				//	{
+				//
+				//	}
+				//	else
+				//	{
+				//		object[] arrayIteration = (object[])array;
+				//		if (GetTypeJagged(array) != typeof(T))
+				//		{
+				//			while (arrayIteration != null)
+				//			{
+				//				index.Add(-1);
+				//				arrayIteration = arrayIteration.GetType().GetElementType().IsArray ? (object[])arrayIteration.GetValue(0) : null;
+				//			}
+				//		}
+				//	}
+				//	return index.ToArray();
+				//}
 
 				[MethodImpl(MethodImplOptions.AggressiveInlining)]
 				private static bool IndexOfMultidimensionalRecursion<T>(Array array, ref int[] indices, int currentDimension, T value)
@@ -100,7 +120,7 @@ namespace Util
 					{
 						for (int i = 0; i < array.Length; ++i)
 						{
-							ShuffleJagged(array.GetValue(i) as Array);
+							ShuffleJagged((object[])array.GetValue(i));
 						}
 						ShuffleSingleDimensional(array);
 					}
@@ -117,7 +137,7 @@ namespace Util
 				public static int[] GetRandomIndexJagged(Array array)
 				{
 					List<int> index = new List<int>();
-					index.Add(array.GetRandomIndex());
+					//index.Add(array.GetRandomIndex()); // Why did I have this?
 					object[] arrayIteration = (object[])array;
 					while (arrayIteration != null)
 					{
@@ -125,6 +145,7 @@ namespace Util
 						index.Add(randomIndex);
 						arrayIteration = arrayIteration.GetType().GetElementType().IsArray ? (object[])arrayIteration.GetValue(randomIndex) : null;
 					}
+					if (index.Count == 0) index.Add(-1);
 					return index.ToArray();
 				}
 
