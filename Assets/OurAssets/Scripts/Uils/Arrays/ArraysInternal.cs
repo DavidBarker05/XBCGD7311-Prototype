@@ -94,7 +94,18 @@ namespace Util
 				}
 
 				[MethodImpl(MethodImplOptions.AggressiveInlining)]
-				public static void ShuffleJagged(Array array) => throw new NotImplementedException("Jagged array implementation hasn't been added");
+				public static void ShuffleJagged(Array array)
+				{
+					if (array.IsJagged())
+					{
+						for (int i = 0; i < array.Length; ++i)
+						{
+							ShuffleJagged(array.GetValue(i) as Array);
+						}
+						ShuffleSingleDimensional(array);
+					}
+					else ShuffleSingleDimensional(array);
+				}
 
 				[MethodImpl(MethodImplOptions.AggressiveInlining)]
 				public static void ShuffleMultidimensional(Array array) => throw new NotImplementedException("Multidimensional array implementation hasn't been added");
