@@ -16,7 +16,10 @@ Shader "Toon/OutlineShader"
 
     SubShader
     {
-        Tags { "RenderPipeline" = "UniversalPipeline" }
+        Tags
+        {
+            "RenderPipeline" = "UniversalPipeline"
+        }
 
         Pass
         {
