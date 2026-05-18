@@ -5,23 +5,25 @@
 
 TEXTURE2D(_BaseMap);
 SAMPLER(sampler_BaseMap);
-        
+
 CBUFFER_START(UnityPerMaterial)
     bool _AlphaClipping;
     float _AlphaClippingThreshold;
-            
+    
     float4 _BaseColor;
     float4 _BaseMap_ST;
     
     float _AdditionalLightBands;
     float3 _ToonShadowTint;
     float _ToonShadowSmoothness;
-            
+    
     float3 _ToonSpecularTint;
     float _ToonGlossiness;
-            
+    
     float3 _ToonRimTint;
     float _ToonRimAmount;
     float _ToonRimThreshold;
+
+    float3 _EmissionColour;
 CBUFFER_END
 #endif

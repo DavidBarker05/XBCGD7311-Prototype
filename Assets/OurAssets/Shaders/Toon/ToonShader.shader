@@ -2,48 +2,42 @@ Shader "Toon/ToonShader"
 {
     Properties
     {
-        [Enum(UnityEngine.Rendering.CullMode)] _Cull("Culling", Integer) = 2 // 0 = Render Front and Back, 1 = Render Back Only, 2 = Render Front Only
+        [Enum(UnityEngine.Rendering.CullMode)] _Cull ("Culling", Integer) = 2 // 0 = Render Front and Back, 1 = Render Back Only, 2 = Render Front Only
 
-        [Toggle] _AlphaClipping("Alpha Clipping", Integer) = 0
-        _AlphaClippingThreshold("Alpha Clipping Threshold", Range(0, 1)) = 0
+        [Toggle] _AlphaClipping ("Alpha Clipping", Integer) = 0
+        _AlphaClippingThreshold ("Alpha Clipping Threshold", Range(0, 1)) = 0
 
-        [MainColor] _BaseColor("Base Color", Color) = (1, 1, 1, 1)
-        [MainTexture] _BaseMap("Base Map", 2D) = "white" {}
+        [MainColor] _BaseColor ("Base Color", Color) = (1, 1, 1, 1)
+        [MainTexture] _BaseMap ("Base Map", 2D) = "white" { }
 
-		_AdditionalLightBands("Additional Light Bands", Range(1, 5)) = 3
-        _ToonShadowTint("Toon Shadow Tint", Color) = (0.4, 0.4, 0.4)
-        _ToonShadowSmoothness("Toon Shadow Smoothness", Range(0, 1)) = 0.01
+        _AdditionalLightBands ("Additional Light Bands", Range(1, 5)) = 3
+        _ToonShadowTint ("Toon Shadow Tint", Color) = (0.4, 0.4, 0.4)
+        _ToonShadowSmoothness ("Toon Shadow Smoothness", Range(0, 1)) = 0.01
 
-        _ToonSpecularTint("Toon Specular Tint", Color) = (0.9, 0.9, 0.9)
-        _ToonGlossiness("Toon Glossiness", Range(0, 1)) = 0
+        _ToonSpecularTint ("Toon Specular Tint", Color) = (0.9, 0.9, 0.9)
+        _ToonGlossiness ("Toon Glossiness", Range(0, 1)) = 0
 
-        _ToonRimTint("Toon Rim Tint", Color) = (1, 1, 1)
-        _ToonRimAmount("Toon Rim Amount", Range(0, 1)) = 0
-        _ToonRimThreshold("Toon Rim Threshold", Range(0, 1)) = 0.1
+        _ToonRimTint ("Toon Rim Tint", Color) = (1, 1, 1)
+        _ToonRimAmount ("Toon Rim Amount", Range(0, 1)) = 0
+        _ToonRimThreshold ("Toon Rim Threshold", Range(0, 1)) = 0.1
+
+        [HDR] _EmissionColour ("Emission Colour", Color) = (0, 0, 0)
     }
 
     SubShader
     {
-        Tags
-        {
-            "RenderPipeline" = "UniversalPipeline"
-            "RenderType" = "Opaque"
-            "Queue" = "Geometry"
-        }
+        Tags { "RenderPipeline" = "UniversalPipeline" "RenderType" = "Opaque" "Queue" = "Geometry" }
 
         Pass
         {
             Name "ForwardPass"
-            Tags
-            {
-                "LightMode" = "UniversalForward"
-            }
-        
+            Tags { "LightMode" = "UniversalForward" }
+            
             ZWrite On
             Cull[_Cull]
-        
+            
             HLSLPROGRAM
-        
+            
             #pragma vertex vert
             #pragma fragment frag
             #pragma multi_compile _ _CLUSTER_LIGHT_LOOP
@@ -51,13 +45,13 @@ Shader "Toon/ToonShader"
             #pragma multi_compile_fragment _ _SHADOWS_SOFT _SHADOWS_SOFT_LOW _SHADOWS_SOFT_MEDIUM _SHADOWS_SOFT_HIGH
             #pragma multi_compile_fragment _ _MAIN_LIGHT_SHADOWS _MAIN_LIGHT_SHADOWS_CASCADE _MAIN_LIGHT_SHADOWS_SCREEN
             #pragma multi_compile_fragment _ _ADDITIONAL_LIGHT_SHADOWS _ADDITIONAL_LIGHT_SHADOWS_CASCADE _ADDITIONAL_LIGHT_SHADOWS_SCREEN
-        
+            
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
             #include "Assets/OurAssets/Shaders/Toon/ToonAttributes.hlsl"
             #include "Assets/OurAssets/Shaders/Toon/ToonInput.hlsl"
             #include "Assets/OurAssets/Shaders/Toon/ToonFunctions.hlsl"
-        
+            
             struct Varyings
             {
                 float4 positionHCS : SV_POSITION;
@@ -66,7 +60,7 @@ Shader "Toon/ToonShader"
                 float3 positionWS : TEXCOORD1;
                 DECLARE_LIGHTMAP_OR_SH(lightmapUV, vertexSH, 2);
             };
-        
+            
             Varyings vert(Attributes IN)
             {
                 Varyings OUT;
@@ -79,7 +73,7 @@ Shader "Toon/ToonShader"
                 OUTPUT_SH(OUT.normalWS, OUT.vertexSH);
                 return OUT;
             }
-        
+            
             float4 frag(Varyings IN) : SV_Target
             {
                 float4 colour = SAMPLE_BASE();
@@ -94,7 +88,7 @@ Shader "Toon/ToonShader"
                 inputData.shadowMask = SAMPLE_SHADOWMASK(IN.lightmapUV);
                 float3 toonTint = ToonTint(IN.positionHCS, inputData);
                 float4 tint = float4(toonTint, 1);
-                return colour * tint;
+                return colour * tint + float4(_EmissionColour, 1);
             }
             ENDHLSL
         }
@@ -102,10 +96,7 @@ Shader "Toon/ToonShader"
         Pass
         {
             Name "ShadowCaster"
-            Tags
-            {
-                "LightMode" = "ShadowCaster"
-            }
+            Tags { "LightMode" = "ShadowCaster" }
 
             ZWrite On
             ColorMask 0
@@ -158,10 +149,7 @@ Shader "Toon/ToonShader"
         Pass
         {
             Name "DepthOnly"
-            Tags
-            {
-                "LightMode" = "DepthOnly"
-            }
+            Tags { "LightMode" = "DepthOnly" }
 
             ZWrite On
             ColorMask R
@@ -203,10 +191,7 @@ Shader "Toon/ToonShader"
         Pass
         {
             Name "DepthNormals"
-            Tags
-            {
-                "LightMode" = "DepthNormals"
-            }
+            Tags { "LightMode" = "DepthNormals" }
 
             ZWrite On
 
