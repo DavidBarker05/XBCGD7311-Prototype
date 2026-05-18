@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using Util.SystemUtils;
 
@@ -9,6 +10,8 @@ public class Player : MonoBehaviour
     PlayerSettings m_PlayerSettings;
     [SerializeField]
     PlayerCharacter m_StartingPlayerCharacter;
+    [SerializeField]
+    MenuCharacter m_MenuCharacter;
     [SerializeField]
     PlayerCamera m_PlayerCamera;
     [SerializeField]
@@ -27,6 +30,7 @@ public class Player : MonoBehaviour
     {
         m_PlayerInput = GetComponent<PlayerInput>();
         m_PlayerCamera.Init(m_PlayerSettings.CameraSettings);
+        m_MenuCharacter.Init(new MenuCharacterInitData() { Player = this });
         ChangeCharacter(m_StartingPlayerCharacter);
         m_CameraInput = new CameraInput();
         m_MouseInfo = new MouseInfo();
@@ -58,15 +62,14 @@ public class Player : MonoBehaviour
     {
         if (!playerCharacter) return;
         m_PlayerCharacter = playerCharacter;
-        if (!m_PlayerCharacter.HasBeenInitialised) m_PlayerCharacter.Init(CurrentPlayerCharacterInitData);
-        m_PlayerCharacterUpdateData = CurrentPlayerCharacterUpdateData;
-        m_PlayerInput.SwitchCurrentActionMap(m_PlayerCharacter.ActionMap);
+        if (!m_PlayerCharacter.HasBeenInitialised) m_PlayerCharacter.Init(PlayerCharacterInitData);
+        m_PlayerCharacterUpdateData = PlayerCharacterUpdateData;
+        if (!string.IsNullOrWhiteSpace(m_PlayerCharacter.ActionMap)) m_PlayerInput.SwitchCurrentActionMap(m_PlayerCharacter.ActionMap);
         m_PlayerCamera.ChangeCameraTarget(m_PlayerCharacter.CameraTarget);
-        if (m_PlayerCharacter.MouseVisible) ShowCursor();
-        else HideCursor();
+        SetCursorVisibility(m_PlayerCharacter.MouseVisible);
     }
 
-    IPlayerCharacterInitData CurrentPlayerCharacterInitData => m_PlayerCharacter switch
+    IPlayerCharacterInitData PlayerCharacterInitData => m_PlayerCharacter switch
     {
         FirstPersonPlayerCharacter => new FirstPersonPlayerCharacterInitData()
         {
@@ -78,16 +81,18 @@ public class Player : MonoBehaviour
         WirePlayerCharacter => new WirePlayerCharacterInitData(),
         WallKnockPlayerCharacter => new WallKnockPlayerCharacterInitData(),
         QTEPlayerCharacter => new QTEPlayerCharacterInitData(),
+        MenuCharacter => new MenuCharacterInitData() { Player = this },
         _ => null
     };
 
-    IPlayerCharacterUpdateData CurrentPlayerCharacterUpdateData => m_PlayerCharacter switch
+    IPlayerCharacterUpdateData PlayerCharacterUpdateData => m_PlayerCharacter switch
     {
         FirstPersonPlayerCharacter => new FirstPersonPlayerCharacterUpdateData(),
         PipePlayerCharacter => new PipePlayerCharacterUpdateData(),
         WirePlayerCharacter => new WirePlayerCharacterUpdateData(),
         WallKnockPlayerCharacter => new WallKnockPlayerCharacterUpdateData(),
         QTEPlayerCharacter => new QTEPlayerCharacterUpdateData(),
+        MenuCharacter => new MenuCharacterUpdateData(),
         _ => null
     };
     #endregion Change Character
@@ -95,22 +100,20 @@ public class Player : MonoBehaviour
     #region Cursor Toggles
     public void ShowCursor()
     {
-        m_bCursorHidden = false;
         Cursor.lockState = CursorLockMode.Confined;
         Cursor.visible = true;
     }
 
     public void HideCursor()
     {
-        m_bCursorHidden = true;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
 
     public void SetCursorVisibility(bool bVisible)
     {
-        if (bVisible && m_bCursorHidden) ShowCursor();
-        else if (!bVisible && !m_bCursorHidden) HideCursor();
+        if (bVisible) ShowCursor();
+        else HideCursor();
     }
     #endregion Cursor Toggles
 
@@ -124,6 +127,7 @@ public class Player : MonoBehaviour
 
     public void GetMouseInfo(ref MouseInfo mouseInfo, LayerMask layerToHit, float maxDistance = 100f)
     {
+        mouseInfo.IsMouseOverUI = EventSystem.current?.IsPointerOverGameObject() ?? false; // Don't forget to make panels not raycast targets
         Ray ray = m_Camera.ScreenPointToRay(mouseInfo.MouseScreenPosition);
         mouseInfo.DidHitObject = Physics.Raycast(ray, out RaycastHit hit, maxDistance, layerToHit);
         if (mouseInfo.DidHitObject) mouseInfo.HitInfo = hit;

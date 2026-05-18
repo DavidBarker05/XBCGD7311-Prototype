@@ -2,6 +2,7 @@ using UnityEngine;
 
 public struct MouseInfo
 {
+    public bool IsMouseOverUI { get; set; }
     public Vector3 MouseScreenPosition { get; set; }
     public bool DidHitObject { get; set; }
     public RaycastHit HitInfo { get; set; }

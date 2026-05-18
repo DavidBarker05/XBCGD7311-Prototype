@@ -9,10 +9,16 @@ public class MinigameManager : MonoBehaviour
     [SerializeField, Min(1)]
     int m_NumMinigamesToBeat = 3;
     [SerializeField]
-    GameObject WinScreen;
+    MenuCharacter m_MenuCharacter;
+    [SerializeField]
+    FirstPersonPlayerCharacter m_FirstPersonPlayerCharacter;
+    [SerializeField]
+    GameObject m_HUD;
+    [SerializeField]
+    GameObject m_WinScreen;
 
     public void OnMinigameBeaten()
     {
-        if (++MinigamesBeaten >= m_NumMinigamesToBeat) WinScreen.SetActive(true);
+        if (++MinigamesBeaten >= m_NumMinigamesToBeat) m_MenuCharacter.OnMenuOpen(m_FirstPersonPlayerCharacter, m_HUD, m_WinScreen); // Hopefully this works
     }
 }
