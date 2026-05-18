@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
-using Util.SystemUtils;
 using Util.ArrayUtils;
+using Util.SystemUtils;
 
 [RequireComponent(typeof(PlaneGridGenerator), typeof(Grid))]
 public class PipeGrid : MonoBehaviour
@@ -70,20 +70,20 @@ public class PipeGrid : MonoBehaviour
     #endregion Delete & Init
 
     #region Start & End Minigame
-	public void StartMinigame(PipeGridData pipeGridData)
-	{
-		m_PlaneGrid.GridSize = pipeGridData.GridSize;
-		if (gameObject.activeSelf) InitCells(ref m_PipeCells, ref m_Grid, Size);
-		else gameObject.SetActive(true);
-		Pipe startPipe = GetPipe(pipeGridData.StartPipe.CellPosition.x, pipeGridData.StartPipe.CellPosition.y);
-		Sys.Assert(startPipe, $"({pipeGridData.StartPipe.CellPosition}) was not a valid index");
-		m_StartPipe = new StartEndPipe() { PipeCell = startPipe, EntranceExitSide = pipeGridData.EndPipe.EntranceExitSide };
-		Pipe endPipe = GetPipe(pipeGridData.EndPipe.CellPosition.x, pipeGridData.EndPipe.CellPosition.y);
-		Sys.Assert(endPipe, $"({pipeGridData.EndPipe.CellPosition}) was not a valid index");
-		m_EndPipe = new StartEndPipe() { PipeCell = endPipe, EntranceExitSide = pipeGridData.EndPipe.EntranceExitSide };
-	}
+    public void StartMinigame(PipeGridData pipeGridData)
+    {
+        m_PlaneGrid.GridSize = pipeGridData.GridSize;
+        if (gameObject.activeSelf) InitCells(ref m_PipeCells, ref m_Grid, Size);
+        else gameObject.SetActive(true);
+        Pipe startPipe = GetPipe(pipeGridData.StartPipe.CellPosition.x, pipeGridData.StartPipe.CellPosition.y);
+        Sys.Assert(startPipe, $"({pipeGridData.StartPipe.CellPosition}) was not a valid index");
+        m_StartPipe = new StartEndPipe() { PipeCell = startPipe, EntranceExitSide = pipeGridData.EndPipe.EntranceExitSide };
+        Pipe endPipe = GetPipe(pipeGridData.EndPipe.CellPosition.x, pipeGridData.EndPipe.CellPosition.y);
+        Sys.Assert(endPipe, $"({pipeGridData.EndPipe.CellPosition}) was not a valid index");
+        m_EndPipe = new StartEndPipe() { PipeCell = endPipe, EntranceExitSide = pipeGridData.EndPipe.EntranceExitSide };
+    }
 
-	void EndMinigame(List<Pipe> path) // path is in case we want to do some kind of flowing animation
+    void EndMinigame(List<Pipe> path) // path is in case we want to do some kind of flowing animation
     {
         // TODO: End minigame
     }
@@ -224,7 +224,7 @@ public class PipeGrid : MonoBehaviour
 
     public void RotatePipeLeft(Vector3Int cellPosition)
     {
-        if(CellIsEmpty(cellPosition)) return;
+        if (CellIsEmpty(cellPosition)) return;
         Pipe pipe = GetPipe(cellPosition);
         pipe.RotateLeft();
         CheckWaterCanReachEnd(m_StartPipe, m_EndPipe);

@@ -131,7 +131,7 @@ public class WireBoard : MonoBehaviour
 		lineRenderer.startWidth = m_WireStarts[index].startWidth;
 		lineRenderer.endWidth = m_WireStarts[index].endWidth;
 		m_Wires[index] = go.AddComponent<Wire>();
-		WireColour[] coloursNoNone = WireColour.WireColours.SubArray(1, WireColour.WireColours.Length - 1);
+		WireColour[] coloursNoNone = WireColour.WireColours.SubArray(1);
 		WireColour randomColour;
 		do
 		{
