@@ -21,11 +21,12 @@ public abstract class PlayerCharacter : MonoBehaviour
     [field: SerializeField]
     public Transform CameraTarget { get; protected set; }
     [field: SerializeField]
-    public LayerMask MouseHitLayer {  get; protected set; }
+    public LayerMask MouseHitLayer { get; protected set; }
     [field: SerializeField]
     public float MouseHitDistance { get; protected set; } = 100f;
 
-	public abstract bool HasBeenInitialised { get; protected set; }
+    public abstract bool HasBeenInitialised { get; protected set; }
+    public abstract string ActionMap { get; }
     public abstract bool MouseVisible { get; }
     public abstract bool DoCameraRotation { get; }
     public abstract bool UseMouseScreenPosition { get; }

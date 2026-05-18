@@ -8,6 +8,8 @@ public class WallKnockMinigameStarter : MonoBehaviour
 	Wall m_Wall;
 	[SerializeField]
 	Player m_Player;
+	[SerializeField]
+	WallKnockPlayerCharacter m_WallKnockPlayerCharacter;
 
 	void Awake()
 	{
@@ -18,6 +20,6 @@ public class WallKnockMinigameStarter : MonoBehaviour
 	public void StartWallKnockMinigame()
 	{
 		m_Wall.StartWallKnockMinigame();
-		m_Player.ChangeActionMap("WallKnockPlayer");
+		m_Player.ChangeCharacter(m_WallKnockPlayerCharacter);
 	}
 }

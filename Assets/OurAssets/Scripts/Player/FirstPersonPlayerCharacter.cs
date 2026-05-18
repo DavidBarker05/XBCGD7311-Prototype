@@ -6,8 +6,7 @@ public class FirstPersonPlayerCharacterInitData : IPlayerCharacterInitData
 {
     public CharacterSettings CharacterSettings { get; set; }
     public InteractSettings InteractSettings { get; set; }
-	public Player Player { get; set; }
-	public QTEPlayerCharacter QTEPlayerCharacter { get; set; }
+    public Player Player { get; set; }
 }
 
 public class FirstPersonPlayerCharacterUpdateData : IPlayerCharacterUpdateData
@@ -44,31 +43,30 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
 
     float m_MovementSpeed;
 
-	public override bool HasBeenInitialised { get; protected set; }
+    public override bool HasBeenInitialised { get; protected set; }
 
+    public override string ActionMap => "Player";
     public override bool MouseVisible => false;
     public override bool DoCameraRotation => true;
     public override bool UseMouseScreenPosition => false;
 
-	Player m_Player;
-	QTEPlayerCharacter m_QTEPlayerCharacter;
+    Player m_Player;
 
     void Awake() => m_CC = GetComponent<CharacterController>();
 
     public override void Init(IPlayerCharacterInitData playerCharacterInitData)
     {
-		FirstPersonPlayerCharacterInitData initData = Sys.AssertType<FirstPersonPlayerCharacterInitData>(playerCharacterInitData, nameof(playerCharacterInitData));
+        FirstPersonPlayerCharacterInitData initData = Sys.AssertType<FirstPersonPlayerCharacterInitData>(playerCharacterInitData, nameof(playerCharacterInitData));
         m_CharacterSettings = initData.CharacterSettings;
         m_InteractSettings = initData.InteractSettings;
-		m_Player = initData.Player;
-		m_QTEPlayerCharacter = initData.QTEPlayerCharacter;
-		HasBeenInitialised = true;
+        m_Player = initData.Player;
+        HasBeenInitialised = true;
     }
 
     public override void UpdateCharacter(ref IPlayerCharacterUpdateData playerCharacterUpdateData)
     {
-		Sys.Assert(HasBeenInitialised, "FirstPersonPlayerCharacter hasn't been initialised");
-		FirstPersonPlayerCharacterUpdateData input = Sys.AssertType<FirstPersonPlayerCharacterUpdateData>(playerCharacterUpdateData, nameof(playerCharacterUpdateData));
+        Sys.Assert(HasBeenInitialised, "FirstPersonPlayerCharacter hasn't been initialised");
+        FirstPersonPlayerCharacterUpdateData input = Sys.AssertType<FirstPersonPlayerCharacterUpdateData>(playerCharacterUpdateData, nameof(playerCharacterUpdateData));
         HandleMovement(ref input);
         HandleInteraction(ref input);
     }
@@ -192,9 +190,9 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
             queryTriggerInteraction: QueryTriggerInteraction.Collide))
         {
             Interactable interactable = hit.GetComponent<Interactable>();
-			if (interactable == null) return;
-			if (interactable is QTEInteractable) interactable.Interact(m_Player, m_QTEPlayerCharacter);
-			else if (interactable is WireMinigameInteractable or WallKnockInteractable or ChaseMinigameInteract) interactable.Interact();
+            if (interactable == null) return;
+            if (interactable is QTEInteractable) interactable.Interact(m_Player, this);
+            else if (interactable is WireMinigameInteractable or WallKnockInteractable or ChaseMinigameInteract) interactable.Interact();
         }
     }
     #endregion Interaction

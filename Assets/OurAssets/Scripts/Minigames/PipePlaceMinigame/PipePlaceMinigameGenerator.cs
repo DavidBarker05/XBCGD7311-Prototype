@@ -26,6 +26,6 @@ public class PipePlaceMinigameGenerator : MonoBehaviour
 			m_PipePlayerCharacter.SetPipeQuantity(pipe.PipeType, pipe.PipeQuantity);
 		}
 		m_PipeGrid.StartMinigame(gridData);
-		m_Player.ChangeActionMap("PipePlayer");
+		m_Player.ChangeCharacter(m_PipePlayerCharacter);
 	}
 }

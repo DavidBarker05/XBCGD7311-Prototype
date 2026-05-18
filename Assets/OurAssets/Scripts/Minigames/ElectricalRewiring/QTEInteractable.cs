@@ -3,29 +3,29 @@ using UnityEngine;
 
 public class QTEInteractable : Interactable
 {
-    public QTEManager qteManager;
-    private bool hasTriggered = false;
+	public QTEManager qteManager;
+	private bool hasTriggered = false;
 	private Player player;
 
-	public QTEPlayerCharacter QTEPlayer { get; private set; }
+	private PlayerCharacter lastPlayer;
 
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
 	void Start()
-    {
+	{
 
-    }
+	}
 
-    // Update is called once per frame
-    void Update()
-    {
-        //if (playerInRange && Input.GetKeyDown(KeyCode.E))
-        //{
-        //    
-        //}
-    }
+	// Update is called once per frame
+	void Update()
+	{
+		//if (playerInRange && Input.GetKeyDown(KeyCode.E))
+		//{
+		//    
+		//}
+	}
 
-    public override object[] Interact(params object[] inputParameters)
-    {
+	public override object[] Interact(params object[] inputParameters)
+	{
 		if (inputParameters.Length != 2)
 		{
 #if UNITY_EDITOR
@@ -34,14 +34,13 @@ public class QTEInteractable : Interactable
 		}
 		else
 		{
-			if (inputParameters[0] is Player player && inputParameters[1] is QTEPlayerCharacter qtePlayer)
+			if (inputParameters[0] is Player player && inputParameters[1] is PlayerCharacter currentPlayer)
 			{
 				if (!hasTriggered)
 				{
 					hasTriggered = true;
 					this.player = player;
-					QTEPlayer = qtePlayer;
-					this.player.ChangeActionMap("QTEPlayer");
+					lastPlayer = currentPlayer;
 					qteManager.StartQTE(this);
 				}
 			}
@@ -54,25 +53,25 @@ public class QTEInteractable : Interactable
 		}
 		// David - Return nothing for now, if you want the qtePlayer to receive information
 		// then output an array of objects instead
-		return null; 
-    }
+		return null;
+	}
 
-    public void OnQTESuccess()
-    {
-        Debug.Log("SUCCESS - Objective completed");
-		player.ChangeActionMap("Player");
+	public void OnQTESuccess()
+	{
+		Debug.Log("SUCCESS - Objective completed");
+		player.ChangeCharacter(lastPlayer);
 		player = null;
-		QTEPlayer = null;
+		lastPlayer = null;
 		ChaseMinigameStarter.Instance.InteractableBeaten();
-        gameObject.SetActive(false);
-    }
+		gameObject.SetActive(false);
+	}
 
-    public void OnQTEFailure()
-    {
-        Debug.Log("FAILURE - Try again");
-		player.ChangeActionMap("Player");
+	public void OnQTEFailure()
+	{
+		Debug.Log("FAILURE - Try again");
+		player.ChangeCharacter(lastPlayer);
 		player = null;
-		QTEPlayer = null;
-        hasTriggered = false;
-    }
+		lastPlayer = null;
+		hasTriggered = false;
+	}
 }

@@ -9,14 +9,15 @@ public class WirePlayerCharacterUpdateData : IPlayerCharacterUpdateData
     public float DeltaTime { get; set; }
     public Quaternion CameraRotation { get; set; }
     public MouseInfo MouseInfo { get; set; }
-    
+
     public bool ClickedThisFrame { get; set; }
 }
 
 public class WirePlayerCharacter : PlayerCharacter
 {
-	public override bool HasBeenInitialised { get; protected set; }
+    public override bool HasBeenInitialised { get; protected set; }
 
+    public override string ActionMap => "WirePlayer";
     public override bool MouseVisible => true;
     public override bool DoCameraRotation => false;
     public override bool UseMouseScreenPosition => true;
@@ -27,14 +28,14 @@ public class WirePlayerCharacter : PlayerCharacter
 
     public override void Init(IPlayerCharacterInitData playerCharacterInitData)
     {
-		WirePlayerCharacterInitData initData = Sys.AssertType<WirePlayerCharacterInitData>(playerCharacterInitData, nameof(playerCharacterInitData));
-		HasBeenInitialised = true;
+        WirePlayerCharacterInitData initData = Sys.AssertType<WirePlayerCharacterInitData>(playerCharacterInitData, nameof(playerCharacterInitData));
+        HasBeenInitialised = true;
     }
 
     public override void UpdateCharacter(ref IPlayerCharacterUpdateData playerCharacterUpdateData)
     {
-		Sys.Assert(HasBeenInitialised, "WirePlayerCharacter hasn't been initialised");
-		WirePlayerCharacterUpdateData input = Sys.AssertType<WirePlayerCharacterUpdateData>(playerCharacterUpdateData, nameof(playerCharacterUpdateData));
+        Sys.Assert(HasBeenInitialised, "WirePlayerCharacter hasn't been initialised");
+        WirePlayerCharacterUpdateData input = Sys.AssertType<WirePlayerCharacterUpdateData>(playerCharacterUpdateData, nameof(playerCharacterUpdateData));
         if (!input.MouseInfo.DidHitObject)
         {
             if (m_CurrentlyHeldWire) ReleaseWire(Vector3.negativeInfinity);
@@ -74,12 +75,12 @@ public class WirePlayerCharacter : PlayerCharacter
     void ReleaseWire(Vector3 position)
     {
         if (!m_CurrentWireBoard || !m_CurrentlyHeldWire) return;
-		if (position.IsNegativeInfinity()) m_CurrentlyHeldWire.ReleaseWire(Vector3.negativeInfinity);
-		else
-		{
-			Vector3 snapPosition = m_CurrentWireBoard.TryReleaseWire(m_CurrentlyHeldWire, position);
-			m_CurrentlyHeldWire.ReleaseWire(snapPosition);
-		}
+        if (position.IsNegativeInfinity()) m_CurrentlyHeldWire.ReleaseWire(Vector3.negativeInfinity);
+        else
+        {
+            Vector3 snapPosition = m_CurrentWireBoard.TryReleaseWire(m_CurrentlyHeldWire, position);
+            m_CurrentlyHeldWire.ReleaseWire(snapPosition);
+        }
         m_CurrentWireBoard = null;
         m_CurrentlyHeldWire = null;
     }

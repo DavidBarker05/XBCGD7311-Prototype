@@ -27,8 +27,9 @@ public class PipePlayerCharacter : PlayerCharacter
     [SerializeField]
     bool m_Debug = false;
 
-	public override bool HasBeenInitialised { get; protected set; }
+    public override bool HasBeenInitialised { get; protected set; }
 
+    public override string ActionMap => "PipePlayer";
     public override bool MouseVisible => true;
     public override bool DoCameraRotation => false;
     public override bool UseMouseScreenPosition => true;
@@ -57,7 +58,7 @@ public class PipePlayerCharacter : PlayerCharacter
 
     public override void Init(IPlayerCharacterInitData playerCharacterInitData)
     {
-		PipePlayerCharacterInitData initData = Sys.AssertType<PipePlayerCharacterInitData>(playerCharacterInitData, nameof(playerCharacterInitData));
+        PipePlayerCharacterInitData initData = Sys.AssertType<PipePlayerCharacterInitData>(playerCharacterInitData, nameof(playerCharacterInitData));
 #if !UNITY_EDITOR
         m_Debug = false;
 #endif
@@ -66,13 +67,13 @@ public class PipePlayerCharacter : PlayerCharacter
         FullyCleanPlaceablePipes(); // Just in case
         foreach (PipeSO pipe in m_PlaceablePipes)
             m_PipeQuantities.Add(pipe, (m_Debug ? 1u : 0u));
-		HasBeenInitialised = true;
+        HasBeenInitialised = true;
     }
 
     public override void UpdateCharacter(ref IPlayerCharacterUpdateData playerCharacterUpdateData)
     {
-		Sys.Assert(HasBeenInitialised, "PipePlayerCharacter hasn't been initialised");
-		PipePlayerCharacterUpdateData input = Sys.AssertType<PipePlayerCharacterUpdateData>(playerCharacterUpdateData, nameof(playerCharacterUpdateData));
+        Sys.Assert(HasBeenInitialised, "PipePlayerCharacter hasn't been initialised");
+        PipePlayerCharacterUpdateData input = Sys.AssertType<PipePlayerCharacterUpdateData>(playerCharacterUpdateData, nameof(playerCharacterUpdateData));
         DoGridFunctions(ref input);
         input.ClickedThisFrame = false;
     }
@@ -118,11 +119,11 @@ public class PipePlayerCharacter : PlayerCharacter
         if (pipe && pipe != m_EmptyPipe) m_CurrentlySelectedPipe = pipe;
     }
 
-	public uint GetPipeQuantity(PipeSO pipe)
-	{
-		if (!pipe || pipe == m_EmptyPipe || !m_PipeQuantities.ContainsKey(pipe)) return 0;
-		return m_PipeQuantities[pipe];
-	}
+    public uint GetPipeQuantity(PipeSO pipe)
+    {
+        if (!pipe || pipe == m_EmptyPipe || !m_PipeQuantities.ContainsKey(pipe)) return 0;
+        return m_PipeQuantities[pipe];
+    }
 
     public void PlacePipe(ref PipeGrid pipeGrid, Vector3Int cellPosition) // public in case need to access in another class
     {
