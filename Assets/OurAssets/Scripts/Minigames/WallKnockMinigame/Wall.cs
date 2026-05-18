@@ -139,7 +139,7 @@ public class Wall : MonoBehaviour
 		Debug.Log(bWon);
 		if (bWon)
 		{
-			m_Player.OnMinigameBeaten();
+			MinigameManager.Instance?.OnMinigameBeaten();
 			m_Player.ChangeCharacter(m_PlayerToChangeTo);
 			ClearHoles();
 			m_UnscaledTransform.gameObject.SetActive(false);

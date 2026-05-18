@@ -16,8 +16,8 @@ public class ChaseMinigameStarter : MonoBehaviour
 	public bool ChaseMinigameIsRunning { get; private set; }
 
 	QTEInteractable[] m_QTEInteractables;
-	int numInteractables;
-	int numInteractablesBeaten;
+	int m_NumInteractables;
+	int m_NumInteractablesBeaten;
 
 	void Awake()
 	{
@@ -32,9 +32,9 @@ public class ChaseMinigameStarter : MonoBehaviour
 		m_FPPCharacter.gameObject.transform.position = m_ChaseSpawn.position;
 		m_FPPCharacter.GetComponent<CharacterController>().enabled = true;
 		m_QTEInteractables = qteInteractables;
-		numInteractables = m_QTEInteractables.Length;
+		m_NumInteractables = m_QTEInteractables.Length;
 		foreach (QTEInteractable qte in m_QTEInteractables) qte.gameObject.SetActive(true);
-		numInteractablesBeaten = 0;
+		m_NumInteractablesBeaten = 0;
 		ChasePlayer[] enemies = FindObjectsByType<ChasePlayer>();
 		foreach (ChasePlayer enemy in enemies)
 		{
@@ -46,8 +46,8 @@ public class ChaseMinigameStarter : MonoBehaviour
 
 	public void InteractableBeaten()
 	{
-		++numInteractablesBeaten;
-		if (numInteractablesBeaten == numInteractables) EndChaseMinigame();
+		++m_NumInteractablesBeaten;
+		if (m_NumInteractablesBeaten == m_NumInteractables) EndChaseMinigame();
 	}
 
 	public void EndChaseMinigame()
@@ -55,7 +55,7 @@ public class ChaseMinigameStarter : MonoBehaviour
 		m_FPPCharacter.GetComponent<CharacterController>().enabled = false;
 		m_FPPCharacter.transform.position = m_HouseSpawn.position;
 		m_FPPCharacter.GetComponent<CharacterController>().enabled = true;
-		m_Player.OnMinigameBeaten();
+		MinigameManager.Instance?.OnMinigameBeaten();
 		ChaseMinigameIsRunning = false;
 	}
 }

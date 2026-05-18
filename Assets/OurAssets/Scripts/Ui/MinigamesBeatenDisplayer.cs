@@ -4,8 +4,6 @@ using UnityEngine;
 [RequireComponent(typeof(TMP_Text))]
 public class MinigamesBeatenDisplayer : MonoBehaviour
 {
-    [SerializeField]
-    Player m_Player;
     [SerializeField, TextArea]
     string m_DisplayText = "Minigames Beaten: {0:D}";
 
@@ -13,5 +11,5 @@ public class MinigamesBeatenDisplayer : MonoBehaviour
 
     void Awake() => m_Text = GetComponent<TMP_Text>();
 
-    void Update() => m_Text.text = string.Format(m_DisplayText, m_Player.MinigamesBeaten);
+    void Update() => m_Text.text = string.Format(m_DisplayText, MinigameManager.Instance?.MinigamesBeaten ?? 0);
 }

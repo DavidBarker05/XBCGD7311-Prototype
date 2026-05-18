@@ -86,7 +86,7 @@ public class WireBoard : MonoBehaviour
 
 	void EndWireMinigame()
 	{
-		m_Player.OnMinigameBeaten();
+		MinigameManager.Instance?.OnMinigameBeaten();
 		StartCoroutine(CloseMinigame());
 	}
 

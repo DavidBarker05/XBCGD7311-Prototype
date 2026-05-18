@@ -23,8 +23,6 @@ public class Player : MonoBehaviour
 
     bool m_bCursorHidden;
 
-    public int MinigamesBeaten { get; private set; } = 0;
-
     void Awake()
     {
         m_PlayerInput = GetComponent<PlayerInput>();
@@ -54,8 +52,6 @@ public class Player : MonoBehaviour
     }
 
     void LateUpdate() => m_PlayerCamera.UpdatePosition(m_PlayerCharacter.CameraTarget);
-
-    public void OnMinigameBeaten() => ++MinigamesBeaten;
 
     #region Change Character
     public void ChangeCharacter(PlayerCharacter playerCharacter)
