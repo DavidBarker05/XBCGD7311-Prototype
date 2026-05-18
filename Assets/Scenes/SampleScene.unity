@@ -47216,7 +47216,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MinigameManager
   m_NumMinigamesToBeat: 3
-  WinScreen: {fileID: 0}
+  m_MenuCharacter: {fileID: 0}
+  m_FirstPersonPlayerCharacter: {fileID: 0}
+  m_HUD: {fileID: 0}
+  m_WinScreen: {fileID: 0}
 --- !u!4 &964669679
 Transform:
   m_ObjectHideFlags: 0
@@ -94623,7 +94626,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1463569256843133250, guid: 19521dc185da0c94e88dfe69a4cff5a8, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5304736747382252985, guid: 19521dc185da0c94e88dfe69a4cff5a8, type: 3}
       propertyPath: m_LocalPosition.x

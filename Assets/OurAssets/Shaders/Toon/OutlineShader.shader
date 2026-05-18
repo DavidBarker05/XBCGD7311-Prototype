@@ -2,6 +2,7 @@ Shader "Toon/OutlineShader"
 {
     Properties
     {
+        _MaxDistance ("Max Distance", Float) = 75
         _Scale ("Scale", Integer) = 2
         _DepthThreshold ("Depth Threshold", Float) = 1.5
         _NormalThreshold ("Normal Threshold", Float) = 0.4
@@ -64,6 +65,7 @@ Shader "Toon/OutlineShader"
         uniform float4 _BlitDecodeInstructions;
 
         CBUFFER_START(UnityPerMaterial)
+            float _MaxDistance;
             int _Scale;
             float _DepthThreshold;
             float _NormalThreshold;
@@ -99,6 +101,15 @@ Shader "Toon/OutlineShader"
         float4 frag(Varyings IN) : SV_Target
         {
             float2 uv = IN.texcoord;
+            float depth = SampleSceneDepth(uv);
+            float3 positionWS = ComputeWorldSpacePosition(uv, depth, UNITY_MATRIX_I_VP);
+            float dist = distance(_WorldSpaceCameraPos, positionWS);
+            if (dist > _MaxDistance)
+            {
+                discard;
+                return 0;
+            }
+
             float halfScaleFloor = floor(_Scale * 0.5);
             float halfScaleCeil = ceil(_Scale * 0.5);
 
@@ -130,7 +141,6 @@ Shader "Toon/OutlineShader"
 
             float edgeDepth = sqrt(pow(depthFiniteDifference0, 2) + pow(depthFiniteDifference1, 2)) * 100;
 
-            float depth = SampleSceneDepth(uv);
             float depthThreshold = _DepthThreshold * depth * normalThreshold;
             edgeDepth = edgeDepth > depthThreshold ? 1 : 0;
 
