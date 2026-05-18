@@ -30527,6 +30527,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ChaseMinigameInteract
   m_CanBePlayedAgain: 0
+  m_QTEInteractables:
+  - {fileID: 996478445}
+  - {fileID: 1881152909}
+  - {fileID: 1225716924}
+  - {fileID: 1204326416}
+  - {fileID: 397889154}
+  - {fileID: 1609355128}
+  - {fileID: 1428909164}
+  - {fileID: 1383095274}
+  - {fileID: 198736257}
+  - {fileID: 1378557136}
 --- !u!1001 &604159285
 PrefabInstance:
   m_ObjectHideFlags: 0

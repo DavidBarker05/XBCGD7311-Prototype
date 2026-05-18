@@ -15,6 +15,7 @@ public class ChaseMinigameStarter : MonoBehaviour
 
 	public bool ChaseMinigameIsRunning { get; private set; }
 
+	QTEInteractable[] m_QTEInteractables;
 	int numInteractables;
 	int numInteractablesBeaten;
 
@@ -24,26 +25,24 @@ public class ChaseMinigameStarter : MonoBehaviour
 		else Instance = this;
 	}
 
-	public void StartChaseMinigame()
+	public void StartChaseMinigame(QTEInteractable[] qteInteractables)
 	{
 		ChaseMinigameIsRunning = true;
 		m_FPPCharacter.GetComponent<CharacterController>().enabled = false;
 		m_FPPCharacter.gameObject.transform.position = m_ChaseSpawn.position;
 		m_FPPCharacter.GetComponent<CharacterController>().enabled = true;
-		numInteractables = 0;
+		m_QTEInteractables = qteInteractables;
+		numInteractables = m_QTEInteractables.Length;
+		foreach (QTEInteractable qte in m_QTEInteractables) qte.gameObject.SetActive(true);
 		numInteractablesBeaten = 0;
-		QTEInteractable[] interactables = FindObjectsByType<QTEInteractable>();
-		foreach (QTEInteractable interactable in interactables)
-		{
-			interactable.gameObject.SetActive(true);
-			++numInteractables;
-		}
 		ChasePlayer[] enemies = FindObjectsByType<ChasePlayer>();
-		foreach(ChasePlayer enemy in enemies)
+		foreach (ChasePlayer enemy in enemies)
 		{
 			enemy.ResetToStart();
 		}
 	}
+
+	public void RestartChaseMinigame() => StartChaseMinigame(m_QTEInteractables);
 
 	public void InteractableBeaten()
 	{

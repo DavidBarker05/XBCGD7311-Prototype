@@ -4,6 +4,8 @@ public class ChaseMinigameInteract : Interactable
 {
 	[SerializeField]
 	bool m_CanBePlayedAgain = false;
+	[SerializeField]
+	QTEInteractable[] m_QTEInteractables;
 
 	bool m_HasBeenPlayed = false;
 
@@ -19,7 +21,7 @@ public class ChaseMinigameInteract : Interactable
 		{
 			if ((!m_HasBeenPlayed || m_CanBePlayedAgain) && !ChaseMinigameStarter.Instance.ChaseMinigameIsRunning)
 			{
-				ChaseMinigameStarter.Instance.StartChaseMinigame();
+				ChaseMinigameStarter.Instance.StartChaseMinigame(m_QTEInteractables);
 			}
 			m_HasBeenPlayed = true;
 		}

@@ -3,8 +3,8 @@ using UnityEngine.AI;
 
 public class ChasePlayer : MonoBehaviour
 {
-    public NavMeshAgent enemy;
-    public Transform player;
+	public NavMeshAgent enemy;
+	public Transform player;
 
 	private Vector3 startPosition;
 	private Quaternion startRotation;
@@ -17,28 +17,28 @@ public class ChasePlayer : MonoBehaviour
 
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
 	void Start()
-    {
-        enemy = GetComponent<NavMeshAgent>();
-    }
+	{
+		enemy = GetComponent<NavMeshAgent>();
+	}
 
-    // Update is called once per frame
-    void Update()
-    {
+	// Update is called once per frame
+	void Update()
+	{
 		if (!ChaseMinigameStarter.Instance.ChaseMinigameIsRunning)
 		{
 			transform.SetPositionAndRotation(startPosition, startRotation);
 			return;
 		}
-        if (player != null && !enemy.pathPending && Vector3.Distance(transform.position, player.position) > enemy.stoppingDistance)
-        {
-            enemy.SetDestination(player.position);
-        }
-        
-    }
+		if (player != null && !enemy.pathPending && Vector3.Distance(transform.position, player.position) > enemy.stoppingDistance)
+		{
+			enemy.SetDestination(player.position);
+		}
+
+	}
 
 	private void OnTriggerEnter(Collider other)
 	{
-		if (other.CompareTag("Player")) ChaseMinigameStarter.Instance.StartChaseMinigame();
+		if (other.CompareTag("Player")) ChaseMinigameStarter.Instance.RestartChaseMinigame();
 	}
 
 	public void ResetToStart()
