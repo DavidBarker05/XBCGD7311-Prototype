@@ -95,7 +95,7 @@ Material:
     - _Cutoff: 0.5
     - _DepthNormalThreshold: 7
     - _DepthNormalThresholdScale: 7
-    - _DepthThreshold: 3
+    - _DepthThreshold: 10
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
@@ -104,9 +104,9 @@ Material:
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
-    - _MaxDistance: 75
+    - _MaxDistance: 124.9
     - _Metallic: 0
-    - _NormalThreshold: 0.4
+    - _NormalThreshold: 1
     - _OcclusionStrength: 1
     - _Parallax: 0.005
     - _QueueOffset: 0

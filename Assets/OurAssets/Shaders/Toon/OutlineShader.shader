@@ -2,7 +2,6 @@ Shader "Toon/OutlineShader"
 {
     Properties
     {
-        _MaxDistance ("Max Distance", Float) = 75
         _Scale ("Scale", Integer) = 2
         _DepthThreshold ("Depth Threshold", Float) = 1.5
         _NormalThreshold ("Normal Threshold", Float) = 0.4
@@ -57,6 +56,7 @@ Shader "Toon/OutlineShader"
             TEXTURE2D_X(_BlitTexture);
         #endif
         TEXTURECUBE(_BlitCubeTexture);
+        SAMPLER(sampler_BlitTexture);
 
         uniform float4 _BlitScaleBias;
         uniform float4 _BlitScaleBiasRt;
@@ -68,7 +68,6 @@ Shader "Toon/OutlineShader"
         uniform float4 _BlitDecodeInstructions;
 
         CBUFFER_START(UnityPerMaterial)
-            float _MaxDistance;
             int _Scale;
             float _DepthThreshold;
             float _NormalThreshold;
@@ -104,18 +103,9 @@ Shader "Toon/OutlineShader"
         float4 frag(Varyings IN) : SV_Target
         {
             float2 uv = IN.texcoord;
-            float depth = SampleSceneDepth(uv);
-            float3 positionWS = ComputeWorldSpacePosition(uv, depth, UNITY_MATRIX_I_VP);
-            float dist = distance(_WorldSpaceCameraPos, positionWS);
-            if (dist > _MaxDistance)
-            {
-                discard;
-                return 0;
-            }
 
             float halfScaleFloor = floor(_Scale * 0.5);
             float halfScaleCeil = ceil(_Scale * 0.5);
-
             float2 bottomLeftUV = uv - float2(_BlitTexture_TexelSize.x, _BlitTexture_TexelSize.y) * halfScaleFloor;
             float2 topRightUV = uv + float2(_BlitTexture_TexelSize.x, _BlitTexture_TexelSize.y) * halfScaleCeil;
             float2 bottomRightUV = uv + float2(_BlitTexture_TexelSize.x * halfScaleCeil, -_BlitTexture_TexelSize.y * halfScaleFloor);
@@ -142,6 +132,7 @@ Shader "Toon/OutlineShader"
             float depthFiniteDifference0 = depth1 - depth0;
             float depthFiniteDifference1 = depth3 - depth2;
 
+            float depth = SampleSceneDepth(uv);
             float edgeDepth = sqrt(pow(depthFiniteDifference0, 2) + pow(depthFiniteDifference1, 2)) * 100;
 
             float depthThreshold = _DepthThreshold * depth * normalThreshold;
@@ -154,10 +145,10 @@ Shader "Toon/OutlineShader"
             edgeNormal = edgeNormal > _NormalThreshold ? 1 : 0;
 
             float edge = max(edgeDepth, edgeNormal);
+            float4 edgeColour = float4(_OutlineColour.rgb, edge);
+            float4 colour = SAMPLE_TEXTURE2D_X(_BlitTexture, sampler_BlitTexture, uv);
 
-            if (edge == 0) discard;
-
-            return float4(_OutlineColour.rgb, 1);
+            return alphaBlend(edgeColour, colour);
         }
         ENDHLSL
     }
