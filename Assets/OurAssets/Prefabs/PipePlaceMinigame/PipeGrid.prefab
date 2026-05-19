@@ -215,6 +215,10 @@ MonoBehaviour:
   unscaledTransform: {fileID: 7976401186110955050}
   m_PipePrefab: {fileID: 1824637721083445770, guid: 91333e14356cc364db0f33c98f622e05, type: 3}
   m_EmptyPipe: {fileID: 11400000, guid: e5cb456cff14c4b41ae710f55a2d571a, type: 2}
+  m_OutsidePipe: {fileID: 11400000, guid: c92f41390f1e5f541b480f1a535977f7, type: 2}
+  m_PipeUI: {fileID: 0}
+  m_Player: {fileID: 0}
+  m_FirstPersonPlayerCharacter: {fileID: 0}
 --- !u!33 &9103582526197475614
 MeshFilter:
   m_ObjectHideFlags: 0

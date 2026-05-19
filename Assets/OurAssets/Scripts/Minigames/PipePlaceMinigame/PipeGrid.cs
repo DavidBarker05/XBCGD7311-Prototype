@@ -13,6 +13,8 @@ public class PipeGrid : MonoBehaviour
     [SerializeField]
     PipeSO m_EmptyPipe;
     [SerializeField]
+    PipeSO m_OutsidePipe;
+    [SerializeField]
     GameObject m_PipeUI;
     [SerializeField]
     Player m_Player;
@@ -29,9 +31,29 @@ public class PipeGrid : MonoBehaviour
     {
         public Pipe PipeCell;
         public PipeSide EntranceExitSide;
+
+        public readonly PipeRotationAngle HoleSideToOutsidePipeAngle => EntranceExitSide switch
+        {
+            PipeSide.Left => PipeRotationAngle.OneEighty,
+            PipeSide.Top => PipeRotationAngle.TwoSeventy,
+            PipeSide.Right => PipeRotationAngle.Zero,
+            PipeSide.Bottom => PipeRotationAngle.Ninety,
+            _ => throw new System.NotImplementedException()
+        };
+
+        public readonly Vector3Int HoleSideToOutsidePipePos => EntranceExitSide switch
+        {
+            PipeSide.Left => new Vector3Int(-1, 0, 0),
+            PipeSide.Top => new Vector3Int(0, 0, 1),
+            PipeSide.Right => new Vector3Int(1, 0, 0),
+            PipeSide.Bottom => new Vector3Int(0, 0, -1),
+            _ => throw new System.NotImplementedException()
+        };
     }
     StartEndPipe m_StartPipe;
+    Pipe m_StartOutsidePipe;
     StartEndPipe m_EndPipe;
+    Pipe m_EndOutsidePipe;
 
     #region Delete & Init
     void DeletePipes(ref Pipe[,] pipeCells)
@@ -44,6 +66,8 @@ public class PipeGrid : MonoBehaviour
             }
         }
         pipeCells = null;
+        if (m_StartOutsidePipe) Destroy(m_StartOutsidePipe.gameObject);
+        if (m_EndOutsidePipe) Destroy(m_EndOutsidePipe.gameObject);
     }
 
     void InitCells(ref Pipe[,] pipeCells, ref Grid grid, Vector2Int size)
@@ -63,6 +87,12 @@ public class PipeGrid : MonoBehaviour
                 m_PipeCells[x, y] = pipe;
             }
         }
+        GameObject sop = Instantiate(m_PipePrefab.gameObject, unscaledTransform);
+        m_StartOutsidePipe = sop.GetComponent<Pipe>();
+        m_StartOutsidePipe.CurrentPipeSO = m_OutsidePipe;
+        GameObject eop = Instantiate(m_PipePrefab.gameObject, unscaledTransform);
+        m_EndOutsidePipe = eop.GetComponent<Pipe>();
+        m_EndOutsidePipe.CurrentPipeSO = m_OutsidePipe;
     }
     #endregion Delete & Init
 
@@ -77,10 +107,18 @@ public class PipeGrid : MonoBehaviour
         InitCells(ref m_PipeCells, ref m_Grid, Size);
         Pipe startPipe = GetPipe(pipeGridData.StartPipe.CellPosition.x, pipeGridData.StartPipe.CellPosition.y);
         Sys.Assert(startPipe, $"({pipeGridData.StartPipe.CellPosition}) was not a valid index");
-        m_StartPipe = new StartEndPipe() { PipeCell = startPipe, EntranceExitSide = pipeGridData.EndPipe.EntranceExitSide };
+        m_StartPipe = new StartEndPipe() { PipeCell = startPipe, EntranceExitSide = pipeGridData.StartPipe.EntranceExitSide };
+        Vector3Int sopPosCP = ArrayIndex2DToCellPosition(pipeGridData.StartPipe.CellPosition.x, pipeGridData.StartPipe.CellPosition.y) + m_StartPipe.HoleSideToOutsidePipePos;
+        Vector3 sopPosWP = m_Grid.CellToWorld(sopPosCP);
+        m_StartOutsidePipe.transform.position = sopPosWP;
+        m_StartOutsidePipe.CurrentPipeAngle = m_StartPipe.HoleSideToOutsidePipeAngle;
         Pipe endPipe = GetPipe(pipeGridData.EndPipe.CellPosition.x, pipeGridData.EndPipe.CellPosition.y);
         Sys.Assert(endPipe, $"({pipeGridData.EndPipe.CellPosition}) was not a valid index");
         m_EndPipe = new StartEndPipe() { PipeCell = endPipe, EntranceExitSide = pipeGridData.EndPipe.EntranceExitSide };
+        Vector3Int eopPosCP = ArrayIndex2DToCellPosition(pipeGridData.EndPipe.CellPosition.x, pipeGridData.EndPipe.CellPosition.y) + m_EndPipe.HoleSideToOutsidePipePos;
+        Vector3 eopPosWP = m_Grid.CellToWorld(eopPosCP);
+        m_EndOutsidePipe.transform.position = eopPosWP;
+        m_EndOutsidePipe.CurrentPipeAngle = m_EndPipe.HoleSideToOutsidePipeAngle;
     }
 
     void EndMinigame(List<Pipe> path) // path is in case we want to do some kind of flowing animation
@@ -292,9 +330,9 @@ public class PipeGrid : MonoBehaviour
         try
         {
             (bool bSideValid, int rX, int rY) = SafeIndexOfCellOnSide(side, x, y);
-            if (!bSideValid) return false;
+            if (!bSideValid) return pipe.CurrentOrientation.HasHole(side);
             Pipe sidePipe = m_PipeCells[rX, rY];
-            return pipe.CurrentOrientation.HasHole(side) && sidePipe.CurrentPipeSO != m_EmptyPipe;
+            return pipe.CurrentOrientation.HasHole(side) && sidePipe.CurrentOrientation.HasHole(PipeSideUtil.Opposite(side)) && sidePipe.CurrentPipeSO != m_EmptyPipe;
         }
         catch (System.Exception e) { throw e; }
     }
@@ -392,7 +430,7 @@ public class PipeGrid : MonoBehaviour
     #region Water Flow Check
     bool WaterCanReachEnd(Pipe startPipe, PipeSide entranceSide, Pipe endPipe, PipeSide exitSide, out List<Pipe> path)
     {
-        if (!startPipe || startPipe == m_EmptyPipe || !endPipe || endPipe == m_EmptyPipe || !startPipe.CurrentOrientation.HasHole(entranceSide) || !endPipe.CurrentOrientation.HasHole(exitSide))
+        if (!startPipe || startPipe.CurrentPipeSO == m_EmptyPipe || !endPipe || endPipe.CurrentPipeSO == m_EmptyPipe || !startPipe.CurrentOrientation.HasHole(entranceSide) || !endPipe.CurrentOrientation.HasHole(exitSide))
         {
             path = null;
             return false;
