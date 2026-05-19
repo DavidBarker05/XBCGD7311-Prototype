@@ -12,6 +12,12 @@ public class PipeGrid : MonoBehaviour
     Pipe m_PipePrefab;
     [SerializeField]
     PipeSO m_EmptyPipe;
+    [SerializeField]
+    GameObject m_PipeUI;
+    [SerializeField]
+    Player m_Player;
+    [SerializeField]
+    FirstPersonPlayerCharacter m_FirstPersonPlayerCharacter;
 
     PlaneGridGenerator m_PlaneGrid;
     Vector2Int Size => m_PlaneGrid.GridSize;
@@ -67,6 +73,7 @@ public class PipeGrid : MonoBehaviour
         if (!m_Grid) m_Grid = GetComponent<Grid>();
         m_PlaneGrid.GridSize = pipeGridData.GridSize;
         unscaledTransform.gameObject.SetActive(true);
+        m_PipeUI.SetActive(true);
         InitCells(ref m_PipeCells, ref m_Grid, Size);
         Pipe startPipe = GetPipe(pipeGridData.StartPipe.CellPosition.x, pipeGridData.StartPipe.CellPosition.y);
         Sys.Assert(startPipe, $"({pipeGridData.StartPipe.CellPosition}) was not a valid index");
@@ -79,7 +86,9 @@ public class PipeGrid : MonoBehaviour
     void EndMinigame(List<Pipe> path) // path is in case we want to do some kind of flowing animation
     {
         DeletePipes(ref m_PipeCells);
-        // TODO: End minigame
+        m_PipeUI.SetActive(false);
+        m_Player.ChangeCharacter(m_FirstPersonPlayerCharacter);
+        MinigameManager.Instance?.OnMinigameBeaten();
     }
     #endregion Start & End Minigame
 

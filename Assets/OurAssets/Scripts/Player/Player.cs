@@ -172,7 +172,7 @@ public class Player : MonoBehaviour
 
     public void HandleLeftClickInput(InputAction.CallbackContext ctx)
     {
-        SetDataValue<PipePlayerCharacterUpdateData>(input => input.ClickedThisFrame |= ctx.started);
+        SetDataValue<PipePlayerCharacterUpdateData>(input => input.LeftClickedThisFrame |= ctx.started);
         SetDataValue<WirePlayerCharacterUpdateData>(input => input.ClickedThisFrame = ctx.action.WasPressedThisFrame());
         SetDataValue<WallKnockPlayerCharacterUpdateData>(input => input.LeftClickedThisFrame |= ctx.started);
     }
@@ -180,6 +180,7 @@ public class Player : MonoBehaviour
     public void HandleRightClickInput(InputAction.CallbackContext ctx)
     {
         SetDataValue<WallKnockPlayerCharacterUpdateData>(input => input.RightClickedThisFrame |= ctx.started);
+        SetDataValue<PipePlayerCharacterUpdateData>(input => input.RightClickedThisFrame |= ctx.started);
     }
 
     public void HandleDoQTEInput(InputAction.CallbackContext ctx)
@@ -190,6 +191,16 @@ public class Player : MonoBehaviour
     public void HandleQuitInput(InputAction.CallbackContext ctx)
     {
         if (ctx.started) Sys.Exit(0);
+    }
+
+    public void HandleRotateLeft(InputAction.CallbackContext ctx)
+    {
+        SetDataValue<PipePlayerCharacterUpdateData>(input => input.PressedLeftRotateThisFrame |= ctx.started);
+    }
+
+    public void HandleRotateRight(InputAction.CallbackContext ctx)
+    {
+        SetDataValue<PipePlayerCharacterUpdateData>(input => input.PressedRightRotateThisFrame |= ctx.started);
     }
 
     #region Control Scheme Change

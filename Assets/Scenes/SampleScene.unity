@@ -43520,6 +43520,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4362549119826498577, guid: 3a3a75cf5cbc5dc4abf59879f79fc181, type: 3}
+      propertyPath: m_PipeUI
+      value: 
+      objectReference: {fileID: 2146085498}
     - target: {fileID: 4515618316155034949, guid: 3a3a75cf5cbc5dc4abf59879f79fc181, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.8
@@ -48032,6 +48036,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 953867934}
   m_CullTransparentMesh: 1
+--- !u!114 &958472078 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2266578989260492190, guid: 2288494715f42ad4a8ce262dee2b745b, type: 3}
+  m_PrefabInstance: {fileID: 1015887250}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87ee35cc0edb13a42946982933c1c33e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MenuCharacter
 --- !u!1001 &958511295
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -48349,9 +48364,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a220313cd4e8dd43aa6a21c99a2db81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MinigameManager
-  m_NumMinigamesToBeat: 3
-  m_MenuCharacter: {fileID: 0}
-  m_FirstPersonPlayerCharacter: {fileID: 0}
+  m_NumMinigamesToBeat: 4
+  m_MenuCharacter: {fileID: 958472078}
+  m_FirstPersonPlayerCharacter: {fileID: 1015887253}
   m_HUD: {fileID: 0}
   m_WinScreen: {fileID: 0}
 --- !u!4 &964669679
@@ -102626,7 +102641,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2146085499
 RectTransform:
   m_ObjectHideFlags: 0

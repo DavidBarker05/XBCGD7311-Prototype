@@ -19,10 +19,6 @@ public class Wall : MonoBehaviour
 	[SerializeField]
 	PipePlaceMinigameGenerator m_PipePlaceMinigameGenerator;
 	[SerializeField]
-	Player m_Player;
-	[SerializeField]
-	PlayerCharacter m_PlayerToChangeTo;
-	[SerializeField]
 	GameObject m_HolePrefab;
 	[SerializeField, Min(1)]
 	int m_MaxTries = 3;
@@ -141,11 +137,10 @@ public class Wall : MonoBehaviour
 		Debug.Log(bWon);
 		if (bWon)
 		{
-			MinigameManager.Instance?.OnMinigameBeaten();
-			//m_Player.ChangeCharacter(m_PlayerToChangeTo);
 			ClearHoles();
 			m_UnscaledTransform.gameObject.SetActive(false);
 			m_PipePlaceMinigameGenerator.StartPipeMinigame();
+			MinigameManager.Instance?.OnMinigameBeaten();
 		}
 		if (!bWon) ResetMinigame();
 	}

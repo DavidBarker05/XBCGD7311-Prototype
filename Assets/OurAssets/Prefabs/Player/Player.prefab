@@ -665,6 +665,54 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: f41b0ff8-2a23-4123-abb3-9823b678b307
     m_ActionName: 'Player/QuitAction[/Keyboard/escape]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8184540134110917077}
+        m_TargetAssemblyTypeName: Player, Assembly-CSharp
+        m_MethodName: HandleRightClickInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: c177a971-b83a-4f27-b361-2d89219fafa3
+    m_ActionName: 'PipePlayer/RightClick[/Mouse/rightButton]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8184540134110917077}
+        m_TargetAssemblyTypeName: Player, Assembly-CSharp
+        m_MethodName: HandleRotateLeft
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: c3987af6-0c31-4d30-85ca-471da22c77a4
+    m_ActionName: 'PipePlayer/RotateLeft[/Keyboard/q]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8184540134110917077}
+        m_TargetAssemblyTypeName: Player, Assembly-CSharp
+        m_MethodName: HandleRotateRight
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 1dfca355-3845-400e-9484-a1ba5ed2764c
+    m_ActionName: 'PipePlayer/RotateRight[/Keyboard/e]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
