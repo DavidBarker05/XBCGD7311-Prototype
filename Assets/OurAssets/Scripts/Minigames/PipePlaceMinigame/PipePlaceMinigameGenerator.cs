@@ -19,6 +19,7 @@ public class PipePlaceMinigameGenerator : MonoBehaviour
 
 	public void StartPipeMinigame()
 	{
+		m_Player.ChangeCharacter(m_PipePlayerCharacter);
 		int puzzleNumber = Random.Range(0, m_PreGeneratedPuzzles.Count);
 		PipeGridData gridData = JsonUtility.FromJson<SerializablePipeGridData>(m_PreGeneratedPuzzles[puzzleNumber].text).Deserialized;
 		foreach (PipeData pipe in gridData.Pipes)
@@ -26,6 +27,5 @@ public class PipePlaceMinigameGenerator : MonoBehaviour
 			m_PipePlayerCharacter.SetPipeQuantity(pipe.PipeType, pipe.PipeQuantity);
 		}
 		m_PipeGrid.StartMinigame(gridData);
-		m_Player.ChangeCharacter(m_PipePlayerCharacter);
 	}
 }

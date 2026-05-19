@@ -31,6 +31,55 @@ Transform:
   m_Children: []
   m_Father: {fileID: 5558182433297790033}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &502540572433101297
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1901345917155466204}
+  - component: {fileID: 2266578989260492190}
+  m_Layer: 6
+  m_Name: MenuCharacter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1901345917155466204
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 502540572433101297}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3524224750697147432}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2266578989260492190
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 502540572433101297}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87ee35cc0edb13a42946982933c1c33e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MenuCharacter
+  <CameraTarget>k__BackingField: {fileID: 0}
+  <MouseHitLayer>k__BackingField:
+    serializedVersion: 2
+    m_Bits: 0
+  <MouseHitDistance>k__BackingField: 100
 --- !u!1 &2644151230137862002
 GameObject:
   m_ObjectHideFlags: 0
@@ -359,6 +408,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5558182433297790033}
+  - {fileID: 1901345917155466204}
   - {fileID: 145719061603609728}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -633,7 +683,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player
   m_PlayerSettings: {fileID: 11400000, guid: 78b21f17f273838449a5908aff882d01, type: 2}
-  m_StartingPlayerCharacter: {fileID: 0}
+  m_StartingPlayerCharacter: {fileID: 5076510780398248523}
+  m_MenuCharacter: {fileID: 2266578989260492190}
   m_PlayerCamera: {fileID: 8232727930318256733}
   m_Camera: {fileID: 8156024979346219202}
 --- !u!1 &8916512990213848511

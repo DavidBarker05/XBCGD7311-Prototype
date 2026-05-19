@@ -27,15 +27,6 @@ public class PipeGrid : MonoBehaviour
     StartEndPipe m_StartPipe;
     StartEndPipe m_EndPipe;
 
-    void OnEnable()
-    {
-        if (!m_PlaneGrid) m_PlaneGrid = GetComponent<PlaneGridGenerator>();
-        if (!m_Grid) m_Grid = GetComponent<Grid>();
-        InitCells(ref m_PipeCells, ref m_Grid, Size);
-    }
-
-    void OnDisable() => DeletePipes(ref m_PipeCells);
-
     #region Delete & Init
     void DeletePipes(ref Pipe[,] pipeCells)
     {
@@ -72,9 +63,11 @@ public class PipeGrid : MonoBehaviour
     #region Start & End Minigame
     public void StartMinigame(PipeGridData pipeGridData)
     {
+        if (!m_PlaneGrid) m_PlaneGrid = GetComponent<PlaneGridGenerator>();
+        if (!m_Grid) m_Grid = GetComponent<Grid>();
         m_PlaneGrid.GridSize = pipeGridData.GridSize;
-        if (gameObject.activeSelf) InitCells(ref m_PipeCells, ref m_Grid, Size);
-        else gameObject.SetActive(true);
+        unscaledTransform.gameObject.SetActive(true);
+        InitCells(ref m_PipeCells, ref m_Grid, Size);
         Pipe startPipe = GetPipe(pipeGridData.StartPipe.CellPosition.x, pipeGridData.StartPipe.CellPosition.y);
         Sys.Assert(startPipe, $"({pipeGridData.StartPipe.CellPosition}) was not a valid index");
         m_StartPipe = new StartEndPipe() { PipeCell = startPipe, EntranceExitSide = pipeGridData.EndPipe.EntranceExitSide };
@@ -85,6 +78,7 @@ public class PipeGrid : MonoBehaviour
 
     void EndMinigame(List<Pipe> path) // path is in case we want to do some kind of flowing animation
     {
+        DeletePipes(ref m_PipeCells);
         // TODO: End minigame
     }
     #endregion Start & End Minigame

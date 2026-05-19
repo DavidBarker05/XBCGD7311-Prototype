@@ -17,6 +17,8 @@ public class Wall : MonoBehaviour
 	[SerializeField]
 	Transform m_UnscaledTransform;
 	[SerializeField]
+	PipePlaceMinigameGenerator m_PipePlaceMinigameGenerator;
+	[SerializeField]
 	Player m_Player;
 	[SerializeField]
 	PlayerCharacter m_PlayerToChangeTo;
@@ -140,9 +142,10 @@ public class Wall : MonoBehaviour
 		if (bWon)
 		{
 			MinigameManager.Instance?.OnMinigameBeaten();
-			m_Player.ChangeCharacter(m_PlayerToChangeTo);
+			//m_Player.ChangeCharacter(m_PlayerToChangeTo);
 			ClearHoles();
 			m_UnscaledTransform.gameObject.SetActive(false);
+			m_PipePlaceMinigameGenerator.StartPipeMinigame();
 		}
 		if (!bWon) ResetMinigame();
 	}

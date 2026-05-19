@@ -34,8 +34,9 @@ public class PipePlayerCharacter : PlayerCharacter
     public override bool DoCameraRotation => false;
     public override bool UseMouseScreenPosition => true;
 
+    public PipeSO CurrentlySelectedPipe { get; private set; }
+
     GameObject m_CellIndicator;
-    PipeSO m_CurrentlySelectedPipe;
     Dictionary<PipeSO, uint> m_PipeQuantities = new Dictionary<PipeSO, uint>();
 
     void OnValidate() => CleanupPlaceablePipes(); // Can't fully clean in OnValidate because unity's + adds duplicate of last item
@@ -63,7 +64,7 @@ public class PipePlayerCharacter : PlayerCharacter
         m_Debug = false;
 #endif
         m_CellIndicator = Instantiate(m_CellIndicatorPrefab);
-        m_CurrentlySelectedPipe = m_Debug && m_PlaceablePipes.Count > 0 ? m_PlaceablePipes[0] : m_EmptyPipe;
+        CurrentlySelectedPipe = m_Debug && m_PlaceablePipes.Count > 0 ? m_PlaceablePipes[0] : m_EmptyPipe;
         FullyCleanPlaceablePipes(); // Just in case
         foreach (PipeSO pipe in m_PlaceablePipes)
             m_PipeQuantities.Add(pipe, (m_Debug ? 1u : 0u));
@@ -85,7 +86,7 @@ public class PipePlayerCharacter : PlayerCharacter
         Grid grid = hit.GetComponent<Grid>();
         if (!grid) return;
         Vector3Int cp = grid.WorldToCell(hit.point);
-        MoveCellIndicator(ref grid, cp, hit.normal);
+        MoveCellIndicator(ref grid, cp, hit);
         if (input.ClickedThisFrame)
         {
             PipeGrid pipeGrid = hit.GetComponent<PipeGrid>();
@@ -116,7 +117,7 @@ public class PipePlayerCharacter : PlayerCharacter
 
     public void SelectPipe(PipeSO pipe) // Added to the buttons on click event
     {
-        if (pipe && pipe != m_EmptyPipe) m_CurrentlySelectedPipe = pipe;
+        if (pipe && pipe != m_EmptyPipe) CurrentlySelectedPipe = pipe;
     }
 
     public uint GetPipeQuantity(PipeSO pipe)
@@ -127,21 +128,21 @@ public class PipePlayerCharacter : PlayerCharacter
 
     public void PlacePipe(ref PipeGrid pipeGrid, Vector3Int cellPosition) // public in case need to access in another class
     {
-        if (!pipeGrid || !m_CurrentlySelectedPipe || m_CurrentlySelectedPipe == m_EmptyPipe || !m_PipeQuantities.ContainsKey(m_CurrentlySelectedPipe) || (m_PipeQuantities[m_CurrentlySelectedPipe] == 0 && !m_Debug)) return;
-        PipeSO originalPipeInCell = pipeGrid.PlacePipe(m_CurrentlySelectedPipe, cellPosition);
-        --m_PipeQuantities[m_CurrentlySelectedPipe];
+        if (!pipeGrid || !CurrentlySelectedPipe || CurrentlySelectedPipe == m_EmptyPipe || !m_PipeQuantities.ContainsKey(CurrentlySelectedPipe) || (m_PipeQuantities[CurrentlySelectedPipe] == 0 && !m_Debug)) return;
+        PipeSO originalPipeInCell = pipeGrid.PlacePipe(CurrentlySelectedPipe, cellPosition);
+        --m_PipeQuantities[CurrentlySelectedPipe];
         if (originalPipeInCell != m_EmptyPipe)
         {
             if (!m_PipeQuantities.ContainsKey(originalPipeInCell)) m_PipeQuantities.Add(originalPipeInCell, 1);
             else ++m_PipeQuantities[originalPipeInCell];
         }
-        if (!m_Debug) m_CurrentlySelectedPipe = m_EmptyPipe;
+        if (m_PipeQuantities[CurrentlySelectedPipe] == 0) CurrentlySelectedPipe = m_EmptyPipe;
+        //if (!m_Debug) m_CurrentlySelectedPipe = m_EmptyPipe;
     }
 
-    void MoveCellIndicator(ref Grid grid, Vector3Int cellPosition, Vector3 up)
+    void MoveCellIndicator(ref Grid grid, Vector3Int cellPosition, RaycastHit hitInfo)
     {
         Vector3 worldPosition = grid.CellToWorld(cellPosition);
-        m_CellIndicator.transform.position = worldPosition;
-        m_CellIndicator.transform.up = up;
+        m_CellIndicator.transform.SetPositionAndRotation(worldPosition, hitInfo.collider.gameObject.transform.rotation);
     }
 }
