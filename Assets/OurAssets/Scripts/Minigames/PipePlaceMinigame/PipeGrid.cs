@@ -30,6 +30,7 @@ public class PipeGrid : MonoBehaviour
     public struct StartEndPipe
     {
         public Pipe PipeCell;
+        public Vector2Int ArrayIndex;
         public PipeSide EntranceExitSide;
 
         public readonly PipeRotationAngle HoleSideToOutsidePipeAngle => EntranceExitSide switch
@@ -84,6 +85,7 @@ public class PipeGrid : MonoBehaviour
                 go.transform.position = wp;
                 Pipe pipe = go.GetComponent<Pipe>();
                 pipe.CurrentPipeSO = m_EmptyPipe;
+                pipe.CurrentPipeAngle = PipeRotationAngle.Zero;
                 m_PipeCells[x, y] = pipe;
             }
         }
@@ -103,18 +105,18 @@ public class PipeGrid : MonoBehaviour
         if (!m_Grid) m_Grid = GetComponent<Grid>();
         m_PlaneGrid.GridSize = pipeGridData.GridSize;
         unscaledTransform.gameObject.SetActive(true);
-        m_PipeUI.SetActive(true);
+        if (m_PipeUI) m_PipeUI.SetActive(true);
         InitCells(ref m_PipeCells, ref m_Grid, Size);
         Pipe startPipe = GetPipe(pipeGridData.StartPipe.CellPosition.x, pipeGridData.StartPipe.CellPosition.y);
         Sys.Assert(startPipe, $"({pipeGridData.StartPipe.CellPosition}) was not a valid index");
-        m_StartPipe = new StartEndPipe() { PipeCell = startPipe, EntranceExitSide = pipeGridData.StartPipe.EntranceExitSide };
+        m_StartPipe = new StartEndPipe() { PipeCell = startPipe, ArrayIndex = pipeGridData.StartPipe.CellPosition, EntranceExitSide = pipeGridData.StartPipe.EntranceExitSide };
         Vector3Int sopPosCP = ArrayIndex2DToCellPosition(pipeGridData.StartPipe.CellPosition.x, pipeGridData.StartPipe.CellPosition.y) + m_StartPipe.HoleSideToOutsidePipePos;
         Vector3 sopPosWP = m_Grid.CellToWorld(sopPosCP);
         m_StartOutsidePipe.transform.position = sopPosWP;
         m_StartOutsidePipe.CurrentPipeAngle = m_StartPipe.HoleSideToOutsidePipeAngle;
         Pipe endPipe = GetPipe(pipeGridData.EndPipe.CellPosition.x, pipeGridData.EndPipe.CellPosition.y);
         Sys.Assert(endPipe, $"({pipeGridData.EndPipe.CellPosition}) was not a valid index");
-        m_EndPipe = new StartEndPipe() { PipeCell = endPipe, EntranceExitSide = pipeGridData.EndPipe.EntranceExitSide };
+        m_EndPipe = new StartEndPipe() { PipeCell = endPipe, ArrayIndex = pipeGridData.EndPipe.CellPosition, EntranceExitSide = pipeGridData.EndPipe.EntranceExitSide };
         Vector3Int eopPosCP = ArrayIndex2DToCellPosition(pipeGridData.EndPipe.CellPosition.x, pipeGridData.EndPipe.CellPosition.y) + m_EndPipe.HoleSideToOutsidePipePos;
         Vector3 eopPosWP = m_Grid.CellToWorld(eopPosCP);
         m_EndOutsidePipe.transform.position = eopPosWP;
@@ -123,10 +125,10 @@ public class PipeGrid : MonoBehaviour
 
     void EndMinigame(List<Pipe> path) // path is in case we want to do some kind of flowing animation
     {
-        DeletePipes(ref m_PipeCells);
-        m_PipeUI.SetActive(false);
-        m_Player.ChangeCharacter(m_FirstPersonPlayerCharacter);
+        if (m_PipeUI) m_PipeUI.SetActive(false);
+        if (m_Player && m_FirstPersonPlayerCharacter) m_Player.ChangeCharacter(m_FirstPersonPlayerCharacter);
         MinigameManager.Instance?.OnMinigameBeaten();
+        DeletePipes(ref m_PipeCells);
     }
     #endregion Start & End Minigame
 
@@ -134,8 +136,15 @@ public class PipeGrid : MonoBehaviour
     public (int x, int y) GetIndexOf(Pipe pipe)
     {
         int[] indices = m_PipeCells.MultiIndexOf(pipe);
-        int x = indices[0], y = indices[1];
-        return (x, y);
+        if (indices[0] >= 0 && indices[1] >= 0) return (indices[0], indices[1]);
+        for (int x = 0; x < m_PipeCells.GetLength(0); ++x)
+        {
+            for (int y = 0; y < m_PipeCells.GetLength(1); ++y)
+            {
+                if (m_PipeCells[x, y] == pipe) return (x, y);
+            }
+        }
+        return (-1, -1);
     }
 
     #region GetPipe
@@ -323,6 +332,18 @@ public class PipeGrid : MonoBehaviour
     #endregion SafeIndexOfCellOnSide
     #endregion IndexOfCellOnSide
 
+    bool IsPlacedPipe(Pipe pipe) => pipe && pipe.CurrentPipeSO != m_EmptyPipe;
+
+    bool PipesConnect(Pipe from, int fromX, int fromY, PipeSide side)
+    {
+        if (fromX < 0 || fromY < 0) return false;
+        if (!IsPlacedPipe(from) || !from.CurrentOrientation.HasHole(side)) return false;
+        (bool bSideValid, int toX, int toY) = SafeIndexOfCellOnSide(side, fromX, fromY);
+        if (!bSideValid) return false;
+        Pipe to = m_PipeCells[toX, toY];
+        return IsPlacedPipe(to) && to.CurrentOrientation.HasHole(PipeSideUtil.Opposite(side));
+    }
+
     #region PipeOpenOnSide
     bool InternalPipeOpenOnSide(PipeSide side, Pipe pipe, int x, int y)
     {
@@ -331,8 +352,7 @@ public class PipeGrid : MonoBehaviour
         {
             (bool bSideValid, int rX, int rY) = SafeIndexOfCellOnSide(side, x, y);
             if (!bSideValid) return pipe.CurrentOrientation.HasHole(side);
-            Pipe sidePipe = m_PipeCells[rX, rY];
-            return pipe.CurrentOrientation.HasHole(side) && sidePipe.CurrentOrientation.HasHole(PipeSideUtil.Opposite(side)) && sidePipe.CurrentPipeSO != m_EmptyPipe;
+            return PipesConnect(pipe, x, y, side);
         }
         catch (System.Exception e) { throw e; }
     }
@@ -373,11 +393,11 @@ public class PipeGrid : MonoBehaviour
     #region BFS
     void AddPipeIfAdjacent(ref List<Pipe> pipes, PipeSide side, ref Pipe pipe)
     {
-        if (!PipeOpenOnSide(side, pipe)) return;
-        (bool bIsValid, int x, int y) = SafeIndexOfCellOnSide(side, pipe);
+        (int x, int y) = GetIndexOf(pipe);
+        if (x < 0 || y < 0 || !PipesConnect(pipe, x, y, side)) return;
+        (bool bIsValid, int adjacentX, int adjacentY) = SafeIndexOfCellOnSide(side, x, y);
         if (!bIsValid) return;
-        Pipe adjacent = m_PipeCells[x, y];
-        pipes.Add(adjacent);
+        pipes.Add(m_PipeCells[adjacentX, adjacentY]);
     }
 
     public void AddAdjacentPipes(ref List<Pipe> pipes, ref Pipe pipe)
@@ -388,83 +408,98 @@ public class PipeGrid : MonoBehaviour
         AddPipeIfAdjacent(ref pipes, PipeSide.Bottom, ref pipe);
     }
 
-    List<Pipe> BreadthFirstSearch(Pipe start, Pipe end)
+    void TryEnqueueCellNeighbor(int x, int y, PipeSide side, ref HashSet<Vector2Int> searched, ref Queue<Vector2Int> toSearch, ref Dictionary<Vector2Int, Vector2Int> previousCells)
     {
-        if (!start || start == m_EmptyPipe || !end || end == m_EmptyPipe) return null;
-        HashSet<Pipe> searched = new HashSet<Pipe>();
-        Queue<Pipe> toSearch = new Queue<Pipe>();
-        Dictionary<Pipe, Pipe> previousPipes = new Dictionary<Pipe, Pipe>();
-        searched.Add(start);
-        toSearch.Enqueue(start);
-        previousPipes.Add(start, null);
+        if (!PipesConnect(m_PipeCells[x, y], x, y, side)) return;
+        (bool bIsValid, int adjacentX, int adjacentY) = SafeIndexOfCellOnSide(side, x, y);
+        if (!bIsValid) return;
+        Vector2Int adjacentIndex = new Vector2Int(adjacentX, adjacentY);
+        if (searched.Contains(adjacentIndex)) return;
+        searched.Add(adjacentIndex);
+        toSearch.Enqueue(adjacentIndex);
+        previousCells.Add(adjacentIndex, new Vector2Int(x, y));
+    }
+
+    List<Pipe> BreadthFirstSearch(int startX, int startY, int endX, int endY)
+    {
+        if (!m_PipeCells.ContainsIndex(startX, startY) || !m_PipeCells.ContainsIndex(endX, endY)) return null;
+        if (!IsPlacedPipe(m_PipeCells[startX, startY]) || !IsPlacedPipe(m_PipeCells[endX, endY])) return null;
+        Vector2Int startIndex = new Vector2Int(startX, startY);
+        Vector2Int endIndex = new Vector2Int(endX, endY);
+        HashSet<Vector2Int> searched = new HashSet<Vector2Int>();
+        Queue<Vector2Int> toSearch = new Queue<Vector2Int>();
+        Dictionary<Vector2Int, Vector2Int> previousCells = new Dictionary<Vector2Int, Vector2Int>();
+        searched.Add(startIndex);
+        toSearch.Enqueue(startIndex);
+        previousCells.Add(startIndex, new Vector2Int(-1, -1));
         while (toSearch.Count > 0)
         {
-            Pipe front = toSearch.Dequeue();
-            if (front == end)
+            Vector2Int current = toSearch.Dequeue();
+            if (current == endIndex)
             {
                 List<Pipe> shortestPath = new List<Pipe>();
-                Pipe current = end;
-                while (current != null)
+                Vector2Int node = endIndex;
+                while (true)
                 {
-                    shortestPath.Insert(0, current);
-                    current = previousPipes[current];
+                    shortestPath.Insert(0, m_PipeCells[node.x, node.y]);
+                    Vector2Int previous = previousCells[node];
+                    if (previous.x < 0) break;
+                    node = previous;
                 }
                 return shortestPath;
             }
-            List<Pipe> adjacentPipes = new List<Pipe>();
-            AddAdjacentPipes(ref adjacentPipes, ref front);
-            foreach (Pipe adjacent in adjacentPipes)
-            {
-                if (!searched.Contains(adjacent))
-                {
-                    searched.Add(adjacent);
-                    toSearch.Enqueue(adjacent);
-                    previousPipes.Add(adjacent, front);
-                }
-            }
+            TryEnqueueCellNeighbor(current.x, current.y, PipeSide.Left, ref searched, ref toSearch, ref previousCells);
+            TryEnqueueCellNeighbor(current.x, current.y, PipeSide.Top, ref searched, ref toSearch, ref previousCells);
+            TryEnqueueCellNeighbor(current.x, current.y, PipeSide.Right, ref searched, ref toSearch, ref previousCells);
+            TryEnqueueCellNeighbor(current.x, current.y, PipeSide.Bottom, ref searched, ref toSearch, ref previousCells);
         }
         return null;
     }
     #endregion BFS
 
     #region Water Flow Check
-    bool WaterCanReachEnd(Pipe startPipe, PipeSide entranceSide, Pipe endPipe, PipeSide exitSide, out List<Pipe> path)
+    bool WaterCanReachEnd(Pipe startPipe, PipeSide entranceSide, Pipe endPipe, PipeSide exitSide, int startX, int startY, int endX, int endY, out List<Pipe> path)
     {
-        if (!startPipe || startPipe.CurrentPipeSO == m_EmptyPipe || !endPipe || endPipe.CurrentPipeSO == m_EmptyPipe || !startPipe.CurrentOrientation.HasHole(entranceSide) || !endPipe.CurrentOrientation.HasHole(exitSide))
+        if (!IsPlacedPipe(startPipe) || !IsPlacedPipe(endPipe) || !startPipe.CurrentOrientation.HasHole(entranceSide) || !endPipe.CurrentOrientation.HasHole(exitSide))
         {
             path = null;
             return false;
         }
-        path = BreadthFirstSearch(startPipe, endPipe);
+        path = BreadthFirstSearch(startX, startY, endX, endY);
         return path != null;
     }
 
     public void CheckWaterCanReachEnd(Pipe startPipe, PipeSide entranceSide, Pipe endPipe, PipeSide exitSide)
     {
-        if (WaterCanReachEnd(startPipe, entranceSide, endPipe, exitSide, out List<Pipe> path)) EndMinigame(path);
+        (int startX, int startY) = GetIndexOf(startPipe);
+        (int endX, int endY) = GetIndexOf(endPipe);
+        if (WaterCanReachEnd(startPipe, entranceSide, endPipe, exitSide, startX, startY, endX, endY, out List<Pipe> path)) EndMinigame(path);
     }
 
     public void CheckWaterCanReachEnd(int startX, int startY, PipeSide entranceSide, int endX, int endY, PipeSide exitSide)
     {
         Pipe startPipe = GetPipe(startX, startY);
         Pipe endPipe = GetPipe(endX, endY);
-        if (WaterCanReachEnd(startPipe, entranceSide, endPipe, exitSide, out List<Pipe> path)) EndMinigame(path);
+        if (WaterCanReachEnd(startPipe, entranceSide, endPipe, exitSide, startX, startY, endX, endY, out List<Pipe> path)) EndMinigame(path);
     }
 
     public void CheckWaterCanReachEnd(Vector3Int startCellPosition, PipeSide entranceSide, Vector3Int endCellPosition, PipeSide exitSide)
     {
-        Pipe startPipe = GetPipe(startCellPosition);
-        Pipe endPipe = GetPipe(endCellPosition);
-        if (WaterCanReachEnd(startPipe, entranceSide, endPipe, exitSide, out List<Pipe> path)) EndMinigame(path);
+        (int startX, int startY) = CellPositionToArrayIndex2D(startCellPosition);
+        (int endX, int endY) = CellPositionToArrayIndex2D(endCellPosition);
+        Pipe startPipe = GetPipe(startX, startY);
+        Pipe endPipe = GetPipe(endX, endY);
+        if (WaterCanReachEnd(startPipe, entranceSide, endPipe, exitSide, startX, startY, endX, endY, out List<Pipe> path)) EndMinigame(path);
     }
 
     public void CheckWaterCanReachEnd(StartEndPipe startPipe, StartEndPipe endPipe)
     {
-        Pipe start = startPipe.PipeCell;
-        PipeSide entrance = startPipe.EntranceExitSide;
-        Pipe end = endPipe.PipeCell;
-        PipeSide exit = endPipe.EntranceExitSide;
-        if (WaterCanReachEnd(start, entrance, end, exit, out List<Pipe> path)) EndMinigame(path);
+        int startX = startPipe.ArrayIndex.x, startY = startPipe.ArrayIndex.y;
+        int endX = endPipe.ArrayIndex.x, endY = endPipe.ArrayIndex.y;
+        Pipe start = GetPipe(startX, startY);
+        Pipe end = GetPipe(endX, endY);
+        if (WaterCanReachEnd(start, startPipe.EntranceExitSide, end, endPipe.EntranceExitSide, startX, startY, endX, endY, out List<Pipe> path))
+            EndMinigame(path);
     }
     #endregion Water Flow Check
     #endregion Pipe Flow

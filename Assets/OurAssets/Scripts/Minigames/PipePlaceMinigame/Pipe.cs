@@ -13,12 +13,14 @@ public class Pipe : MonoBehaviour
         set
         {
             if (m_CurrentPipePrefab) Destroy(m_CurrentPipePrefab);
-            if (value.Model)
+            m_CurrentPipePrefab = null;
+            if (value && value.Model)
             {
                 GameObject go = Instantiate(value.Model, m_PipeTransform);
                 m_CurrentPipePrefab = go;
             }
             m_CurrentPipeSO = value;
+            RefreshOrientation();
         }
     }
 
@@ -36,10 +38,12 @@ public class Pipe : MonoBehaviour
         set
         {
             m_PipeTransform.localEulerAngles = new Vector3(0f, (int)value, 0f);
-            CurrentOrientation = CurrentPipeSO.GetOrientationFromAngle(value);
             m_CurrentAngle = value;
+            RefreshOrientation();
         }
     }
+
+    void RefreshOrientation() => CurrentOrientation = m_CurrentPipeSO ? m_CurrentPipeSO.GetOrientationFromAngle(m_CurrentAngle) : default;
 
     public void RotateRight() => CurrentPipeAngle = PipeRotationAngleUtil.NextAngleRight(m_CurrentAngle);
 

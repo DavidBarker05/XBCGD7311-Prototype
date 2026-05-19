@@ -43524,6 +43524,14 @@ PrefabInstance:
       propertyPath: m_PipeUI
       value: 
       objectReference: {fileID: 2146085498}
+    - target: {fileID: 4362549119826498577, guid: 3a3a75cf5cbc5dc4abf59879f79fc181, type: 3}
+      propertyPath: m_Player
+      value: 
+      objectReference: {fileID: 833965921}
+    - target: {fileID: 4362549119826498577, guid: 3a3a75cf5cbc5dc4abf59879f79fc181, type: 3}
+      propertyPath: m_FirstPersonPlayerCharacter
+      value: 
+      objectReference: {fileID: 1015887253}
     - target: {fileID: 4515618316155034949, guid: 3a3a75cf5cbc5dc4abf59879f79fc181, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.8
