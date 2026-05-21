@@ -17,7 +17,7 @@ public class Wall : MonoBehaviour
 	[SerializeField]
 	Transform m_UnscaledTransform;
 	[SerializeField]
-	Player m_Player;
+	PipePlaceMinigameGenerator m_PipePlaceMinigameGenerator;
 	[SerializeField]
 	GameObject m_HolePrefab;
 	[SerializeField, Min(1)]
@@ -137,13 +137,10 @@ public class Wall : MonoBehaviour
 		Debug.Log(bWon);
 		if (bWon)
 		{
-			if (!m_Player) m_Player = FindAnyObjectByType<Player>();
-			Sys.Assert(m_Player, "Player doesn't exist");
-			m_Player.OnMinigameBeaten();
-			m_Player.ChangeActionMap("Player");
 			ClearHoles();
 			m_UnscaledTransform.gameObject.SetActive(false);
-			//m_Player.ChangeActionMap("PipePlayer");
+			m_PipePlaceMinigameGenerator.StartPipeMinigame();
+			MinigameManager.Instance?.OnMinigameBeaten();
 		}
 		if (!bWon) ResetMinigame();
 	}

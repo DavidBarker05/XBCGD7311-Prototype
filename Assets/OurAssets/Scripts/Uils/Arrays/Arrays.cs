@@ -38,6 +38,24 @@ namespace Util
 			}
 
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			public static bool ContainsIndex(this Array array, int[] indices)
+			{
+				if (!IsValid(indices)) return false;
+				int firstIndex = indices[0];
+				if (indices.Length > 1)
+				{
+					int secondIndex = indices[1];
+					if (indices.Length > 2)
+					{
+						int[] remainingIndices = indices.SubArray(2);
+						return array.ContainsIndex(firstIndex, secondIndex, remainingIndices);
+					}
+					return array.ContainsIndex(firstIndex, secondIndex);
+				}
+				return array.ContainsIndex(firstIndex);
+			}
+
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
 			public static object GetValueJagged(this Array array, int[] index) => throw new NotImplementedException("Jagged array implementation hasn't been added");
 
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -125,13 +143,16 @@ namespace Util
 			public static T GetRandomElement<T>(this Array array) => array.GetValue<T>(array.GetRandomMultiIndex());
 
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
-			public static T[] SubArray<T>(this T[] array, int startIndex, int length) where T : class
+			public static T[] SubArray<T>(this T[] array, int startIndex, int length)
 			{
 				if (array.IsMultidimensional()) throw new ArgumentException("Array.SubArray(int startIndex, int length) can't be used with multidimensional arrays");
 				T[] subArray = new T[length];
 				Array.Copy(array, startIndex, subArray, 0, length);
 				return subArray;
 			}
+
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			public static T[] SubArray<T>(this T[] array, int startIndex) => array.SubArray(startIndex, array.Length - startIndex);
 		}
 	}
 }

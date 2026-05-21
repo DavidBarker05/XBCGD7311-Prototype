@@ -4,6 +4,8 @@ public class QTEManager : MonoBehaviour
 {
     public Canvas canvas;
     public GameObject qtePrefab;
+    public Player player;
+    public QTEPlayerCharacter qteCharacter;
     private GameObject currentQTE;
 
     private QTEInteractable currentInteractable;
@@ -14,7 +16,8 @@ public class QTEManager : MonoBehaviour
 
         currentQTE = Instantiate(qtePrefab, canvas.transform);
         PointerController pointer = currentQTE.GetComponentInChildren<PointerController>();
-        pointer.Begin(this, currentInteractable.QTEPlayer);
+        player.ChangeCharacter(qteCharacter);
+        pointer.Begin(this, qteCharacter);
         Time.timeScale = 0f;
     }
 

@@ -12,11 +12,7 @@ public class PlayerCamera : MonoBehaviour
     CameraSettings m_CameraSettings;
     Vector3 m_EulerAngles;
 
-    public void Init(CameraSettings cameraSettings, Transform target)
-    {
-        m_CameraSettings = cameraSettings;
-        ChangeCameraTarget(target);
-    }
+    public void Init(CameraSettings cameraSettings) => m_CameraSettings = cameraSettings;
 
     public void ChangeCameraTarget(Transform target)
     {

@@ -17,6 +17,7 @@ public class QTEPlayerCharacter : PlayerCharacter
 {
 	public override bool HasBeenInitialised { get; protected set; }
 
+	public override string ActionMap => "QTEPlayer";
 	public override bool MouseVisible => true;
 	public override bool DoCameraRotation => false;
 	public override bool UseMouseScreenPosition => false;

@@ -15,8 +15,9 @@ public class ChaseMinigameStarter : MonoBehaviour
 
 	public bool ChaseMinigameIsRunning { get; private set; }
 
-	int numInteractables;
-	int numInteractablesBeaten;
+	QTEInteractable[] m_QTEInteractables;
+	int m_NumInteractables;
+	int m_NumInteractablesBeaten;
 
 	void Awake()
 	{
@@ -24,31 +25,29 @@ public class ChaseMinigameStarter : MonoBehaviour
 		else Instance = this;
 	}
 
-	public void StartChaseMinigame()
+	public void StartChaseMinigame(QTEInteractable[] qteInteractables)
 	{
 		ChaseMinigameIsRunning = true;
 		m_FPPCharacter.GetComponent<CharacterController>().enabled = false;
 		m_FPPCharacter.gameObject.transform.position = m_ChaseSpawn.position;
 		m_FPPCharacter.GetComponent<CharacterController>().enabled = true;
-		numInteractables = 0;
-		numInteractablesBeaten = 0;
-		QTEInteractable[] interactables = FindObjectsByType<QTEInteractable>();
-		foreach (QTEInteractable interactable in interactables)
-		{
-			interactable.gameObject.SetActive(true);
-			++numInteractables;
-		}
+		m_QTEInteractables = qteInteractables;
+		m_NumInteractables = m_QTEInteractables.Length;
+		foreach (QTEInteractable qte in m_QTEInteractables) qte.gameObject.SetActive(true);
+		m_NumInteractablesBeaten = 0;
 		ChasePlayer[] enemies = FindObjectsByType<ChasePlayer>();
-		foreach(ChasePlayer enemy in enemies)
+		foreach (ChasePlayer enemy in enemies)
 		{
 			enemy.ResetToStart();
 		}
 	}
 
+	public void RestartChaseMinigame() => StartChaseMinigame(m_QTEInteractables);
+
 	public void InteractableBeaten()
 	{
-		++numInteractablesBeaten;
-		if (numInteractablesBeaten == numInteractables) EndChaseMinigame();
+		++m_NumInteractablesBeaten;
+		if (m_NumInteractablesBeaten == m_NumInteractables) EndChaseMinigame();
 	}
 
 	public void EndChaseMinigame()
@@ -56,7 +55,7 @@ public class ChaseMinigameStarter : MonoBehaviour
 		m_FPPCharacter.GetComponent<CharacterController>().enabled = false;
 		m_FPPCharacter.transform.position = m_HouseSpawn.position;
 		m_FPPCharacter.GetComponent<CharacterController>().enabled = true;
-		m_Player.OnMinigameBeaten();
+		MinigameManager.Instance?.OnMinigameBeaten();
 		ChaseMinigameIsRunning = false;
 	}
 }

@@ -9,11 +9,12 @@ public class PipeSelectButton : MonoBehaviour
 	PipePlayerCharacter m_PipePlayer;
 	[SerializeField]
 	PipeSO m_Pipe;
+	[SerializeField]
+	TextMeshProUGUI m_ButtonText;
+	[SerializeField]
+	GameObject m_SelectedIndicator;
 
 	Button m_Button;
-	TextMeshProUGUI m_ButtonText;
-
-	uint m_PipeQuantity;
 
 	void Awake()
 	{
@@ -21,14 +22,13 @@ public class PipeSelectButton : MonoBehaviour
 		m_Button.onClick.AddListener(SelectPipe);
 	}
 
-	void OnDestroy() => m_Button.onClick.RemoveListener(SelectPipe);
-
-    void Update()
-    {
-		m_PipeQuantity = m_PipePlayer.GetPipeQuantity(m_Pipe);
-		m_ButtonText.text = $"{m_PipeQuantity}";
-		m_Button.interactable = m_PipeQuantity > 0;
-    }
+	void Update()
+	{
+		uint pipeQuantity = m_PipePlayer.GetPipeQuantity(m_Pipe);
+		m_ButtonText.text = $"{pipeQuantity}";
+		m_Button.interactable = pipeQuantity > 0;
+		m_SelectedIndicator.SetActive(m_PipePlayer.CurrentlySelectedPipe == m_Pipe);
+	}
 
 	void SelectPipe() => m_PipePlayer.SelectPipe(m_Pipe);
 }

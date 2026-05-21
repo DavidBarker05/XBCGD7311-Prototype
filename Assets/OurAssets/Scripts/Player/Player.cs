@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using Util.SystemUtils;
 
@@ -8,15 +9,9 @@ public class Player : MonoBehaviour
     [SerializeField]
     PlayerSettings m_PlayerSettings;
     [SerializeField]
-    FirstPersonPlayerCharacter m_PlayerCharacter;
+    PlayerCharacter m_StartingPlayerCharacter;
     [SerializeField]
-    PipePlayerCharacter m_PipePlayerCharacter;
-    [SerializeField]
-    WirePlayerCharacter m_WirePlayerCharacter;
-	[SerializeField]
-	WallKnockPlayerCharacter m_WallKnockPlayerCharacter;
-	[SerializeField]
-	QTEPlayerCharacter m_QTEPlayerCharacter;
+    MenuCharacter m_MenuCharacter;
     [SerializeField]
     PlayerCamera m_PlayerCamera;
     [SerializeField]
@@ -24,122 +19,101 @@ public class Player : MonoBehaviour
 
     PlayerInput m_PlayerInput;
 
-    PlayerCharacter m_CurrentPlayerCharacter;
-    IPlayerCharacterUpdateData m_CurrentPlayerCharacterUpdateData;
+    PlayerCharacter m_PlayerCharacter;
+    IPlayerCharacterUpdateData m_PlayerCharacterUpdateData;
     CameraInput m_CameraInput;
     MouseInfo m_MouseInfo;
 
     bool m_bCursorHidden;
 
-	public int MinigamesBeaten { get; private set; } = 0;
-
     void Awake()
     {
         m_PlayerInput = GetComponent<PlayerInput>();
-        ChangeCharacter(m_PlayerInput.currentActionMap.name);
-        m_PlayerCamera.Init(m_PlayerSettings.CameraSettings, m_PlayerCharacter.CameraTarget);
+        m_PlayerCamera.Init(m_PlayerSettings.CameraSettings);
+        m_MenuCharacter.Init(new MenuCharacterInitData() { Player = this });
+        ChangeCharacter(m_StartingPlayerCharacter);
         m_CameraInput = new CameraInput();
         m_MouseInfo = new MouseInfo();
     }
 
     void Update()
     {
-        if (!m_CurrentPlayerCharacter || !m_PlayerCamera) return;
-        SetCursorVisibility(m_CurrentPlayerCharacter.MouseVisible);
-        m_CurrentPlayerCharacterUpdateData.DeltaTime = Time.deltaTime;
-        if (m_CurrentPlayerCharacter.DoCameraRotation)
+        if (!m_PlayerCharacter || !m_PlayerCamera) return;
+        SetCursorVisibility(m_PlayerCharacter.MouseVisible);
+        m_PlayerCharacterUpdateData.DeltaTime = Time.deltaTime;
+        if (m_PlayerCharacter.DoCameraRotation)
         {
             m_PlayerCamera.UpdateRotation(ref m_CameraInput, Time.deltaTime);
-            m_CurrentPlayerCharacterUpdateData.CameraRotation = m_PlayerCamera.transform.rotation;
+            m_PlayerCharacterUpdateData.CameraRotation = m_PlayerCamera.transform.rotation;
         }
-        if (m_CurrentPlayerCharacter.UseMouseScreenPosition)
+        if (m_PlayerCharacter.UseMouseScreenPosition)
         {
             m_MouseInfo.MouseScreenPosition = GetMousePositionOnScreen();
-            GetMouseInfo(ref m_MouseInfo, m_CurrentPlayerCharacter.MouseHitLayer, m_CurrentPlayerCharacter.MouseHitDistance);
-            m_CurrentPlayerCharacterUpdateData.MouseInfo = m_MouseInfo;
+            GetMouseInfo(ref m_MouseInfo, m_PlayerCharacter.MouseHitLayer, m_PlayerCharacter.MouseHitDistance);
+            m_PlayerCharacterUpdateData.MouseInfo = m_MouseInfo;
         }
-        m_CurrentPlayerCharacter.UpdateCharacter(ref m_CurrentPlayerCharacterUpdateData);
+        m_PlayerCharacter.UpdateCharacter(ref m_PlayerCharacterUpdateData);
     }
 
-    void LateUpdate() => m_PlayerCamera.UpdatePosition(m_CurrentPlayerCharacter.CameraTarget);
-
-	public void OnMinigameBeaten() => ++MinigamesBeaten;
-
-    #region Change Action Map
-    public void ChangeActionMap(string actionMap)
-    {
-        if (m_PlayerInput.currentActionMap.name == actionMap) return;
-        m_PlayerInput.SwitchCurrentActionMap(actionMap);
-        ChangeCharacter(actionMap);
-    }
+    void LateUpdate() => m_PlayerCamera.UpdatePosition(m_PlayerCharacter.CameraTarget);
 
     #region Change Character
-    PlayerCharacter ChangePlayerCharacter(string actionMap) => actionMap switch
+    public void ChangeCharacter(PlayerCharacter playerCharacter)
     {
-        "Player" => m_PlayerCharacter,
-        "PipePlayer" => m_PipePlayerCharacter,
-        "WirePlayer" => m_WirePlayerCharacter,
-		"WallKnockPlayer" => m_WallKnockPlayerCharacter,
-		"QTEPlayer" => m_QTEPlayerCharacter,
-        _ => null
-    };
-
-	IPlayerCharacterInitData CurrentPlayerCharacterInitData => m_CurrentPlayerCharacter switch
-	{
-		FirstPersonPlayerCharacter => new FirstPersonPlayerCharacterInitData()
-		{
-			CharacterSettings = m_PlayerSettings.CharacterSettings,
-			InteractSettings = m_PlayerSettings.InteractSettings,
-			Player = this,
-			QTEPlayerCharacter = m_QTEPlayerCharacter
-		},
-		PipePlayerCharacter => new PipePlayerCharacterInitData(),
-		WirePlayerCharacter => new WirePlayerCharacterInitData(),
-		WallKnockPlayerCharacter => new WallKnockPlayerCharacterInitData(),
-		QTEPlayerCharacter => new QTEPlayerCharacterInitData(),
-		_ => null
-	};
-
-    IPlayerCharacterUpdateData CurrentPlayerCharacterUpdateData => m_CurrentPlayerCharacter switch
-    {
-		FirstPersonPlayerCharacter => new FirstPersonPlayerCharacterUpdateData(),
-		PipePlayerCharacter => new PipePlayerCharacterUpdateData(),
-		WirePlayerCharacter => new WirePlayerCharacterUpdateData(),
-		WallKnockPlayerCharacter => new WallKnockPlayerCharacterUpdateData(),
-		QTEPlayerCharacter => new QTEPlayerCharacterUpdateData(),
-        _ => null
-    };
-
-    void ChangeCharacter(string actionMap)
-    {
-        m_CurrentPlayerCharacter = ChangePlayerCharacter(actionMap);
-		if (!m_CurrentPlayerCharacter.HasBeenInitialised) m_CurrentPlayerCharacter.Init(CurrentPlayerCharacterInitData);
-        m_CurrentPlayerCharacterUpdateData = CurrentPlayerCharacterUpdateData;
-        m_PlayerCamera.ChangeCameraTarget(m_CurrentPlayerCharacter.CameraTarget);
-        SetCursorVisibility(m_CurrentPlayerCharacter.MouseVisible);
+        if (!playerCharacter) return;
+        m_PlayerCharacter = playerCharacter;
+        if (!m_PlayerCharacter.HasBeenInitialised) m_PlayerCharacter.Init(PlayerCharacterInitData);
+        m_PlayerCharacterUpdateData = PlayerCharacterUpdateData;
+        if (!string.IsNullOrWhiteSpace(m_PlayerCharacter.ActionMap)) m_PlayerInput.SwitchCurrentActionMap(m_PlayerCharacter.ActionMap);
+        m_PlayerCamera.ChangeCameraTarget(m_PlayerCharacter.CameraTarget);
+        SetCursorVisibility(m_PlayerCharacter.MouseVisible);
     }
+
+    IPlayerCharacterInitData PlayerCharacterInitData => m_PlayerCharacter switch
+    {
+        FirstPersonPlayerCharacter => new FirstPersonPlayerCharacterInitData()
+        {
+            CharacterSettings = m_PlayerSettings.CharacterSettings,
+            InteractSettings = m_PlayerSettings.InteractSettings,
+            Player = this
+        },
+        PipePlayerCharacter => new PipePlayerCharacterInitData(),
+        WirePlayerCharacter => new WirePlayerCharacterInitData(),
+        WallKnockPlayerCharacter => new WallKnockPlayerCharacterInitData(),
+        QTEPlayerCharacter => new QTEPlayerCharacterInitData(),
+        MenuCharacter => new MenuCharacterInitData() { Player = this },
+        _ => null
+    };
+
+    IPlayerCharacterUpdateData PlayerCharacterUpdateData => m_PlayerCharacter switch
+    {
+        FirstPersonPlayerCharacter => new FirstPersonPlayerCharacterUpdateData(),
+        PipePlayerCharacter => new PipePlayerCharacterUpdateData(),
+        WirePlayerCharacter => new WirePlayerCharacterUpdateData(),
+        WallKnockPlayerCharacter => new WallKnockPlayerCharacterUpdateData(),
+        QTEPlayerCharacter => new QTEPlayerCharacterUpdateData(),
+        MenuCharacter => new MenuCharacterUpdateData(),
+        _ => null
+    };
     #endregion Change Character
-    #endregion Change Action Map
 
     #region Cursor Toggles
     public void ShowCursor()
     {
-        m_bCursorHidden = false;
         Cursor.lockState = CursorLockMode.Confined;
         Cursor.visible = true;
     }
 
     public void HideCursor()
     {
-        m_bCursorHidden = true;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
 
     public void SetCursorVisibility(bool bVisible)
     {
-        if (bVisible && m_bCursorHidden) ShowCursor();
-        else if (!bVisible && !m_bCursorHidden) HideCursor();
+        if (bVisible) ShowCursor();
+        else HideCursor();
     }
     #endregion Cursor Toggles
 
@@ -153,6 +127,7 @@ public class Player : MonoBehaviour
 
     public void GetMouseInfo(ref MouseInfo mouseInfo, LayerMask layerToHit, float maxDistance = 100f)
     {
+        mouseInfo.IsMouseOverUI = EventSystem.current?.IsPointerOverGameObject() ?? false; // Don't forget to make panels not raycast targets
         Ray ray = m_Camera.ScreenPointToRay(mouseInfo.MouseScreenPosition);
         mouseInfo.DidHitObject = Physics.Raycast(ray, out RaycastHit hit, maxDistance, layerToHit);
         if (mouseInfo.DidHitObject) mouseInfo.HitInfo = hit;
@@ -165,7 +140,7 @@ public class Player : MonoBehaviour
 
     void SetDataValue<T>(SetDataValueFunc<T> dataChangeFunction) where T : class, IPlayerCharacterUpdateData
     {
-        if (m_CurrentPlayerCharacterUpdateData is T t) dataChangeFunction(t);
+        if (m_PlayerCharacterUpdateData is T t) dataChangeFunction(t);
     }
 
     public void HandleMoveInput(InputAction.CallbackContext ctx)
@@ -175,7 +150,7 @@ public class Player : MonoBehaviour
 
     public void HandleLookInput(InputAction.CallbackContext ctx)
     {
-        if (!m_CurrentPlayerCharacter.DoCameraRotation) return;
+        if (!m_PlayerCharacter.DoCameraRotation) return;
         m_CameraInput.LookInput = ctx.ReadValue<Vector2>();
         m_CameraInput.LookDevice = ctx.control.device;
     }
@@ -197,25 +172,36 @@ public class Player : MonoBehaviour
 
     public void HandleLeftClickInput(InputAction.CallbackContext ctx)
     {
-        SetDataValue<PipePlayerCharacterUpdateData>(input => input.ClickedThisFrame |= ctx.started);
+        SetDataValue<PipePlayerCharacterUpdateData>(input => input.LeftClickedThisFrame |= ctx.started);
         SetDataValue<WirePlayerCharacterUpdateData>(input => input.ClickedThisFrame = ctx.action.WasPressedThisFrame());
-		SetDataValue<WallKnockPlayerCharacterUpdateData>(input => input.LeftClickedThisFrame |= ctx.started);
-	}
+        SetDataValue<WallKnockPlayerCharacterUpdateData>(input => input.LeftClickedThisFrame |= ctx.started);
+    }
 
-	public void HandleRightClickInput(InputAction.CallbackContext ctx)
-	{
-		SetDataValue<WallKnockPlayerCharacterUpdateData>(input => input.RightClickedThisFrame |= ctx.started);
-	}
+    public void HandleRightClickInput(InputAction.CallbackContext ctx)
+    {
+        SetDataValue<WallKnockPlayerCharacterUpdateData>(input => input.RightClickedThisFrame |= ctx.started);
+        SetDataValue<PipePlayerCharacterUpdateData>(input => input.RightClickedThisFrame |= ctx.started);
+    }
 
-	public void HandleDoQTEInput(InputAction.CallbackContext ctx)
-	{
-		SetDataValue<QTEPlayerCharacterUpdateData>(input => input.DidQTEInput |= ctx.started);
-	}
+    public void HandleDoQTEInput(InputAction.CallbackContext ctx)
+    {
+        SetDataValue<QTEPlayerCharacterUpdateData>(input => input.DidQTEInput |= ctx.started);
+    }
 
-	public void HandleQuitInput(InputAction.CallbackContext ctx)
-	{
-		if (ctx.started) Sys.Exit(0);
-	}
+    public void HandleQuitInput(InputAction.CallbackContext ctx)
+    {
+        if (ctx.started) Sys.Exit(0);
+    }
+
+    public void HandleRotateLeft(InputAction.CallbackContext ctx)
+    {
+        SetDataValue<PipePlayerCharacterUpdateData>(input => input.PressedLeftRotateThisFrame |= ctx.started);
+    }
+
+    public void HandleRotateRight(InputAction.CallbackContext ctx)
+    {
+        SetDataValue<PipePlayerCharacterUpdateData>(input => input.PressedRightRotateThisFrame |= ctx.started);
+    }
 
     #region Control Scheme Change
     public InputDevice CurrentDevice { get; private set; }

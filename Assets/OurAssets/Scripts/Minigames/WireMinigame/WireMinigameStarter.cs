@@ -8,6 +8,8 @@ public class WireMinigameStarter : MonoBehaviour
 	WireBoard m_WireBoard;
 	[SerializeField]
 	Player m_Player;
+	[SerializeField]
+	WirePlayerCharacter m_WirePlayerCharacter;
 
 	void Awake()
 	{
@@ -18,6 +20,6 @@ public class WireMinigameStarter : MonoBehaviour
 	public void StartWireMinigame()
 	{
 		m_WireBoard.StartWireMinigame();
-		m_Player.ChangeActionMap("WirePlayer");
+		m_Player.ChangeCharacter(m_WirePlayerCharacter);
 	}
 }

@@ -306,7 +306,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &324972742
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -448,7 +448,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Button
+  m_text: 0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -475,15 +475,15 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
-  m_fontSizeBase: 24
+  m_fontSize: 40
+  m_fontSizeBase: 40
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 0
   m_fontSizeMax: 0
   m_fontStyle: 0
-  m_HorizontalAlignment: 2
-  m_VerticalAlignment: 512
+  m_HorizontalAlignment: 4
+  m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_characterHorizontalScale: 1
@@ -514,7 +514,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 0, y: 5, z: 10, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -1170,6 +1170,7 @@ GameObject:
   - component: {fileID: 1326059866}
   - component: {fileID: 1326059865}
   - component: {fileID: 1326059864}
+  - component: {fileID: 1326059867}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -1195,7 +1196,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 160, y: 30}
+  m_SizeDelta: {x: 200, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1326059864
 MonoBehaviour:
@@ -1240,19 +1241,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1326059865}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 8286086353187022022}
-        m_TargetAssemblyTypeName: PipePlayerCharacter, Assembly-CSharp
-        m_MethodName: SelectPipe
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: PipeSO, Assembly-CSharp
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1326059865
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1291,6 +1280,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1326059862}
   m_CullTransparentMesh: 1
+--- !u!114 &1326059867
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1326059862}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4edef75af3e28054ebc0f0a2af7bd877, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PipeSelectButton
+  m_PipePlayer: {fileID: 0}
+  m_Pipe: {fileID: 11400000, guid: 62d51b70b3d53494ab7bd3e33950fa3b, type: 2}
 --- !u!1 &1839726312
 GameObject:
   m_ObjectHideFlags: 0
@@ -1744,7 +1747,7 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 3524224750697147432, guid: 2288494715f42ad4a8ce262dee2b745b, type: 3}
-      insertIndex: 3
+      insertIndex: -1
       addedObject: {fileID: 1181591374}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2288494715f42ad4a8ce262dee2b745b, type: 3}
@@ -1764,17 +1767,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ecfb279cf57e19841a1f21475bd4627b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player
---- !u!114 &8286086353187022022 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4464223845418608054, guid: 2288494715f42ad4a8ce262dee2b745b, type: 3}
-  m_PrefabInstance: {fileID: 7136708635688845761}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 105d6adeddb664c4cb9a92246f3f0ef0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PipePlayerCharacter
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

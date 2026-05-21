@@ -18,6 +18,7 @@ public class WallKnockPlayerCharacter : PlayerCharacter
 {
 	public override bool HasBeenInitialised { get; protected set; }
 
+	public override string ActionMap => "WallKnockPlayer";
 	public override bool MouseVisible => true;
 	public override bool DoCameraRotation => false;
 	public override bool UseMouseScreenPosition => true;

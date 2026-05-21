@@ -9,6 +9,19 @@ public enum PipeSide
     Bottom
 }
 
+public static class PipeSideUtil
+{
+    public static PipeSide Opposite(PipeSide side) => side switch
+    {
+        PipeSide.Left => PipeSide.Right,
+        PipeSide.Top => PipeSide.Bottom,
+        PipeSide.Right => PipeSide.Left,
+        PipeSide.Bottom => PipeSide.Top,
+        _ => throw new System.NotImplementedException()
+    };
+}
+
+
 [System.Serializable]
 public enum PipeRotationAngle
 {
