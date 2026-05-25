@@ -2,7 +2,10 @@ using UnityEngine;
 using Util.SystemUtils;
 using Util.UnityUtils;
 
-public class WirePlayerCharacterInitData : IPlayerCharacterInitData { }
+public class WirePlayerCharacterInitData : IPlayerCharacterInitData
+{
+    public PauseCharacter PauseCharacter { get; set; }
+}
 
 public class WirePlayerCharacterUpdateData : IPlayerCharacterUpdateData
 {
@@ -22,36 +25,44 @@ public class WirePlayerCharacter : PlayerCharacter
     public override bool DoCameraRotation => false;
     public override bool UseMouseScreenPosition => true;
 
-    Camera m_Camera;
+    PauseCharacter m_PauseCharacter;
+
     WireBoard m_CurrentWireBoard = null;
     Wire m_CurrentlyHeldWire = null;
 
     public override void Init(IPlayerCharacterInitData playerCharacterInitData)
     {
         WirePlayerCharacterInitData initData = Sys.AssertType<WirePlayerCharacterInitData>(playerCharacterInitData, nameof(playerCharacterInitData));
+        m_PauseCharacter = initData.PauseCharacter;
         HasBeenInitialised = true;
     }
 
     public override void UpdateCharacter(ref IPlayerCharacterUpdateData playerCharacterUpdateData)
     {
         Sys.Assert(HasBeenInitialised, "WirePlayerCharacter hasn't been initialised");
-        WirePlayerCharacterUpdateData input = Sys.AssertType<WirePlayerCharacterUpdateData>(playerCharacterUpdateData, nameof(playerCharacterUpdateData));
-        if (!input.MouseInfo.DidHitObject)
+        WirePlayerCharacterUpdateData updateData = Sys.AssertType<WirePlayerCharacterUpdateData>(playerCharacterUpdateData, nameof(playerCharacterUpdateData));
+        if (!updateData.MouseInfo.DidHitObject)
         {
             if (m_CurrentlyHeldWire) ReleaseWire(Vector3.negativeInfinity);
             return;
         }
-        if (!input.ClickedThisFrame)
+        if (!updateData.ClickedThisFrame)
         {
-            if (m_CurrentlyHeldWire) ReleaseWire(input.MouseInfo.HitInfo.point);
+            if (m_CurrentlyHeldWire) ReleaseWire(updateData.MouseInfo.HitInfo.point);
             return;
         }
-        if (m_CurrentlyHeldWire) HoldWire(input.MouseInfo.HitInfo.point);
+        if (m_CurrentlyHeldWire) HoldWire(updateData.MouseInfo.HitInfo.point);
         else
         {
-            m_CurrentWireBoard = input.MouseInfo.HitInfo.GetComponent<WireBoard>();
-            GrabWire(input.MouseInfo.HitInfo.point);
+            m_CurrentWireBoard = updateData.MouseInfo.HitInfo.GetComponent<WireBoard>();
+            GrabWire(updateData.MouseInfo.HitInfo.point);
         }
+    }
+
+    public override void OnPausePressed()
+    {
+        Sys.Assert(HasBeenInitialised, "WirePlayerCharacter hasn't been initialised");
+        if (!m_CurrentlyHeldWire) m_PauseCharacter.PauseGame(this);
     }
 
     void GrabWire(Vector3 position)

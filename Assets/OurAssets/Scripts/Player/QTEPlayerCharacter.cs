@@ -26,16 +26,19 @@ public class QTEPlayerCharacter : PlayerCharacter
 
 	public override void Init(IPlayerCharacterInitData playerCharacterInitData)
 	{
-		QTEPlayerCharacterInitData initData = Sys.AssertType<QTEPlayerCharacterInitData>(playerCharacterInitData, nameof(playerCharacterInitData));
+		Sys.AssertType<QTEPlayerCharacterInitData>(playerCharacterInitData, nameof(playerCharacterInitData));
 		HasBeenInitialised = true;
 	}
 
 	public override void UpdateCharacter(ref IPlayerCharacterUpdateData playerCharacterUpdateData)
 	{
-		QTEPlayerCharacterUpdateData input = Sys.AssertType<QTEPlayerCharacterUpdateData>(playerCharacterUpdateData, nameof(playerCharacterUpdateData));
-		if (input.DidQTEInput) OnQTEInput.Invoke();
-		input.DidQTEInput = false;
+		Sys.Assert(HasBeenInitialised, "QTEPlayerCharacter hasn't been initialised");
+		QTEPlayerCharacterUpdateData updateData = Sys.AssertType<QTEPlayerCharacterUpdateData>(playerCharacterUpdateData, nameof(playerCharacterUpdateData));
+		if (updateData.DidQTEInput) OnQTEInput.Invoke();
+		updateData.DidQTEInput = false;
 	}
 
 	void OnDestroy() => OnQTEInput.RemoveAllListeners();
+
+	public override void OnPausePressed() => Sys.Assert(HasBeenInitialised, "QTEPlayerCharacter hasn't been initialised");
 }

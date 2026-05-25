@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-using Util.SystemUtils;
 
 [RequireComponent(typeof(PlayerInput))]
 public class Player : MonoBehaviour
@@ -12,6 +11,8 @@ public class Player : MonoBehaviour
     PlayerCharacter m_StartingPlayerCharacter;
     [SerializeField]
     MenuCharacter m_MenuCharacter;
+    [SerializeField]
+    PauseCharacter m_PauseCharacter;
     [SerializeField]
     PlayerCamera m_PlayerCamera;
     [SerializeField]
@@ -24,13 +25,12 @@ public class Player : MonoBehaviour
     CameraInput m_CameraInput;
     MouseInfo m_MouseInfo;
 
-    bool m_bCursorHidden;
-
     void Awake()
     {
         m_PlayerInput = GetComponent<PlayerInput>();
         m_PlayerCamera.Init(m_PlayerSettings.CameraSettings);
         m_MenuCharacter.Init(new MenuCharacterInitData() { Player = this });
+        m_PauseCharacter.Init(new PauseCharacterInitData() { Player = this });
         ChangeCharacter(m_StartingPlayerCharacter);
         m_CameraInput = new CameraInput();
         m_MouseInfo = new MouseInfo();
@@ -75,13 +75,15 @@ public class Player : MonoBehaviour
         {
             CharacterSettings = m_PlayerSettings.CharacterSettings,
             InteractSettings = m_PlayerSettings.InteractSettings,
-            Player = this
+            Player = this,
+            PauseCharacter = m_PauseCharacter
         },
-        PipePlayerCharacter => new PipePlayerCharacterInitData(),
-        WirePlayerCharacter => new WirePlayerCharacterInitData(),
-        WallKnockPlayerCharacter => new WallKnockPlayerCharacterInitData(),
+        PipePlayerCharacter => new PipePlayerCharacterInitData() { PauseCharacter = m_PauseCharacter },
+        WirePlayerCharacter => new WirePlayerCharacterInitData() { PauseCharacter = m_PauseCharacter },
+        WallKnockPlayerCharacter => new WallKnockPlayerCharacterInitData() { PauseCharacter = m_PauseCharacter },
         QTEPlayerCharacter => new QTEPlayerCharacterInitData(),
         MenuCharacter => new MenuCharacterInitData() { Player = this },
+        PauseCharacter => new PauseCharacterInitData() { Player = this },
         _ => null
     };
 
@@ -93,6 +95,7 @@ public class Player : MonoBehaviour
         WallKnockPlayerCharacter => new WallKnockPlayerCharacterUpdateData(),
         QTEPlayerCharacter => new QTEPlayerCharacterUpdateData(),
         MenuCharacter => new MenuCharacterUpdateData(),
+        PauseCharacter => new PauseCharacterUpdateData(),
         _ => null
     };
     #endregion Change Character
@@ -145,7 +148,7 @@ public class Player : MonoBehaviour
 
     public void HandleMoveInput(InputAction.CallbackContext ctx)
     {
-        SetDataValue<FirstPersonPlayerCharacterUpdateData>(input => input.MovementInput = ctx.ReadValue<Vector2>());
+        SetDataValue<FirstPersonPlayerCharacterUpdateData>(updateData => updateData.MovementInput = ctx.ReadValue<Vector2>());
     }
 
     public void HandleLookInput(InputAction.CallbackContext ctx)
@@ -157,50 +160,47 @@ public class Player : MonoBehaviour
 
     public void HandleSprintInput(InputAction.CallbackContext ctx)
     {
-        SetDataValue<FirstPersonPlayerCharacterUpdateData>(input => input.SprintPressedThisFrame = ctx.action.WasPressedThisFrame());
+        SetDataValue<FirstPersonPlayerCharacterUpdateData>(updateData => updateData.SprintPressedThisFrame = ctx.action.WasPressedThisFrame());
     }
 
     public void HandleInteractInput(InputAction.CallbackContext ctx)
     {
-        SetDataValue<FirstPersonPlayerCharacterUpdateData>(input => { if (ctx.started) input.PressedInteract = true; });
+        SetDataValue<FirstPersonPlayerCharacterUpdateData>(updateData => { if (ctx.started) updateData.PressedInteract = true; });
     }
 
     public void HandleJumpInput(InputAction.CallbackContext ctx)
     {
-        SetDataValue<FirstPersonPlayerCharacterUpdateData>(input => input.JumpPressedThisFrame = ctx.action.WasPressedThisFrame());
+        SetDataValue<FirstPersonPlayerCharacterUpdateData>(updateData => updateData.JumpPressedThisFrame = ctx.action.WasPressedThisFrame());
     }
 
     public void HandleLeftClickInput(InputAction.CallbackContext ctx)
     {
-        SetDataValue<PipePlayerCharacterUpdateData>(input => input.LeftClickedThisFrame |= ctx.started);
-        SetDataValue<WirePlayerCharacterUpdateData>(input => input.ClickedThisFrame = ctx.action.WasPressedThisFrame());
-        SetDataValue<WallKnockPlayerCharacterUpdateData>(input => input.LeftClickedThisFrame |= ctx.started);
+        SetDataValue<PipePlayerCharacterUpdateData>(updateData => updateData.LeftClickedThisFrame |= ctx.started);
+        SetDataValue<WirePlayerCharacterUpdateData>(updateData => updateData.ClickedThisFrame = ctx.action.WasPressedThisFrame());
+        SetDataValue<WallKnockPlayerCharacterUpdateData>(updateData => updateData.LeftClickedThisFrame |= ctx.started);
     }
 
     public void HandleRightClickInput(InputAction.CallbackContext ctx)
     {
-        SetDataValue<WallKnockPlayerCharacterUpdateData>(input => input.RightClickedThisFrame |= ctx.started);
-        SetDataValue<PipePlayerCharacterUpdateData>(input => input.RightClickedThisFrame |= ctx.started);
+        SetDataValue<WallKnockPlayerCharacterUpdateData>(updateData => updateData.RightClickedThisFrame |= ctx.started);
+        SetDataValue<PipePlayerCharacterUpdateData>(updateData => updateData.RightClickedThisFrame |= ctx.started);
     }
 
     public void HandleDoQTEInput(InputAction.CallbackContext ctx)
     {
-        SetDataValue<QTEPlayerCharacterUpdateData>(input => input.DidQTEInput |= ctx.started);
+        SetDataValue<QTEPlayerCharacterUpdateData>(updateData => updateData.DidQTEInput |= ctx.started);
     }
 
-    public void HandleQuitInput(InputAction.CallbackContext ctx)
-    {
-        if (ctx.started) Sys.Exit(0);
-    }
+    public void HandlePauseInput(InputAction.CallbackContext ctx) => m_PlayerCharacter.OnPausePressed();
 
     public void HandleRotateLeft(InputAction.CallbackContext ctx)
     {
-        SetDataValue<PipePlayerCharacterUpdateData>(input => input.PressedLeftRotateThisFrame |= ctx.started);
+        SetDataValue<PipePlayerCharacterUpdateData>(updateData => updateData.PressedLeftRotateThisFrame |= ctx.started);
     }
 
     public void HandleRotateRight(InputAction.CallbackContext ctx)
     {
-        SetDataValue<PipePlayerCharacterUpdateData>(input => input.PressedRightRotateThisFrame |= ctx.started);
+        SetDataValue<PipePlayerCharacterUpdateData>(updateData => updateData.PressedRightRotateThisFrame |= ctx.started);
     }
 
     #region Control Scheme Change

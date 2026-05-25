@@ -7,6 +7,7 @@ public class FirstPersonPlayerCharacterInitData : IPlayerCharacterInitData
     public CharacterSettings CharacterSettings { get; set; }
     public InteractSettings InteractSettings { get; set; }
     public Player Player { get; set; }
+    public PauseCharacter PauseCharacter { get; set; }
 }
 
 public class FirstPersonPlayerCharacterUpdateData : IPlayerCharacterUpdateData
@@ -51,6 +52,7 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
     public override bool UseMouseScreenPosition => false;
 
     Player m_Player;
+    PauseCharacter m_PauseCharacter;
 
     void Awake() => m_CC = GetComponent<CharacterController>();
 
@@ -60,28 +62,35 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
         m_CharacterSettings = initData.CharacterSettings;
         m_InteractSettings = initData.InteractSettings;
         m_Player = initData.Player;
+        m_PauseCharacter = initData.PauseCharacter;
         HasBeenInitialised = true;
     }
 
     public override void UpdateCharacter(ref IPlayerCharacterUpdateData playerCharacterUpdateData)
     {
         Sys.Assert(HasBeenInitialised, "FirstPersonPlayerCharacter hasn't been initialised");
-        FirstPersonPlayerCharacterUpdateData input = Sys.AssertType<FirstPersonPlayerCharacterUpdateData>(playerCharacterUpdateData, nameof(playerCharacterUpdateData));
-        HandleMovement(ref input);
-        HandleInteraction(ref input);
+        FirstPersonPlayerCharacterUpdateData updateData = Sys.AssertType<FirstPersonPlayerCharacterUpdateData>(playerCharacterUpdateData, nameof(playerCharacterUpdateData));
+        HandleMovement(ref updateData);
+        HandleInteraction(ref updateData);
+    }
+
+    public override void OnPausePressed()
+    {
+        Sys.Assert(HasBeenInitialised, "FirstPersonPlayerCharacter hasn't been initialised");
+        m_PauseCharacter.PauseGame(this);
     }
 
     #region Movement
-    void HandleMovement(ref FirstPersonPlayerCharacterUpdateData input)
+    void HandleMovement(ref FirstPersonPlayerCharacterUpdateData updateData)
     {
-        UpdateRotation(input.CameraRotation);
+        UpdateRotation(updateData.CameraRotation);
         CollisionChecks();
-        UpdateTimers(input.DeltaTime);
-        UpdateMovementSpeed(input.SprintPressedThisFrame);
-        UpdateHorizontalVelocity(input.MovementInput);
-        JumpChecks(input.JumpPressedThisFrame);
-        UpdateVerticalVelocity(input.DeltaTime);
-        m_CC.Move(m_Velocity * input.DeltaTime);
+        UpdateTimers(updateData.DeltaTime);
+        UpdateMovementSpeed(updateData.SprintPressedThisFrame);
+        UpdateHorizontalVelocity(updateData.MovementInput);
+        JumpChecks(updateData.JumpPressedThisFrame);
+        UpdateVerticalVelocity(updateData.DeltaTime);
+        m_CC.Move(m_Velocity * updateData.DeltaTime);
     }
 
     void UpdateRotation(Quaternion rotation)
@@ -169,14 +178,14 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
     #endregion Movement
 
     #region Interaction
-    void HandleInteraction(ref FirstPersonPlayerCharacterUpdateData input)
+    void HandleInteraction(ref FirstPersonPlayerCharacterUpdateData updateData)
     {
-        if (input.PressedInteract)
+        if (updateData.PressedInteract)
         {
-            Vector3 direction = input.CameraRotation * Vector3.forward; // Rotate forward vector by camera rotation to get camera's forward vector
+            Vector3 direction = updateData.CameraRotation * Vector3.forward; // Rotate forward vector by camera rotation to get camera's forward vector
             DoInteraction(direction);
         }
-        input.PressedInteract = false;
+        updateData.PressedInteract = false;
     }
 
     void DoInteraction(Vector3 direction)

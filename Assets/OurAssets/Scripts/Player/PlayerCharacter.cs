@@ -34,4 +34,6 @@ public abstract class PlayerCharacter : MonoBehaviour
 
     public abstract void Init(IPlayerCharacterInitData playerCharacterInitData);
     public abstract void UpdateCharacter(ref IPlayerCharacterUpdateData playerCharacterUpdateData);
+
+    public abstract void OnPausePressed();
 }

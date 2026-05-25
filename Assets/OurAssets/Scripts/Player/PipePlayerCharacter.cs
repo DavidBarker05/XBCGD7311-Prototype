@@ -3,7 +3,10 @@ using UnityEngine;
 using Util.SystemUtils;
 using Util.UnityUtils;
 
-public class PipePlayerCharacterInitData : IPlayerCharacterInitData { }
+public class PipePlayerCharacterInitData : IPlayerCharacterInitData
+{
+    public PauseCharacter PauseCharacter { get; set; }
+}
 
 public class PipePlayerCharacterUpdateData : IPlayerCharacterUpdateData
 {
@@ -37,6 +40,8 @@ public class PipePlayerCharacter : PlayerCharacter
 
     public PipeSO CurrentlySelectedPipe { get; private set; }
 
+    PauseCharacter m_PauseCharacter;
+
     GameObject m_CellIndicator;
     Dictionary<PipeSO, uint> m_PipeQuantities = new Dictionary<PipeSO, uint>();
 
@@ -69,34 +74,41 @@ public class PipePlayerCharacter : PlayerCharacter
         FullyCleanPlaceablePipes(); // Just in case
         foreach (PipeSO pipe in m_PlaceablePipes)
             m_PipeQuantities.Add(pipe, (m_Debug ? 1u : 0u));
+        m_PauseCharacter = initData.PauseCharacter;
         HasBeenInitialised = true;
     }
 
     public override void UpdateCharacter(ref IPlayerCharacterUpdateData playerCharacterUpdateData)
     {
         Sys.Assert(HasBeenInitialised, "PipePlayerCharacter hasn't been initialised");
-        PipePlayerCharacterUpdateData input = Sys.AssertType<PipePlayerCharacterUpdateData>(playerCharacterUpdateData, nameof(playerCharacterUpdateData));
-        DoGridFunctions(ref input);
-        input.LeftClickedThisFrame = false;
-        input.RightClickedThisFrame = false;
-        input.PressedLeftRotateThisFrame = false;
-        input.PressedRightRotateThisFrame = false;
+        PipePlayerCharacterUpdateData updateData = Sys.AssertType<PipePlayerCharacterUpdateData>(playerCharacterUpdateData, nameof(playerCharacterUpdateData));
+        DoGridFunctions(ref updateData);
+        updateData.LeftClickedThisFrame = false;
+        updateData.RightClickedThisFrame = false;
+        updateData.PressedLeftRotateThisFrame = false;
+        updateData.PressedRightRotateThisFrame = false;
     }
 
-    void DoGridFunctions(ref PipePlayerCharacterUpdateData input)
+    public override void OnPausePressed()
     {
-        if (!input.MouseInfo.DidHitObject) return;
-        RaycastHit hit = input.MouseInfo.HitInfo;
+        Sys.Assert(HasBeenInitialised, "PipePlayerCharacter hasn't been initialised");
+        m_PauseCharacter.PauseGame(this);
+    }
+
+    void DoGridFunctions(ref PipePlayerCharacterUpdateData updateData)
+    {
+        if (!updateData.MouseInfo.DidHitObject) return;
+        RaycastHit hit = updateData.MouseInfo.HitInfo;
         Grid grid = hit.GetComponent<Grid>();
         if (!grid) return;
         Vector3Int cp = grid.WorldToCell(hit.point);
         MoveCellIndicator(ref grid, cp, hit);
         PipeGrid pipeGrid = hit.GetComponent<PipeGrid>();
         if (!pipeGrid) return;
-        if (input.LeftClickedThisFrame) PlacePipe(ref pipeGrid, cp);
-        if (input.RightClickedThisFrame) RemovePipe(ref pipeGrid, cp);
-        if (input.PressedLeftRotateThisFrame) RotatePipeLeft(ref pipeGrid, cp);
-        if (input.PressedRightRotateThisFrame) RotatePipeRight(ref pipeGrid, cp);
+        if (updateData.LeftClickedThisFrame) PlacePipe(ref pipeGrid, cp);
+        if (updateData.RightClickedThisFrame) RemovePipe(ref pipeGrid, cp);
+        if (updateData.PressedLeftRotateThisFrame) RotatePipeLeft(ref pipeGrid, cp);
+        if (updateData.PressedRightRotateThisFrame) RotatePipeRight(ref pipeGrid, cp);
     }
 
     public void ClearPipeQuantity(PipeSO pipe)

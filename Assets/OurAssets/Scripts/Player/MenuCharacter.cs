@@ -1,4 +1,5 @@
 using UnityEngine;
+using Util.SystemUtils;
 
 public class MenuCharacterInitData : IPlayerCharacterInitData
 {
@@ -28,31 +29,22 @@ public class MenuCharacter : PlayerCharacter
 
     public override void Init(IPlayerCharacterInitData playerCharacterInitData)
     {
-        if (playerCharacterInitData is not MenuCharacterInitData initData)
-        {
-            Debug.LogError($"playerCharacterInitData needs to be type MenuCharacterInitData! Received {playerCharacterInitData.GetType()}");
-            return;
-        }
+        MenuCharacterInitData initData = Sys.AssertType<MenuCharacterInitData>(playerCharacterInitData, nameof(playerCharacterInitData));
         m_Player = initData.Player;
         HasBeenInitialised = true;
     }
 
     public override void UpdateCharacter(ref IPlayerCharacterUpdateData playerCharacterUpdateData)
     {
-        if (!HasBeenInitialised)
-        {
-            Debug.LogError("MenuCharacter hasn't been initialised!");
-            return;
-        }
-        if (playerCharacterUpdateData is not MenuCharacterUpdateData)
-        {
-            Debug.LogError($"playerCharacterUpdateData needs to be type MenuCharacterUpdateData! Received {playerCharacterUpdateData.GetType()}");
-            return;
-        }
+        Sys.Assert(HasBeenInitialised, "MenuCharacter hasn't been initialised");
+        Sys.AssertType<MenuCharacterUpdateData>(playerCharacterUpdateData, nameof(playerCharacterUpdateData));
     }
+
+    public override void OnPausePressed() => Sys.Assert(HasBeenInitialised, "MenuCharacter hasn't been initialised");
 
     public void OnMenuOpen(PlayerCharacter currentCharacter, GameObject currentUI, GameObject newUI)
     {
+        Sys.Assert(HasBeenInitialised, "MenuCharacter hasn't been initialised");
         if (m_LastCharacter || !currentCharacter || !newUI) return;
         CameraTarget = currentCharacter.CameraTarget;
         m_LastCharacter = currentCharacter;
@@ -65,6 +57,7 @@ public class MenuCharacter : PlayerCharacter
 
     public void OnMenuExit()
     {
+        Sys.Assert(HasBeenInitialised, "MenuCharacter hasn't been initialised");
         if (!m_LastCharacter) return;
         Time.timeScale = 1f;
         m_Player.ChangeCharacter(m_LastCharacter);
