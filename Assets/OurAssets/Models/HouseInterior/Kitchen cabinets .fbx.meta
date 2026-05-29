@@ -3,7 +3,22 @@ guid: 4a8bc858b1ae59048a79c75aff0d130b
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Ktop
+    second: {fileID: 2100000, guid: b640d92150664a64b86b42dc6c615709, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Kwood
+    second: {fileID: 2100000, guid: 1e246df6fb4da7d418ad5e4350cf8688, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Secondary
+    second: {fileID: 2100000, guid: 2b34d9f086daa44479ce7a777336812d, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

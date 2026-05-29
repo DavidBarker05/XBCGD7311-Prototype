@@ -3,7 +3,12 @@ guid: 15da0b15a88ef414a8d413725a4e82f9
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Bowl
+    second: {fileID: 2100000, guid: a04f7c457f41a9e4ea048cbbbd072f05, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

@@ -3,7 +3,22 @@ guid: 296fa6530b231974ba12c3f8fd7bec91
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Buttons
+    second: {fileID: 2100000, guid: 32b4b45c5ebe5cf4697c8be65934a325, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: SBottom
+    second: {fileID: 2100000, guid: c5e3bafa8bd105b48a854e99fd071310, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Sofa
+    second: {fileID: 2100000, guid: 36a81fae5834cf84389f86e3e2ba1f9f, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
