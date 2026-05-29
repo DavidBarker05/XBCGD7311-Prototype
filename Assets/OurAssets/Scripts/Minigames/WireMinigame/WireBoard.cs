@@ -84,11 +84,7 @@ public class WireBoard : MonoBehaviour
 		m_UnscaledTransform.gameObject.SetActive(true);
 	}
 
-	void EndWireMinigame()
-	{
-		MinigameManager.Instance?.OnMinigameBeaten();
-		StartCoroutine(CloseMinigame());
-	}
+	void EndWireMinigame() => StartCoroutine(CloseMinigame());
 
 	IEnumerator CloseMinigame()
 	{
@@ -99,6 +95,7 @@ public class WireBoard : MonoBehaviour
 		{
 			Destroy(m_Wires[i].gameObject);
 		}
+		MinigameManager.Instance?.OnMinigameBeaten();
 		m_UnscaledTransform.gameObject.SetActive(false);
 	}
 

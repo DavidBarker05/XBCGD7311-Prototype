@@ -95,6 +95,15 @@ public class PipePlayerCharacter : PlayerCharacter
         m_PauseCharacter.PauseGame(this);
     }
 
+    public void DeleteCellIndicator()
+    {
+        if (m_CellIndicator)
+        {
+            Destroy(m_CellIndicator);
+            m_CellIndicator = null;
+        }
+    }
+
     void DoGridFunctions(ref PipePlayerCharacterUpdateData updateData)
     {
         if (!updateData.MouseInfo.DidHitObject) return;

@@ -7,7 +7,7 @@ using Util.SystemUtils;
 public class PipeGrid : MonoBehaviour
 {
     [SerializeField]
-    Transform unscaledTransform;
+    Transform m_UnscaledTransform;
     [SerializeField]
     Pipe m_PipePrefab;
     [SerializeField]
@@ -20,6 +20,8 @@ public class PipeGrid : MonoBehaviour
     Player m_Player;
     [SerializeField]
     FirstPersonPlayerCharacter m_FirstPersonPlayerCharacter;
+    [SerializeField]
+    PipePlayerCharacter m_PipePlayerCharacter;
 
     PlaneGridGenerator m_PlaneGrid;
     Vector2Int Size => m_PlaneGrid.GridSize;
@@ -79,7 +81,7 @@ public class PipeGrid : MonoBehaviour
         {
             for (int y = 0; y < size.y; ++y)
             {
-                GameObject go = Instantiate(m_PipePrefab.gameObject, unscaledTransform);
+                GameObject go = Instantiate(m_PipePrefab.gameObject, m_UnscaledTransform);
                 Vector3Int cp = ArrayIndex2DToCellPosition(x, y);
                 Vector3 wp = grid.CellToWorld(cp);
                 go.transform.position = wp;
@@ -89,10 +91,10 @@ public class PipeGrid : MonoBehaviour
                 m_PipeCells[x, y] = pipe;
             }
         }
-        GameObject sop = Instantiate(m_PipePrefab.gameObject, unscaledTransform);
+        GameObject sop = Instantiate(m_PipePrefab.gameObject, m_UnscaledTransform);
         m_StartOutsidePipe = sop.GetComponent<Pipe>();
         m_StartOutsidePipe.CurrentPipeSO = m_OutsidePipe;
-        GameObject eop = Instantiate(m_PipePrefab.gameObject, unscaledTransform);
+        GameObject eop = Instantiate(m_PipePrefab.gameObject, m_UnscaledTransform);
         m_EndOutsidePipe = eop.GetComponent<Pipe>();
         m_EndOutsidePipe.CurrentPipeSO = m_OutsidePipe;
     }
@@ -104,7 +106,7 @@ public class PipeGrid : MonoBehaviour
         if (!m_PlaneGrid) m_PlaneGrid = GetComponent<PlaneGridGenerator>();
         if (!m_Grid) m_Grid = GetComponent<Grid>();
         m_PlaneGrid.GridSize = pipeGridData.GridSize;
-        unscaledTransform.gameObject.SetActive(true);
+        m_UnscaledTransform.gameObject.SetActive(true);
         if (m_PipeUI) m_PipeUI.SetActive(true);
         InitCells(ref m_PipeCells, ref m_Grid, Size);
         Pipe startPipe = GetPipe(pipeGridData.StartPipe.CellPosition.x, pipeGridData.StartPipe.CellPosition.y);
@@ -126,9 +128,11 @@ public class PipeGrid : MonoBehaviour
     void EndMinigame(List<Pipe> path) // path is in case we want to do some kind of flowing animation
     {
         if (m_PipeUI) m_PipeUI.SetActive(false);
+        m_PipePlayerCharacter.DeleteCellIndicator();
         if (m_Player && m_FirstPersonPlayerCharacter) m_Player.ChangeCharacter(m_FirstPersonPlayerCharacter);
         MinigameManager.Instance?.OnMinigameBeaten();
         DeletePipes(ref m_PipeCells);
+        m_UnscaledTransform.gameObject.SetActive(false);
     }
     #endregion Start & End Minigame
 

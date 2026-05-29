@@ -17,6 +17,12 @@ public class MinigameManager : MonoBehaviour
     [SerializeField]
     GameObject m_WinScreen;
 
+    void Awake()
+    {
+        if (Instance && Instance != this) Destroy(gameObject);
+        else Instance = this;
+    }
+
     public void OnMinigameBeaten()
     {
         if (++MinigamesBeaten >= m_NumMinigamesToBeat) m_MenuCharacter.OnMenuOpen(m_FirstPersonPlayerCharacter, m_HUD, m_WinScreen); // Hopefully this works
