@@ -56419,7 +56419,7 @@ MonoBehaviour:
   m_MenuCharacter: {fileID: 958472078}
   m_FirstPersonPlayerCharacter: {fileID: 1015887253}
   m_HUD: {fileID: 0}
-  m_WinScreen: {fileID: 0}
+  m_WinScreen: {fileID: 1788659183}
 --- !u!4 &964669679
 Transform:
   m_ObjectHideFlags: 0
@@ -100274,7 +100274,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1788659184
 RectTransform:
   m_ObjectHideFlags: 0
@@ -110996,6 +110996,10 @@ PrefabInstance:
     - target: {fileID: 7185897417062289680, guid: 19521dc185da0c94e88dfe69a4cff5a8, type: 3}
       propertyPath: m_Indicator
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7185897417062289680, guid: 19521dc185da0c94e88dfe69a4cff5a8, type: 3}
+      propertyPath: m_BreakTolerance
+      value: 0.75
       objectReference: {fileID: 0}
     - target: {fileID: 7185897417062289680, guid: 19521dc185da0c94e88dfe69a4cff5a8, type: 3}
       propertyPath: m_PlayerToChangeTo
