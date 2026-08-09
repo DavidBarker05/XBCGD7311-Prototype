@@ -62,6 +62,8 @@ public class Wire : MonoBehaviour
         }
     }
 
+    public void SetColourblind(bool bColourBlind) => m_Line.material.color = bColourBlind ? WireColour.None.Colour : m_WireColour.Colour;
+
     public bool CanBeGrabbed { get; private set; } = true;
     bool m_bBeingHeld = false;
 

@@ -30,6 +30,8 @@ public class WireBoard : MonoBehaviour
 	FirstPersonPlayerCharacter m_FirstPersonPlayerCharacter;
 	[SerializeField, Range(0f, 1f)]
 	float m_TimeActiveAfterCompleted = 0.3f;
+	[SerializeField, Min(1)]
+	int m_FailsToLoseColour = 3;
 	[SerializeField, Min(0)]
 	int m_MinWires = 3;
 	[SerializeField]
@@ -63,6 +65,7 @@ public class WireBoard : MonoBehaviour
 	GrabReleasePoint[] m_GrabPoints;
 	GrabReleasePoint[] m_ReleasePoints;
 	Dictionary<WireColour, int> m_WireColoursUsed;
+	int m_CurrentFails;
 
 	bool m_bIsAlreadyPlaying = false;
 
@@ -93,6 +96,7 @@ public class WireBoard : MonoBehaviour
 	{
 		if (m_bIsAlreadyPlaying) return;
 		m_bIsAlreadyPlaying = true;
+		m_CurrentFails = 0;
 		CreateWires(Random.Range(m_MinWires, m_WireStartingPositions.Length + 1));
 		m_UnscaledTransform.gameObject.SetActive(true);
 	}
@@ -245,7 +249,17 @@ public class WireBoard : MonoBehaviour
 				}
 				else
 				{
-					for (int j = 0; j < m_Wires.Length; ++j) m_Wires[j].ResetWire();
+					++m_CurrentFails;
+					for (int j = 0; j < m_Wires.Length; ++j)
+					{
+						m_Wires[j].ResetWire();
+						m_Wires[j].SetColourblind(m_CurrentFails >= m_FailsToLoseColour);
+						if (m_CurrentFails >= m_FailsToLoseColour)
+						{
+							m_WireStarts[j].material.color = Color.black;
+							m_WireEnds[j].material.color = Color.black;
+						}
+					}
 					m_UsedReleasePoints.Clear();
 					return new WireReleaseInfo() { ReleaseStatus = WireReleaseStatus.Reset };
 				}
