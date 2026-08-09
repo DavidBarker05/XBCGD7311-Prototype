@@ -5,6 +5,19 @@ using Util.ArrayUtils;
 using Util.ComparisonUtils;
 using Util.SystemUtils;
 
+public enum WireReleaseStatus
+{
+	SnapToStart,
+	Reset,
+	Success
+}
+
+public struct WireReleaseInfo
+{
+	public WireReleaseStatus ReleaseStatus;
+	public Vector3 SnapPosition;
+}
+
 public class WireBoard : MonoBehaviour
 {
 	[SerializeField]
@@ -211,7 +224,7 @@ public class WireBoard : MonoBehaviour
 		return null;
 	}
 
-	public Vector3 TryReleaseWire(Wire wire, Vector3 position)
+	public WireReleaseInfo TryReleaseWire(Wire wire, Vector3 position)
 	{
 		if (m_IgnoreDepthAxis) position = Vector3.ProjectOnPlane(position, transform.up);
 		for (int i = 0; i < m_ReleasePoints.Length; ++i)
@@ -224,11 +237,20 @@ public class WireBoard : MonoBehaviour
 				{
 					m_UsedReleasePoints.Add(m_ReleasePoints[i]);
 					if (m_UsedReleasePoints.Count == m_Wires.Length) EndWireMinigame();
-					return m_ReleasePoints[i].Position;
+					return new WireReleaseInfo()
+					{
+						ReleaseStatus = WireReleaseStatus.Success,
+						SnapPosition = m_ReleasePoints[i].Position
+					};
 				}
-				else return Vector3.negativeInfinity;
+				else
+				{
+					for (int j = 0; j < m_Wires.Length; ++j) m_Wires[j].ResetWire();
+					m_UsedReleasePoints.Clear();
+					return new WireReleaseInfo() { ReleaseStatus = WireReleaseStatus.Reset };
+				}
 			}
 		}
-		return Vector3.negativeInfinity;
+		return new WireReleaseInfo() { ReleaseStatus = WireReleaseStatus.SnapToStart };
 	}
 }
