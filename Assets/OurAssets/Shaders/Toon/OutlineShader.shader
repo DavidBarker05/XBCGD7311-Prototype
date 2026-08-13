@@ -111,10 +111,10 @@ Shader "Toon/OutlineShader"
             float2 bottomRightUV = uv + float2(_BlitTexture_TexelSize.x * halfScaleCeil, -_BlitTexture_TexelSize.y * halfScaleFloor);
             float2 topLeftUV = uv + float2(-_BlitTexture_TexelSize.x * halfScaleFloor, _BlitTexture_TexelSize.y * halfScaleCeil);
 
-            float depth0 = SampleSceneDepth(bottomLeftUV);
-            float depth1 = SampleSceneDepth(topRightUV);
-            float depth2 = SampleSceneDepth(bottomRightUV);
-            float depth3 = SampleSceneDepth(topLeftUV);
+            float depth0 = LinearEyeDepth(SampleSceneDepth(bottomLeftUV), _ZBufferParams);
+            float depth1 = LinearEyeDepth(SampleSceneDepth(topRightUV), _ZBufferParams);
+            float depth2 = LinearEyeDepth(SampleSceneDepth(bottomRightUV), _ZBufferParams);
+            float depth3 = LinearEyeDepth(SampleSceneDepth(topLeftUV), _ZBufferParams);
 
             float3x3 worldNormalToViewMatrix = (float3x3)UNITY_MATRIX_MV;
             float3 normal0 = mul(worldNormalToViewMatrix, SampleSceneNormals(bottomLeftUV));
@@ -132,7 +132,7 @@ Shader "Toon/OutlineShader"
             float depthFiniteDifference0 = depth1 - depth0;
             float depthFiniteDifference1 = depth3 - depth2;
 
-            float depth = SampleSceneDepth(uv);
+            float depth = LinearEyeDepth(SampleSceneDepth(uv), _ZBufferParams);
             float edgeDepth = sqrt(pow(depthFiniteDifference0, 2) + pow(depthFiniteDifference1, 2)) * 100;
 
             float depthThreshold = _DepthThreshold * depth * normalThreshold;
