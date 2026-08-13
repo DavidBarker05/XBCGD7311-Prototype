@@ -35,11 +35,11 @@ public class ChaseMinigameStarter : MonoBehaviour
 		m_NumInteractables = m_QTEInteractables.Length;
 		foreach (QTEInteractable qte in m_QTEInteractables) qte.gameObject.SetActive(true);
 		m_NumInteractablesBeaten = 0;
-		ChasePlayer[] enemies = FindObjectsByType<ChasePlayer>();
-		foreach (ChasePlayer enemy in enemies)
-		{
-			enemy.ResetToStart();
-		}
+		//ChasePlayer[] enemies = FindObjectsByType<ChasePlayer>();
+		//foreach (ChasePlayer enemy in enemies)
+		//{
+		//	enemy.ResetToStart();
+		//}
 	}
 
 	public void RestartChaseMinigame() => StartChaseMinigame(m_QTEInteractables);
