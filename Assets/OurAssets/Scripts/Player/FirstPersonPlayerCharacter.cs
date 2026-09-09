@@ -202,6 +202,7 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
             if (interactable == null) return;
             if (interactable is QTEInteractable) interactable.Interact(m_Player, this);
             else if (interactable is WireMinigameInteractable or WallKnockInteractable or ChaseMinigameInteract) interactable.Interact();
+            else if (interactable is Door or NPC) interactable.Interact(this);
         }
     }
     #endregion Interaction

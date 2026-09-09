@@ -1,5 +1,12 @@
 using UnityEngine;
 
+public enum MinigameType
+{
+    Wires,
+    WallKnockAndPipes,
+    ChaseMinigame
+}
+
 public class MinigameManager : MonoBehaviour
 {
     public static MinigameManager Instance { get; private set; }

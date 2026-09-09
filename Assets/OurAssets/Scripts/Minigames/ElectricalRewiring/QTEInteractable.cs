@@ -24,7 +24,7 @@ public class QTEInteractable : Interactable
 		//}
 	}
 
-	public override object[] Interact(params object[] inputParameters)
+	public override InteractionStatus Interact(params object[] inputParameters)
 	{
 		if (inputParameters.Length != 2)
 		{
@@ -52,8 +52,8 @@ public class QTEInteractable : Interactable
 			}
 		}
 		// David - Return nothing for now, if you want the qtePlayer to receive information
-		// then output an array of objects instead
-		return null;
+		// then output an array of objects as well
+		return new InteractionStatus() { EndInteraction = true };
 	}
 
 	public void OnQTESuccess()

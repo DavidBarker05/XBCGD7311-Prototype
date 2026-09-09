@@ -7,7 +7,7 @@ public class WallKnockInteractable : Interactable
 
 	bool m_HasBeenPlayed = false;
 
-	public override object[] Interact(params object[] inputParameters)
+	public override InteractionStatus Interact(params object[] inputParameters)
 	{
 		if (inputParameters.Length != 0)
 		{
@@ -20,6 +20,6 @@ public class WallKnockInteractable : Interactable
 			if (!m_HasBeenPlayed || m_CanBePlayedAgain) WallKnockMinigameStarter.Instance.StartWallKnockMinigame();
 			m_HasBeenPlayed = true;
 		}
-		return null;
+		return new InteractionStatus() { EndInteraction = true };
 	}
 }

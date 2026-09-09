@@ -9,7 +9,7 @@ public class ChaseMinigameInteract : Interactable
 
 	bool m_HasBeenPlayed = false;
 
-	public override object[] Interact(params object[] inputParameters)
+	public override InteractionStatus Interact(params object[] inputParameters)
 	{
 		if (inputParameters.Length != 0)
 		{
@@ -25,6 +25,6 @@ public class ChaseMinigameInteract : Interactable
 			}
 			m_HasBeenPlayed = true;
 		}
-		return null;
+		return new InteractionStatus() { EndInteraction = true };
 	}
 }
