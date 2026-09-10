@@ -3,56 +3,47 @@ using UnityEngine;
 
 public class DialogueManager : MonoBehaviour
 {
-    static DialogueManager _instance;
-    public static DialogueManager Instance
-    {
-        get
-        {
-            // Lazy instantiation
-            if (!_instance)
-            {
-                GameObject go = new GameObject(nameof(DialogueManager));
-                _instance = go.AddComponent<DialogueManager>();
-            }
-            return _instance;
-        }
-    }
+    public static DialogueManager Instance { get; private set; }
 
-    Queue<DialogueItem> dialogueQueue;
+    [SerializeField]
+    DialogueDisplayer m_DialogueDisplayer;
 
-    Dialogue currentDialogue;
+    Queue<DialogueItem> m_DialogueQueue;
+
+    Dialogue m_CurrentDialogue;
     public DialogueItem CurrentDialogueItem { get; private set; }
 
     void Awake()
     {
-        if (_instance && _instance != this) Destroy(gameObject);
-        else _instance = this;
+        if (Instance && Instance != this) Destroy(gameObject);
+        else Instance = this;
     }
 
-    public void StartDialogue(Dialogue dialogue)
+    public void StartDialogue(Dialogue dialogue, System.Action callBackFunction = null)
     {
         if (dialogue == null) return;
         Clear();
-        currentDialogue = dialogue;
-        dialogueQueue = new Queue<DialogueItem>(dialogue.DialogueItems);
-        if (dialogueQueue.Count != 0) LoadNextItem(); // Load the first item
+        m_CurrentDialogue = dialogue;
+        m_DialogueQueue = new Queue<DialogueItem>(dialogue.DialogueItems);
+        if (m_DialogueQueue.Count != 0) LoadNextItem(); // Load the first item
+        m_DialogueDisplayer.StartDisplayingDialogue(callBackFunction);
     }
 
     public void LoadNextItem()
     {
-        if (dialogueQueue == null || dialogueQueue.Count == 0)
+        if (m_DialogueQueue == null || m_DialogueQueue.Count == 0)
         {
             Clear();
             return;
         }
-        CurrentDialogueItem = dialogueQueue.Dequeue();
+        CurrentDialogueItem = m_DialogueQueue.Dequeue();
     }
 
     public void Clear()
     {
-        if (currentDialogue == null) return;
-        dialogueQueue = null;
-        currentDialogue = null;
+        if (m_CurrentDialogue == null) return;
+        m_DialogueQueue = null;
+        m_CurrentDialogue = null;
         CurrentDialogueItem = null;
     }
 }
