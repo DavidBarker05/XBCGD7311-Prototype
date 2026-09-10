@@ -25,6 +25,8 @@ public class Player : MonoBehaviour
     CameraInput m_CameraInput;
     MouseInfo m_MouseInfo;
 
+    public PlayerCharacter CurrentPlayerCharacter => m_PlayerCharacter;
+
     void Awake()
     {
         m_PlayerInput = GetComponent<PlayerInput>();
