@@ -9,7 +9,6 @@ public class MenuCharacterInitData : IPlayerCharacterInitData
 public class MenuCharacterUpdateData : IPlayerCharacterUpdateData
 {
     public float DeltaTime { get; set; }
-    public Quaternion CameraRotation { get; set; }
     public MouseInfo MouseInfo { get; set; }
 }
 

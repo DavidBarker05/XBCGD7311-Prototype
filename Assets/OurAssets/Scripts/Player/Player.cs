@@ -17,6 +17,12 @@ public class Player : MonoBehaviour
     PlayerCamera m_PlayerCamera;
     [SerializeField]
     Camera m_Camera;
+    [SerializeField]
+    Camera m_HoldCamera;
+    [SerializeField]
+    Camera m_HoldClipCamera;
+    [SerializeField]
+    Transform m_HoldPosTransform;
 
     PlayerInput m_PlayerInput;
 
@@ -43,11 +49,7 @@ public class Player : MonoBehaviour
         if (!m_PlayerCharacter || !m_PlayerCamera) return;
         SetCursorVisibility(m_PlayerCharacter.MouseVisible);
         m_PlayerCharacterUpdateData.DeltaTime = Time.deltaTime;
-        if (m_PlayerCharacter.DoCameraRotation)
-        {
-            m_PlayerCamera.UpdateRotation(ref m_CameraInput, Time.deltaTime);
-            m_PlayerCharacterUpdateData.CameraRotation = m_PlayerCamera.transform.rotation;
-        }
+        if (m_PlayerCharacter.DoCameraRotation) m_PlayerCamera.UpdateRotation(ref m_CameraInput, Time.deltaTime);
         if (m_PlayerCharacter.UseMouseScreenPosition)
         {
             m_MouseInfo.MouseScreenPosition = GetMousePositionOnScreen();
@@ -75,8 +77,11 @@ public class Player : MonoBehaviour
     {
         FirstPersonPlayerCharacter => new FirstPersonPlayerCharacterInitData()
         {
+            Camera = m_Camera,
+            HoldCamera = m_HoldCamera,
+            HoldClipCamera = m_HoldClipCamera,
+            HoldPosTransform = m_HoldPosTransform,
             CharacterSettings = m_PlayerSettings.CharacterSettings,
-            InteractSettings = m_PlayerSettings.InteractSettings,
             Player = this,
             PauseCharacter = m_PauseCharacter
         },

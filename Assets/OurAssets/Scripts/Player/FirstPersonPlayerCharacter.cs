@@ -1,19 +1,21 @@
 using UnityEngine;
 using Util.SystemUtils;
-using Util.UnityUtils;
 
 public class FirstPersonPlayerCharacterInitData : IPlayerCharacterInitData
 {
     public CharacterSettings CharacterSettings { get; set; }
-    public InteractSettings InteractSettings { get; set; }
     public Player Player { get; set; }
     public PauseCharacter PauseCharacter { get; set; }
+
+    public Camera Camera { get; set; }
+    public Camera HoldCamera { get; set; }
+    public Camera HoldClipCamera { get; set; }
+    public Transform HoldPosTransform { get; set; }
 }
 
 public class FirstPersonPlayerCharacterUpdateData : IPlayerCharacterUpdateData
 {
     public float DeltaTime { get; set; }
-    public Quaternion CameraRotation { get; set; }
     public MouseInfo MouseInfo { get; set; }
 
     public Vector2 MovementInput { get; set; }
@@ -28,8 +30,11 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
     static readonly float s_Epsilon = 0.05f;
     static readonly float s_SqrEpsilon = s_Epsilon * s_Epsilon;
 
+    [SerializeField]
+    FirstPersonPlayerCharacterInteraction m_FirstPersonPlayerCharacterInteraction;
+
+    Camera m_Camera;
     CharacterSettings m_CharacterSettings;
-    InteractSettings m_InteractSettings;
     CharacterController m_CC;
 
     bool m_bIsGrounded;
@@ -51,7 +56,6 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
     public override bool DoCameraRotation => true;
     public override bool UseMouseScreenPosition => false;
 
-    Player m_Player;
     PauseCharacter m_PauseCharacter;
 
     void Awake() => m_CC = GetComponent<CharacterController>();
@@ -60,9 +64,17 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
     {
         FirstPersonPlayerCharacterInitData initData = Sys.AssertType<FirstPersonPlayerCharacterInitData>(playerCharacterInitData, nameof(playerCharacterInitData));
         m_CharacterSettings = initData.CharacterSettings;
-        m_InteractSettings = initData.InteractSettings;
-        m_Player = initData.Player;
         m_PauseCharacter = initData.PauseCharacter;
+        m_Camera = initData.Camera;
+        m_FirstPersonPlayerCharacterInteraction.Init(new FirstPersonPlayerCharacterInteractionInitData()
+        {
+            Camera = m_Camera,
+            HoldCamera = initData.HoldCamera,
+            HoldClipCamera = initData.HoldClipCamera,
+            HoldPosTransform = initData.HoldPosTransform,
+            Player = initData.Player,
+            FirstPersonPlayerCharacter = this
+        });
         HasBeenInitialised = true;
     }
 
@@ -72,6 +84,8 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
         FirstPersonPlayerCharacterUpdateData updateData = Sys.AssertType<FirstPersonPlayerCharacterUpdateData>(playerCharacterUpdateData, nameof(playerCharacterUpdateData));
         HandleMovement(ref updateData);
         HandleInteraction(ref updateData);
+        IPlayerInteractionUpdateData interactionUpdateData = new FirstPersonPlayerCharacterInteractionUpdateData() { DeltaTime = updateData.DeltaTime };
+        m_FirstPersonPlayerCharacterInteraction.UpdateInteraction(ref interactionUpdateData);
     }
 
     public override void OnPausePressed()
@@ -83,7 +97,7 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
     #region Movement
     void HandleMovement(ref FirstPersonPlayerCharacterUpdateData updateData)
     {
-        UpdateRotation(updateData.CameraRotation);
+        UpdateRotation(m_Camera.transform.rotation);
         CollisionChecks();
         UpdateTimers(updateData.DeltaTime);
         UpdateMovementSpeed(updateData.SprintPressedThisFrame);
@@ -180,30 +194,8 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
     #region Interaction
     void HandleInteraction(ref FirstPersonPlayerCharacterUpdateData updateData)
     {
-        if (updateData.PressedInteract)
-        {
-            Vector3 direction = updateData.CameraRotation * Vector3.forward; // Rotate forward vector by camera rotation to get camera's forward vector
-            DoInteraction(direction);
-        }
+        if (updateData.PressedInteract) m_FirstPersonPlayerCharacterInteraction.Interact();
         updateData.PressedInteract = false;
-    }
-
-    void DoInteraction(Vector3 direction)
-    {
-        if (Physics.Raycast(
-            origin: CameraTarget.position,
-            direction: direction,
-            hitInfo: out RaycastHit hit,
-            maxDistance: m_InteractSettings.InteractionDistance,
-            layerMask: m_InteractSettings.InteractableLayer,
-            queryTriggerInteraction: QueryTriggerInteraction.Collide))
-        {
-            Interactable interactable = hit.GetComponent<Interactable>();
-            if (interactable == null) return;
-            if (interactable is QTEInteractable) interactable.Interact(m_Player, this);
-            else if (interactable is WireMinigameInteractable or WallKnockInteractable or ChaseMinigameInteract) interactable.Interact();
-            else if (interactable is Door or NPC) interactable.Interact(this);
-        }
     }
     #endregion Interaction
 }

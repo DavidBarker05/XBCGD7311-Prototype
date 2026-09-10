@@ -7,7 +7,6 @@ public class QTEPlayerCharacterInitData : IPlayerCharacterInitData { }
 public class QTEPlayerCharacterUpdateData : IPlayerCharacterUpdateData
 {
 	public float DeltaTime { get; set; }
-	public Quaternion CameraRotation { get; set; }
 	public MouseInfo MouseInfo { get; set; }
 
 	public bool DidQTEInput { get; set; }

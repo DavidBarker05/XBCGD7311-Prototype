@@ -9,7 +9,6 @@ public class PauseCharacterInitData : IPlayerCharacterInitData
 public class PauseCharacterUpdateData : IPlayerCharacterUpdateData
 {
     public float DeltaTime { get; set; }
-    public Quaternion CameraRotation { get; set; }
     public MouseInfo MouseInfo { get; set; }
 }
 
