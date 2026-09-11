@@ -9,6 +9,14 @@ public static class PlayerSaveManager
 
     const int TutorialRandomSeed = 761218;
 
+    // TEMPORARY: Remove when all systems in place
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    static void Bootstrap()
+    {
+        LoadSave();
+        if (CurrentSaveData == null) CreateNewSave();
+    }
+
     public static void CreateNewSave()
     {
         CurrentSaveData = new PlayerSaveData()
