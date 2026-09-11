@@ -48,35 +48,29 @@ public class NPCHouse : MonoBehaviour
     [field: SerializeField]
     public Transform OutsideTeleportSpot { get; private set; }
 
-    public (MinigameType Minigame, bool IsDone)[] HouseMinigames { get; private set; }
-    public bool AllMinigamesBeaten
-    {
-        get
-        {
-            foreach ((MinigameType _, bool IsDone) in HouseMinigames) if (!IsDone) return false;
-            return true;
-        }
-    }
+    public HouseProgress Progress { get; private set; }
 
     GameObject m_ActiveDoorObject;
     readonly List<GameObject> m_SpawnedInteriorObjects = new List<GameObject>();
-    bool m_bIsEntered;
 
     void Awake()
     {
-        GenerateHouseMinigamePlan();
-        SpawnEntryDoor();
+        Progress = HouseProgressTracker.GetOrRegisterHouse(transform.position, GenerateHouseMinigamePlan);
+        SpawnDoor();
+        // TODO: once level generation/scene-load flow exists, this is where re-entering the house and
+        // restoring the player's position (Progress.PlayerPosition/PlayerRotation/CameraRotation) after
+        // a reload while Progress.IsPlayerInside is true should happen
     }
 
     void Update()
     {
-        if (!m_bIsEntered) return;
-        MinigameType? completed = HouseMinigameProgressTracker.ConsumePendingCompletedMinigame();
+        if (!Progress.IsPlayerInside) return;
+        MinigameType? completed = HouseProgressTracker.ConsumePendingCompletedMinigame(transform.position);
         if (completed.HasValue) OnMinigameCompleted(completed.Value);
     }
 
     #region Plan Generation
-    void GenerateHouseMinigamePlan()
+    MinigameType[] GenerateHouseMinigamePlan()
     {
         int wireCount, wallKnockCount, chaseCount;
         do
@@ -90,37 +84,16 @@ public class NPCHouse : MonoBehaviour
         for (int i = 0; i < wireCount; ++i) plan.Add(MinigameType.Wires);
         for (int i = 0; i < wallKnockCount; ++i) plan.Add(MinigameType.WallKnockAndPipes);
         for (int i = 0; i < chaseCount; ++i) plan.Add(MinigameType.ChaseMinigame);
-
-        HouseMinigames = new (MinigameType, bool)[plan.Count];
-        for (int i = 0; i < plan.Count; ++i) HouseMinigames[i] = (plan[i], false);
-    }
-
-    int CountOfType(MinigameType type)
-    {
-        int count = 0;
-        foreach ((MinigameType Minigame, bool IsDone) entry in HouseMinigames) if (entry.Minigame == type) ++count;
-        return count;
-    }
-
-    void MarkMinigameCompleted(MinigameType type)
-    {
-        for (int i = 0; i < HouseMinigames.Length; ++i)
-        {
-            if (HouseMinigames[i].Minigame == type && !HouseMinigames[i].IsDone)
-            {
-                HouseMinigames[i] = (type, true);
-                return;
-            }
-        }
+        return plan.ToArray();
     }
     #endregion Plan Generation
 
     #region Door
-    void SpawnEntryDoor()
+    void SpawnDoor()
     {
         Door door = Instantiate(m_NonChaseDoorPrefab, m_DoorSpawnLocation.position, m_DoorSpawnLocation.rotation);
         door.OwningHouse = this;
-        door.DoorType = DoorType.Entry;
+        door.DoorType = Progress.DoorType; // Usually Entry, but could already be Exit if this house's progress is being resumed after a reload
         m_ActiveDoorObject = door.gameObject;
     }
 
@@ -134,6 +107,7 @@ public class NPCHouse : MonoBehaviour
         Door exitDoor = Instantiate(m_NonChaseDoorPrefab, position, rotation);
         exitDoor.OwningHouse = this;
         exitDoor.DoorType = DoorType.Exit;
+        Progress.DoorType = DoorType.Exit;
         m_ActiveDoorObject = exitDoor.gameObject;
         m_SpawnedInteriorObjects.Add(exitDoor.gameObject);
     }
@@ -164,7 +138,8 @@ public class NPCHouse : MonoBehaviour
 
     void SpawnInteractablesOfType<T>(MinigameType type, Transform[] possibleLocations, T prefab) where T : Component
     {
-        int count = CountOfType(type);
+        int count = 0; // Only the ones not already beaten need spawning, matters if this house's interior is ever rebuilt after some were already completed
+        for (int i = 0; i < Progress.MinigameTypes.Length; ++i) if (Progress.MinigameTypes[i] == type && !Progress.MinigamesBeaten[i]) ++count;
         if (count <= 0) return;
         if (!Arrays.IsValid(possibleLocations) || !prefab)
         {
@@ -187,17 +162,24 @@ public class NPCHouse : MonoBehaviour
 
     void OnMinigameCompleted(MinigameType type)
     {
-        MarkMinigameCompleted(type);
+        Progress.MarkMinigameBeaten(type);
         if (type == MinigameType.ChaseMinigame) ReplaceChaseInteractableWithExitDoor();
     }
 
     public void EnterHouse(Door doorUsedToEnter)
     {
-        m_bIsEntered = true;
+        Progress.IsPlayerInside = true;
+        HouseProgressTracker.SetActiveHouse(transform.position);
         SpawnNPC();
         SpawnMinigameInteractables();
 
-        if (CountOfType(MinigameType.ChaseMinigame) > 0)
+        bool bHasUnbeatenChase = false;
+        for (int i = 0; i < Progress.MinigameTypes.Length; ++i)
+        {
+            if (Progress.MinigameTypes[i] == MinigameType.ChaseMinigame && !Progress.MinigamesBeaten[i]) bHasUnbeatenChase = true;
+        }
+
+        if (bHasUnbeatenChase)
         {
             Vector3 position = doorUsedToEnter.transform.position;
             Quaternion rotation = doorUsedToEnter.transform.rotation;
@@ -210,13 +192,15 @@ public class NPCHouse : MonoBehaviour
         else
         {
             doorUsedToEnter.DoorType = DoorType.Exit;
+            Progress.DoorType = DoorType.Exit;
             m_ActiveDoorObject = doorUsedToEnter.gameObject;
         }
     }
 
     public void ExitHouse()
     {
-        m_bIsEntered = false;
+        Progress.IsPlayerInside = false;
+        HouseProgressTracker.SetActiveHouse(null);
         foreach (GameObject spawnedObject in m_SpawnedInteriorObjects) if (spawnedObject) Destroy(spawnedObject);
         m_SpawnedInteriorObjects.Clear();
     }

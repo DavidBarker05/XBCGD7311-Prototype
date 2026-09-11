@@ -150,7 +150,7 @@ public class PipeGrid : MonoBehaviour
         m_PipePlayerCharacter.DeleteCellIndicator();
         if (m_Player && m_FirstPersonPlayerCharacter) m_Player.ChangeCharacter(m_FirstPersonPlayerCharacter);
         MinigameManager.Instance?.OnMinigameBeaten();
-        HouseMinigameProgressTracker.ReportMinigameCompleted(MinigameType.WallKnockAndPipes);
+        HouseProgressTracker.ReportMinigameCompleted(MinigameType.WallKnockAndPipes);
         DeletePipes(ref m_PipeCells);
         m_UnscaledTransform.gameObject.SetActive(false);
     }

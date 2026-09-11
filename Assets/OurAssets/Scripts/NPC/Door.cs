@@ -11,8 +11,6 @@ public class Door : Interactable
     public DoorType DoorType { get; set; } = DoorType.Entry;
     public NPCHouse OwningHouse { get; set; }
 
-    bool m_bHasExited = false;
-
     public override InteractionStatus Interact(params object[] inputParameters)
     {
         if (inputParameters.Length != 1)
@@ -23,7 +21,7 @@ public class Door : Interactable
         }
         else if (inputParameters[0] is FirstPersonPlayerCharacter player)
         {
-            if (DoorType == DoorType.Entry && !m_bHasExited)
+            if (DoorType == DoorType.Entry && !OwningHouse.Progress.HasBeatenHouse)
             {
                 CharacterController cc = player.GetComponent<CharacterController>();
                 cc.enabled = false;
@@ -33,7 +31,7 @@ public class Door : Interactable
             }
             else if (DoorType == DoorType.Exit)
             {
-                if (!OwningHouse.AllMinigamesBeaten)
+                if (!OwningHouse.Progress.AllMinigamesBeaten)
                 {
 #if UNITY_EDITOR
                     Debug.Log("Door is locked until all of this house's minigames have been beaten");
@@ -44,7 +42,7 @@ public class Door : Interactable
                 cc.enabled = false;
                 player.transform.SetPositionAndRotation(OwningHouse.OutsideTeleportSpot.position, OwningHouse.OutsideTeleportSpot.rotation);
                 cc.enabled = true;
-                m_bHasExited = true;
+                OwningHouse.Progress.HasBeatenHouse = true;
                 OwningHouse.ExitHouse();
             }
         }

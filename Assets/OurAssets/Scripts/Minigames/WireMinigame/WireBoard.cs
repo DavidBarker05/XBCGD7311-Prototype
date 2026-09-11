@@ -113,7 +113,7 @@ public class WireBoard : MonoBehaviour
 			Destroy(m_Wires[i].gameObject);
 		}
 		MinigameManager.Instance?.OnMinigameBeaten();
-		HouseMinigameProgressTracker.ReportMinigameCompleted(MinigameType.Wires);
+		HouseProgressTracker.ReportMinigameCompleted(MinigameType.Wires);
 		m_UnscaledTransform.gameObject.SetActive(false);
 	}
 
