@@ -75,8 +75,8 @@ public struct SerializablePipeGridData
 {
 	// Fields to be serialised
 	public SerializableVectorTwoInt gridSize;
-	public SerializableStartEndPipe startPipe;
-	public SerializableStartEndPipe endPipe;
+	public SerializableStartEndPipe[] startPipes;
+	public SerializableStartEndPipe[] endPipes;
 	public SerializablePipeData[] pipes;
 
 	// Property to read the fields as meaningful data, don't serialise
@@ -85,14 +85,22 @@ public struct SerializablePipeGridData
 		get
 		{
 			Vector2Int _gridSize = gridSize.Deserialized;
-			StartEndPipe _startPipe = startPipe.Deserialized;
-			StartEndPipe _endPipe = endPipe.Deserialized;
+			StartEndPipe[] _startPipes = new StartEndPipe[startPipes.Length];
+			for (int i = 0; i < _startPipes.Length; ++i)
+			{
+				_startPipes[i] = startPipes[i].Deserialized;
+			}
+			StartEndPipe[] _endPipes = new StartEndPipe[endPipes.Length];
+			for (int i = 0; i < _endPipes.Length; ++i)
+			{
+				_endPipes[i] = endPipes[i].Deserialized;
+			}
 			PipeData[] _pipes = new PipeData[pipes.Length];
 			for (int i = 0; i < _pipes.Length; ++i)
 			{
 				_pipes[i] = pipes[i].Deserialized;
 			}
-			return new PipeGridData() { GridSize = _gridSize, StartPipe = _startPipe, EndPipe = _endPipe, Pipes = _pipes };
+			return new PipeGridData() { GridSize = _gridSize, StartPipes = _startPipes, EndPipes = _endPipes, Pipes = _pipes };
 		}
 	}
 }
@@ -103,9 +111,9 @@ public struct PipeGridData
 	[field: SerializeField]
 	public Vector2Int GridSize { get; set; }
 	[field: SerializeField]
-	public StartEndPipe StartPipe { get; set; }
+	public StartEndPipe[] StartPipes { get; set; }
 	[field: SerializeField]
-	public StartEndPipe EndPipe { get; set; }
+	public StartEndPipe[] EndPipes { get; set; }
 	[field: SerializeField]
 	public PipeData[] Pipes { get; set; }
 
@@ -114,14 +122,22 @@ public struct PipeGridData
 		get
 		{
 			SerializableVectorTwoInt gridSize = new SerializableVectorTwoInt() { x = GridSize.x, y = GridSize.y };
-			SerializableStartEndPipe startPipe = StartPipe.Serialized;
-			SerializableStartEndPipe endPipe = EndPipe.Serialized;
+			SerializableStartEndPipe[] startPipes = new SerializableStartEndPipe[StartPipes.Length];
+			for (int i = 0; i < StartPipes.Length; ++i)
+			{
+				startPipes[i] = StartPipes[i].Serialized;
+			}
+			SerializableStartEndPipe[] endPipes = new SerializableStartEndPipe[EndPipes.Length];
+			for (int i = 0; i < EndPipes.Length; ++i)
+			{
+				endPipes[i] = EndPipes[i].Serialized;
+			}
 			SerializablePipeData[] pipes = new SerializablePipeData[Pipes.Length];
 			for (int i = 0; i < Pipes.Length; ++i)
 			{
 				pipes[i] = Pipes[i].Serialized;
 			}
-			return new SerializablePipeGridData() { gridSize = gridSize, startPipe = startPipe, endPipe = endPipe, pipes = pipes };
+			return new SerializablePipeGridData() { gridSize = gridSize, startPipes = startPipes, endPipes = endPipes, pipes = pipes };
 		}
 	}
 }

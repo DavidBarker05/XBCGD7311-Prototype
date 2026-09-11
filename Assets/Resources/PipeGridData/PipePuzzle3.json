@@ -3,20 +3,24 @@
         "x": 8,
         "y": 8
     },
-    "startPipe": {
-        "cellPosition": {
-            "x": 0,
-            "y": 7
-        },
-        "entranceExitSide": 0
-    },
-    "endPipe": {
-        "cellPosition": {
-            "x": 7,
-            "y": 0
-        },
-        "entranceExitSide": 3
-    },
+    "startPipes": [
+        {
+            "cellPosition": {
+                "x": 0,
+                "y": 7
+            },
+            "entranceExitSide": 0
+        }
+    ],
+    "endPipes": [
+        {
+            "cellPosition": {
+                "x": 7,
+                "y": 0
+            },
+            "entranceExitSide": 3
+        }
+    ],
     "pipes": [
         {
             "pipeType": "PipeScriptableObjects/StraightPipe",
