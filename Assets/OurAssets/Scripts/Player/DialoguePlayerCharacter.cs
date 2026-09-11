@@ -13,7 +13,7 @@ public class DialoguePlayerCharacter : PlayerCharacter
 {
     public override bool HasBeenInitialised { get; protected set; }
 
-    public override string ActionMap => "DialoguePlayer";
+    public override string ActionMap => string.Empty;
     public override bool MouseVisible => true;
     public override bool DoCameraRotation => false;
     public override bool UseMouseScreenPosition => false;

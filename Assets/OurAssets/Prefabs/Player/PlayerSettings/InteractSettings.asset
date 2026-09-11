@@ -15,4 +15,7 @@ MonoBehaviour:
   <InteractionDistance>k__BackingField: 2
   <InteractableLayer>k__BackingField:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 257
+  <HoldLayer>k__BackingField:
+    serializedVersion: 2
+    m_Bits: 512
