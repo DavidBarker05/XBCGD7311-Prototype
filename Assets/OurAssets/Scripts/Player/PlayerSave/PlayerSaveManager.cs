@@ -21,11 +21,13 @@ public static class PlayerSaveManager
     {
         CurrentSaveData = new PlayerSaveData()
         {
-            DaySeed = Random.Range(int.MinValue, int.MaxValue)
+            DaySeed = GenerateEntropySeed()
         };
         SaveGame();
         SeedRandomForCurrentDay();
     }
+
+    static int GenerateEntropySeed() => unchecked((int)System.DateTime.UtcNow.Ticks);
 
     public static void SaveGame()
     {
@@ -44,6 +46,8 @@ public static class PlayerSaveManager
         CurrentSaveData = JsonUtility.FromJson<PlayerSaveData>(json);
         SeedRandomForCurrentDay();
     }
+
+    public static void GenerateRandomSeed() => CurrentSaveData.DaySeed = GenerateEntropySeed();
 
     public static void SeedRandomForCurrentDay()
     {
