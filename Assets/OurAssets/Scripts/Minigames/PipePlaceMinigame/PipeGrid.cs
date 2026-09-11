@@ -473,22 +473,29 @@ public class PipeGrid : MonoBehaviour
         return IsPlacedPipe(pipe) && pipe.CurrentOrientation.HasHole(startEndPipe.EntranceExitSide);
     }
 
-    // Beaten once every end pipe (however many there are) is reachable by water from at least one open start pipe
+    static List<Vector2Int> OpenIndices(ResolvedStartEndPipe[] startEndPipes, System.Func<ResolvedStartEndPipe, bool> isOpen)
+    {
+        List<Vector2Int> indices = new List<Vector2Int>(startEndPipes.Length);
+        foreach (ResolvedStartEndPipe startEndPipe in startEndPipes) if (isOpen(startEndPipe)) indices.Add(startEndPipe.ArrayIndex);
+        return indices;
+    }
+
     public void CheckWaterCanReachEnd()
     {
-        List<Vector2Int> openStartIndices = new List<Vector2Int>();
-        foreach (ResolvedStartEndPipe startPipe in m_StartPipes) if (IsOpenStartEndPipe(startPipe)) openStartIndices.Add(startPipe.ArrayIndex);
-        if (openStartIndices.Count == 0) return;
+        List<Vector2Int> openStartIndices = OpenIndices(m_StartPipes, IsOpenStartEndPipe);
+        List<Vector2Int> openEndIndices = OpenIndices(m_EndPipes, IsOpenStartEndPipe);
+        if (openStartIndices.Count != m_StartPipes.Length || openEndIndices.Count != m_EndPipes.Length) return; // Every start/end must be open, not just some of them
 
-        HashSet<Vector2Int> reachableCells = FindReachableCells(openStartIndices);
+        HashSet<Vector2Int> reachableFromStarts = FindReachableCells(openStartIndices);
+        foreach (Vector2Int endIndex in openEndIndices) if (!reachableFromStarts.Contains(endIndex)) return;
 
-        List<Pipe> reachedEndPipes = new List<Pipe>(m_EndPipes.Length);
-        foreach (ResolvedStartEndPipe endPipe in m_EndPipes)
-        {
-            if (!IsOpenStartEndPipe(endPipe) || !reachableCells.Contains(endPipe.ArrayIndex)) return;
-            reachedEndPipes.Add(endPipe.PipeCell);
-        }
-        EndMinigame(reachedEndPipes);
+        HashSet<Vector2Int> reachableFromEnds = FindReachableCells(openEndIndices);
+        foreach (Vector2Int startIndex in openStartIndices) if (!reachableFromEnds.Contains(startIndex)) return;
+
+        List<Pipe> reachedPipes = new List<Pipe>(m_StartPipes.Length + m_EndPipes.Length);
+        foreach (ResolvedStartEndPipe startPipe in m_StartPipes) reachedPipes.Add(startPipe.PipeCell);
+        foreach (ResolvedStartEndPipe endPipe in m_EndPipes) reachedPipes.Add(endPipe.PipeCell);
+        EndMinigame(reachedPipes);
     }
     #endregion Water Flow Check
     #endregion Pipe Flow

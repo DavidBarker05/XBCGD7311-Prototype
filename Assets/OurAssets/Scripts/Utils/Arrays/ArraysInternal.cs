@@ -45,7 +45,7 @@ namespace Util
 				[MethodImpl(MethodImplOptions.AggressiveInlining)]
 				public static bool IsValidIndexMultidimensional(Array array, int firstIndex, int secondIndex, params int[] remainingIndices)
 				{
-					if (!IsValidIndex(array.GetLength(0), firstIndex) || !IsValidIndex(array.GetLength(0), secondIndex)) return false;
+					if (!IsValidIndex(array.GetLength(0), firstIndex) || !IsValidIndex(array.GetLength(1), secondIndex)) return false;
 					if (!IsValid(remainingIndices)) return true; // First index and second index are valid, but there are no more indices to check therefore valid
 					if (remainingIndices.Length > array.Rank - 2) return false; // Already checked the first 2 ranks so use array.Rank - 2
 					for (int i = 0; i < remainingIndices.Length; ++i)
