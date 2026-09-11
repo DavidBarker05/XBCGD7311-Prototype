@@ -7,10 +7,16 @@ public static class PlayerSaveManager
 
     static readonly string SaveFile = "save.dat";
 
+    const int TutorialRandomSeed = 761218;
+
     public static void CreateNewSave()
     {
-        CurrentSaveData = new PlayerSaveData();
+        CurrentSaveData = new PlayerSaveData()
+        {
+            DaySeed = Random.Range(int.MinValue, int.MaxValue)
+        };
         SaveGame();
+        SeedRandomForCurrentDay();
     }
 
     public static void SaveGame()
@@ -28,5 +34,12 @@ public static class PlayerSaveManager
         string encryptedJson = File.ReadAllText(saveLocation);
         string json = EncryptionUtility.DecryptString(encryptedJson);
         CurrentSaveData = JsonUtility.FromJson<PlayerSaveData>(json);
+        SeedRandomForCurrentDay();
+    }
+
+    public static void SeedRandomForCurrentDay()
+    {
+        int seed = CurrentSaveData.DayNumber == 0 ? TutorialRandomSeed : CurrentSaveData.DaySeed;
+        Random.InitState(seed);
     }
 }

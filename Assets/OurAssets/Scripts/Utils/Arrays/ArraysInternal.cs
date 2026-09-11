@@ -121,10 +121,10 @@ namespace Util
 				public static void ShuffleSingleDimensional(Array array)
 				{
 					// Fisher-Yates shuffle: https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle
-					System.Random rng = new System.Random();
+					// Uses UnityEngine.Random (not System.Random) so this respects Random.InitState seeding
 					for (int i = array.Length - 1; i > 0; --i)
 					{
-						int j = rng.Next(i + 1);
+						int j = UnityEngine.Random.Range(0, i + 1);
 						array.Swap(i, j);
 					}
 				}
