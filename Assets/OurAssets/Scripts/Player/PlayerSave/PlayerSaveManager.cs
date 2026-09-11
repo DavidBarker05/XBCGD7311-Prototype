@@ -27,7 +27,7 @@ public static class PlayerSaveManager
         SeedRandomForCurrentDay();
     }
 
-    static int GenerateEntropySeed() => unchecked((int)System.DateTime.UtcNow.Ticks);
+    static int GenerateEntropySeed() => Random.Range(int.MinValue, int.MaxValue) ^ unchecked((int)System.DateTime.UtcNow.Ticks);
 
     public static void SaveGame()
     {
