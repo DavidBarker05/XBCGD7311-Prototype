@@ -105,9 +105,11 @@ public static class HouseProgressTracker
     }
     #endregion Active House
 
-    public static void SavePlayerTransform(Vector3 housePosition, Vector3 playerPosition, Quaternion playerRotation, Quaternion cameraRotation)
+    // Cheap no-op when no house is active (nothing to save to) - safe to call every frame
+    public static void UpdateActiveHousePlayerTransform(Vector3 playerPosition, Quaternion playerRotation, Quaternion cameraRotation)
     {
-        HouseProgress progress = GetHouse(housePosition);
+        if (!s_ActiveHousePosition.HasValue) return;
+        HouseProgress progress = GetHouse(s_ActiveHousePosition.Value);
         if (progress == null) return;
         progress.PlayerPosition = playerPosition;
         progress.PlayerRotation = playerRotation;

@@ -21,6 +21,12 @@ public class PlayerCamera : MonoBehaviour
         m_EulerAngles = target.eulerAngles;
     }
 
+    public void SetRotation(Quaternion rotation)
+    {
+        transform.rotation = rotation;
+        m_EulerAngles = rotation.eulerAngles;
+    }
+
     public void UpdateRotation(ref CameraInput input, float deltaTime)
     {
         float lY = input.LookInput.y;

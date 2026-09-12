@@ -53,18 +53,33 @@ public class NPCHouse : MonoBehaviour
     GameObject m_ActiveDoorObject;
     readonly List<GameObject> m_SpawnedInteriorObjects = new List<GameObject>();
 
-    void Awake()
+    public void LoadHouse()
     {
         Progress = HouseProgressTracker.GetOrRegisterHouse(transform.position, GenerateHouseMinigamePlan);
-        SpawnDoor();
-        // TODO: once level generation/scene-load flow exists, this is where re-entering the house and
-        // restoring the player's position (Progress.PlayerPosition/PlayerRotation/CameraRotation) after
-        // a reload while Progress.IsPlayerInside is true should happen
+        if (Progress.IsPlayerInside) ResumeInsideHouse();
+        else SpawnDoor();
+    }
+
+    void ResumeInsideHouse()
+    {
+        HouseProgressTracker.SetActiveHouse(transform.position);
+        SpawnNPC();
+        SpawnMinigameInteractables();
+        SpawnDoorSpotForCurrentProgress();
+    }
+
+    public void UnloadHouse()
+    {
+        if (m_ActiveDoorObject) Destroy(m_ActiveDoorObject);
+        m_ActiveDoorObject = null;
+        foreach (GameObject spawnedObject in m_SpawnedInteriorObjects) if (spawnedObject) Destroy(spawnedObject);
+        m_SpawnedInteriorObjects.Clear();
+        Progress = null;
     }
 
     void Update()
     {
-        if (!Progress.IsPlayerInside) return;
+        if (Progress == null || !Progress.IsPlayerInside) return;
         MinigameType? completed = HouseProgressTracker.ConsumePendingCompletedMinigame(transform.position);
         if (completed.HasValue) OnMinigameCompleted(completed.Value);
     }
@@ -89,12 +104,39 @@ public class NPCHouse : MonoBehaviour
     #endregion Plan Generation
 
     #region Door
+    bool HasUnbeatenChase()
+    {
+        for (int i = 0; i < Progress.MinigameTypes.Length; ++i)
+        {
+            if (Progress.MinigameTypes[i] == MinigameType.ChaseMinigame && !Progress.MinigamesBeaten[i]) return true;
+        }
+        return false;
+    }
+
     void SpawnDoor()
     {
         Door door = Instantiate(m_NonChaseDoorPrefab, m_DoorSpawnLocation.position, m_DoorSpawnLocation.rotation);
         door.OwningHouse = this;
-        door.DoorType = Progress.DoorType; // Usually Entry, but could already be Exit if this house's progress is being resumed after a reload
+        door.DoorType = DoorType.Entry;
         m_ActiveDoorObject = door.gameObject;
+    }
+
+    void SpawnDoorSpotForCurrentProgress()
+    {
+        if (HasUnbeatenChase())
+        {
+            ChaseMinigameInteract chaseInteract = Instantiate(m_ChaseMinigameInteractPrefab, m_DoorSpawnLocation.position, m_DoorSpawnLocation.rotation);
+            m_ActiveDoorObject = chaseInteract.gameObject;
+            m_SpawnedInteriorObjects.Add(m_ActiveDoorObject);
+        }
+        else
+        {
+            Door exitDoor = Instantiate(m_NonChaseDoorPrefab, m_DoorSpawnLocation.position, m_DoorSpawnLocation.rotation);
+            exitDoor.OwningHouse = this;
+            exitDoor.DoorType = DoorType.Exit;
+            Progress.DoorType = DoorType.Exit;
+            m_ActiveDoorObject = exitDoor.gameObject;
+        }
     }
 
     void ReplaceChaseInteractableWithExitDoor()
@@ -173,13 +215,7 @@ public class NPCHouse : MonoBehaviour
         SpawnNPC();
         SpawnMinigameInteractables();
 
-        bool bHasUnbeatenChase = false;
-        for (int i = 0; i < Progress.MinigameTypes.Length; ++i)
-        {
-            if (Progress.MinigameTypes[i] == MinigameType.ChaseMinigame && !Progress.MinigamesBeaten[i]) bHasUnbeatenChase = true;
-        }
-
-        if (bHasUnbeatenChase)
+        if (HasUnbeatenChase())
         {
             Vector3 position = doorUsedToEnter.transform.position;
             Quaternion rotation = doorUsedToEnter.transform.rotation;

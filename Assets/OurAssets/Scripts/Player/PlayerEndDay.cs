@@ -10,12 +10,7 @@ public class PlayerEndDay : Interactable
             Debug.LogWarning($"WARNING: PlayerEndDay objects needs 0 input parameters. Received {inputParameters.Length} input parameters");
 #endif
         }
-        else
-        {
-            ++PlayerSaveManager.CurrentSaveData.DayNumber;
-            if (PlayerSaveManager.CurrentSaveData.DayNumber > 1) PlayerSaveManager.GenerateRandomSeed();
-            PlayerSaveManager.SeedRandomForCurrentDay();
-        }
+        else GameManager.Instance.EndDay();
         return new InteractionStatus() { EndInteraction = true };
     }
 }

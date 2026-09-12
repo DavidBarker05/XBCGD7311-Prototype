@@ -9,9 +9,8 @@ public static class PlayerSaveManager
 
     const int TutorialRandomSeed = 761218;
 
-    // TEMPORARY: Remove when all systems in place
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-    static void Bootstrap()
+    static void Bootstrap() // Actually keep this so if we want to display save info in menu
     {
         LoadSave();
         if (CurrentSaveData == null) CreateNewSave();
@@ -24,7 +23,6 @@ public static class PlayerSaveManager
             DaySeed = GenerateEntropySeed()
         };
         SaveGame();
-        SeedRandomForCurrentDay();
     }
 
     static int GenerateEntropySeed() => Random.Range(int.MinValue, int.MaxValue) ^ unchecked((int)System.DateTime.UtcNow.Ticks);
@@ -44,12 +42,11 @@ public static class PlayerSaveManager
         string encryptedJson = File.ReadAllText(saveLocation);
         string json = EncryptionUtility.DecryptString(encryptedJson);
         CurrentSaveData = JsonUtility.FromJson<PlayerSaveData>(json);
-        SeedRandomForCurrentDay();
     }
 
     public static void GenerateRandomSeed() => CurrentSaveData.DaySeed = GenerateEntropySeed();
 
-    public static void SeedRandomForCurrentDay()
+    public static void UseSeedForCurrentDay()
     {
         int seed = CurrentSaveData.DayNumber == 0 ? TutorialRandomSeed : CurrentSaveData.DaySeed;
         Random.InitState(seed);
