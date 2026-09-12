@@ -44,4 +44,10 @@ public class NPCHouseDailyManager : MonoBehaviour
         m_LoadedHouses.Clear();
         HouseProgressTracker.ClearAll();
     }
+
+    public bool AllMinigamesBeatenForToday()
+    {
+        foreach (NPCHouse house in m_LoadedHouses) if (!house.Progress.AllMinigamesBeaten) return false;
+        return true;
+    }
 }

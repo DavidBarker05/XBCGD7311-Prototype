@@ -60,6 +60,13 @@ public class GameManager : MonoBehaviour
 
     public void EndDay()
     {
+        if (!NPCHouseDailyManager.Instance.AllMinigamesBeatenForToday())
+        {
+#if UNITY_EDITOR
+            Debug.Log("Can't end the day until every house's minigames have been beaten");
+#endif
+            return;
+        }
         ++PlayerSaveManager.CurrentSaveData.DayNumber;
         if (PlayerSaveManager.CurrentSaveData.DayNumber > 1) PlayerSaveManager.GenerateRandomSeed();
         PlayerSaveManager.SaveGame();
