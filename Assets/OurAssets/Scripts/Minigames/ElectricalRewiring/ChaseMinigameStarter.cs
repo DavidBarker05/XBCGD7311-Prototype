@@ -57,6 +57,7 @@ public class ChaseMinigameStarter : MonoBehaviour
 		m_FPPCharacter.GetComponent<CharacterController>().enabled = true;
 		MinigameManager.Instance?.OnMinigameBeaten();
 		HouseProgressTracker.ReportMinigameCompleted(MinigameType.ChaseMinigame);
+		TutorialMinigameManager.Instance?.ReportMinigameCompleted(MinigameType.ChaseMinigame);
 		ChaseMinigameIsRunning = false;
 	}
 }
