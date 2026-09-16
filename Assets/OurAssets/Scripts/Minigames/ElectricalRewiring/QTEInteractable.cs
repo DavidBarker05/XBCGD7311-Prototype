@@ -1,77 +1,79 @@
-using System.Security.Cryptography;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class QTEInteractable : Interactable
 {
-	public QTEManager qteManager;
-	private bool hasTriggered = false;
-	private Player player;
+    public QTEManager qteManager;
+    private bool hasTriggered = false;
+    private Player player;
 
-	private PlayerCharacter lastPlayer;
+    private PlayerCharacter lastPlayer;
 
-	// Start is called once before the first execution of Update after the MonoBehaviour is created
-	void Start()
-	{
+    [Header("Checkpoint Gating")]
+    public bool canInteract = true; // manager flips this on/off
+    public UnityEvent OnCompleted;  // fired on success, checkpoint manager listens to this
 
-	}
+    void Start()
+    {
 
-	// Update is called once per frame
-	void Update()
-	{
-		//if (playerInRange && Input.GetKeyDown(KeyCode.E))
-		//{
-		//    
-		//}
-	}
+    }
 
-	public override InteractionStatus Interact(params object[] inputParameters)
-	{
-		if (inputParameters.Length != 2)
-		{
+    void Update()
+    {
+    }
+
+    public override InteractionStatus Interact(params object[] inputParameters)
+    {
+        if (!canInteract)
+        {
+            return new InteractionStatus() { EndInteraction = true };
+        }
+
+        if (inputParameters.Length != 2)
+        {
 #if UNITY_EDITOR
-			Debug.LogWarning($"WARNING: QTEInteractable objects needs 2 input parameters. Received {inputParameters.Length} input parameters");
+            Debug.LogWarning($"WARNING: QTEInteractable objects needs 2 input parameters. Received {inputParameters.Length} input parameters");
 #endif
-		}
-		else
-		{
-			if (inputParameters[0] is Player player && inputParameters[1] is PlayerCharacter currentPlayer)
-			{
-				if (!hasTriggered)
-				{
-					hasTriggered = true;
-					this.player = player;
-					lastPlayer = currentPlayer;
-					qteManager.StartQTE(this);
-				}
-			}
-			else
-			{
+        }
+        else
+        {
+            if (inputParameters[0] is Player player && inputParameters[1] is PlayerCharacter currentPlayer)
+            {
+                if (!hasTriggered)
+                {
+                    hasTriggered = true;
+                    this.player = player;
+                    lastPlayer = currentPlayer;
+                    qteManager.StartQTE(this);
+                }
+            }
+            else
+            {
 #if UNITY_EDITOR
-				Debug.LogWarning($"WARNING: Input parameter 0 needs to be a QTEPlayerCharacter. Received {inputParameters[0]} type {inputParameters[0].GetType()} as input parameter 0");
+                Debug.LogWarning($"WARNING: Input parameter 0 needs to be a QTEPlayerCharacter. Received {inputParameters[0]} type {inputParameters[0].GetType()} as input parameter 0");
 #endif
-			}
-		}
-		// David - Return nothing for now, if you want the qtePlayer to receive information
-		// then output an array of objects as well
-		return new InteractionStatus() { EndInteraction = true };
-	}
+            }
+        }
+        return new InteractionStatus() { EndInteraction = true };
+    }
 
-	public void OnQTESuccess()
-	{
-		Debug.Log("SUCCESS - Objective completed");
-		player.ChangeCharacter(lastPlayer);
-		player = null;
-		lastPlayer = null;
-		ChaseMinigameStarter.Instance.InteractableBeaten();
-		gameObject.SetActive(false);
-	}
+    public void OnQTESuccess()
+    {
+        Debug.Log("SUCCESS - Objective completed");
+        player.ChangeCharacter(lastPlayer);
+        player = null;
+        lastPlayer = null;
+        ChaseMinigameStarter.Instance.InteractableBeaten();
+        OnCompleted.Invoke();
+        gameObject.SetActive(false);
+    }
 
-	public void OnQTEFailure()
-	{
-		Debug.Log("FAILURE - Try again");
-		player.ChangeCharacter(lastPlayer);
-		player = null;
-		lastPlayer = null;
-		hasTriggered = false;
-	}
+    public void OnQTEFailure()
+    {
+        Debug.Log("FAILURE - Try again");
+        player.ChangeCharacter(lastPlayer);
+        player = null;
+        lastPlayer = null;
+        hasTriggered = false;
+    }
 }

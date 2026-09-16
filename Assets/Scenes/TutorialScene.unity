@@ -17739,6 +17739,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::QTEInteractable
   qteManager: {fileID: 1482240728}
+  canInteract: 1
+  OnCompleted:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!208 &198736258
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -33930,6 +33934,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::QTEInteractable
   qteManager: {fileID: 1482240728}
+  canInteract: 1
+  OnCompleted:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!208 &397889155
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -82058,6 +82066,62 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 013d4b2bd8872a04c935487aa414d44c, type: 3}
   m_PrefabInstance: {fileID: 992849772}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &992994456
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 992994458}
+  - component: {fileID: 992994457}
+  m_Layer: 0
+  m_Name: QTECheckpointManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &992994457
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 992994456}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7cfcb26dde606a438939de03f95cba6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::QTECheckpointManager
+  checkpoints:
+  - {fileID: 198736257}
+  - {fileID: 1383095274}
+  - {fileID: 996478445}
+  - {fileID: 1881152909}
+  - {fileID: 1428909164}
+  - {fileID: 1378557136}
+  - {fileID: 1204326416}
+  - {fileID: 397889154}
+  - {fileID: 1609355128}
+  markerPrefab: {fileID: 7257610658245803238, guid: 5c052a01b3341e24cb929b3e858efe30, type: 3}
+  markerHeightOffset: 2
+--- !u!4 &992994458
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 992994456}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -55.93283, y: 3.6748, z: -235.63127}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &994426565
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -82439,6 +82503,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::QTEInteractable
   qteManager: {fileID: 1482240728}
+  canInteract: 1
+  OnCompleted:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!208 &996478446
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -96975,6 +97043,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::QTEInteractable
   qteManager: {fileID: 1482240728}
+  canInteract: 1
+  OnCompleted:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!208 &1204326417
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -98915,6 +98987,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::QTEInteractable
   qteManager: {fileID: 1482240728}
+  canInteract: 1
+  OnCompleted:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!208 &1225716925
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -109734,6 +109810,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::QTEInteractable
   qteManager: {fileID: 1482240728}
+  canInteract: 1
+  OnCompleted:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!208 &1378557137
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -109999,6 +110079,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::QTEInteractable
   qteManager: {fileID: 1482240728}
+  canInteract: 1
+  OnCompleted:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!208 &1383095275
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -113224,6 +113308,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::QTEInteractable
   qteManager: {fileID: 1482240728}
+  canInteract: 1
+  OnCompleted:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!208 &1428909165
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -125336,6 +125424,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::QTEInteractable
   qteManager: {fileID: 1482240728}
+  canInteract: 1
+  OnCompleted:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!208 &1609355129
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -147540,6 +147632,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::QTEInteractable
   qteManager: {fileID: 1482240728}
+  canInteract: 1
+  OnCompleted:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!208 &1881152910
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -169587,3 +169683,4 @@ SceneRoots:
   - {fileID: 273673260}
   - {fileID: 1391424689}
   - {fileID: 2117345260}
+  - {fileID: 992994458}
