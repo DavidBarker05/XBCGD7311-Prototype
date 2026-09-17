@@ -1,0 +1,10 @@
+{
+    "dialogueItems": [
+        {
+            "name": "PersonName",
+            "text": "Hello",
+            "fontSize": 24,
+            "charactersPerSecond": 50
+        }
+    ]
+}
