@@ -29936,6 +29936,7 @@ RectTransform:
   - {fileID: 1950402160}
   - {fileID: 1788659184}
   - {fileID: 1852883081}
+  - {fileID: 1128260001}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -73602,6 +73603,55 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1658040175515973542, guid: 6d782b9b106bae24cbbd0a63651a510b, type: 3}
   m_PrefabInstance: {fileID: 895885838}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &896024873
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 896024875}
+  - component: {fileID: 896024874}
+  m_Layer: 0
+  m_Name: WaypointManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &896024874
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 896024873}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37971b433f500c643b20af80392a10a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WaypointManager
+  m_WaypointParent: {fileID: 1128260001}
+  m_WaypointIndicatorPrefab: {fileID: 8755765136298759726, guid: 5a0fe10e1cdfc3d42ac21d78c1ff3352, type: 3}
+  m_DefaultIcon: {fileID: 21300000, guid: c74195c91547e7e4d9702e2b5993ac25, type: 3}
+  m_Camera: {fileID: 1015887254}
+  m_DefaultWorldOffset: {x: 0, y: 2, z: 0}
+--- !u!4 &896024875
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 896024873}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &896137947
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -80868,7 +80918,7 @@ MonoBehaviour:
   - {fileID: 1204326416}
   - {fileID: 397889154}
   - {fileID: 1609355128}
-  markerPrefab: {fileID: 7257610658245803238, guid: 5c052a01b3341e24cb929b3e858efe30, type: 3}
+  markerIcon: {fileID: 0}
   markerHeightOffset: 2
 --- !u!4 &992994458
 Transform:
@@ -82845,6 +82895,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc991168d66d96a4c872c3119c8d298e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerCharacter
+--- !u!20 &1015887254 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 8156024979346219202, guid: 2288494715f42ad4a8ce262dee2b745b, type: 3}
+  m_PrefabInstance: {fileID: 1015887250}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1015892719
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -90365,6 +90420,81 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 013d4b2bd8872a04c935487aa414d44c, type: 3}
   m_PrefabInstance: {fileID: 1127539110}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1128260000
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1128260001}
+  - component: {fileID: 1128260003}
+  - component: {fileID: 1128260002}
+  m_Layer: 5
+  m_Name: HUD
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1128260001
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1128260000}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 357170067}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1128260002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1128260000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1128260003
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1128260000}
+  m_CullTransparentMesh: 1
 --- !u!1001 &1128448538
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -128981,6 +129111,7 @@ MonoBehaviour:
   m_FPPCharacter: {fileID: 1015887253}
   m_ChaseSpawn: {fileID: 107449035}
   m_HouseSpawn: {fileID: 97590826}
+  m_CheckpointManager: {fileID: 992994457}
 --- !u!4 &1667063549
 Transform:
   m_ObjectHideFlags: 0
@@ -167270,3 +167401,4 @@ SceneRoots:
   - {fileID: 1391424689}
   - {fileID: 2117345260}
   - {fileID: 992994458}
+  - {fileID: 896024875}

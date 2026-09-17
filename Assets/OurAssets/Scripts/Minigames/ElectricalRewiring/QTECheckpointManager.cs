@@ -1,19 +1,18 @@
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class QTECheckpointManager : MonoBehaviour
 {
-    [Header("Checkpoints (in the order they should be completed)")]
+    [Header("Checkpoints (can be completed in any order)")]
     public List<QTEInteractable> checkpoints = new List<QTEInteractable>();
 
     [Header("Marker Settings")]
-    public GameObject markerPrefab;
+    public Sprite markerIcon; // Uses WaypointManager's default icon if left unset
     public float markerHeightOffset = 2f;
 
-    private int currentIndex = 0;
-    private GameObject currentMarkerInstance;
+    readonly HashSet<QTEInteractable> completedCheckpoints = new HashSet<QTEInteractable>();
 
-    void Start()
+    void Awake()
     {
         if (checkpoints.Count == 0)
         {
@@ -21,43 +20,46 @@ public class QTECheckpointManager : MonoBehaviour
             return;
         }
 
-        for (int i = 0; i < checkpoints.Count; i++)
+        foreach (QTEInteractable checkpoint in checkpoints)
         {
-            checkpoints[i].canInteract = (i == 0);
-            checkpoints[i].OnCompleted.AddListener(OnCheckpointCompleted);
+            QTEInteractable capturedCheckpoint = checkpoint; // Local copy so each listener closes over its own checkpoint, not whichever one the loop variable ends on
+            capturedCheckpoint.OnCompleted.AddListener(() => OnCheckpointCompleted(capturedCheckpoint));
         }
-
-        SpawnMarkerFor(checkpoints[currentIndex]);
     }
 
-    void OnCheckpointCompleted()
+    public void BeginCheckpoints()
     {
-        ClearMarker();
-        currentIndex++;
-
-        if (currentIndex >= checkpoints.Count)
+        ClearAllMarkers();
+        completedCheckpoints.Clear();
+        foreach (QTEInteractable checkpoint in checkpoints)
         {
-            Debug.Log("QTECheckpointManager: All checkpoints complete!");
-            return;
+            checkpoint.canInteract = true;
+            SpawnMarkerFor(checkpoint);
         }
+    }
 
-        checkpoints[currentIndex].canInteract = true;
-        SpawnMarkerFor(checkpoints[currentIndex]);
+    void OnCheckpointCompleted(QTEInteractable checkpoint)
+    {
+        completedCheckpoints.Add(checkpoint);
+        ClearMarkerFor(checkpoint);
+
+        if (completedCheckpoints.Count >= checkpoints.Count) Debug.Log("QTECheckpointManager: All checkpoints complete!");
     }
 
     void SpawnMarkerFor(QTEInteractable target)
     {
-        if (target == null || markerPrefab == null) return;
-
-        Vector3 pos = target.transform.position + Vector3.up * markerHeightOffset;
-        currentMarkerInstance = Instantiate(markerPrefab, pos, Quaternion.identity, target.transform);
+        if (target == null || WaypointManager.Instance == null) return;
+        WaypointManager.Instance.AddWaypoint(target.transform, markerIcon, Vector3.up * markerHeightOffset);
     }
 
-    void ClearMarker()
+    void ClearMarkerFor(QTEInteractable target)
     {
-        if (currentMarkerInstance != null)
-        {
-            Destroy(currentMarkerInstance);
-        }
+        if (target == null || WaypointManager.Instance == null) return;
+        WaypointManager.Instance.RemoveWaypoint(target.transform);
+    }
+
+    void ClearAllMarkers()
+    {
+        foreach (QTEInteractable checkpoint in checkpoints) ClearMarkerFor(checkpoint);
     }
 }

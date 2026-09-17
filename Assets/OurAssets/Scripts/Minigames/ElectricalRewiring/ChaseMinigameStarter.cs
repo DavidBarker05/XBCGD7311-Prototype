@@ -12,6 +12,8 @@ public class ChaseMinigameStarter : MonoBehaviour
 	Transform m_ChaseSpawn;
 	[SerializeField]
 	Transform m_HouseSpawn;
+	[SerializeField]
+	QTECheckpointManager m_CheckpointManager;
 
 	public bool ChaseMinigameIsRunning { get; private set; }
 
@@ -35,6 +37,7 @@ public class ChaseMinigameStarter : MonoBehaviour
 		m_NumInteractables = m_QTEInteractables.Length;
 		foreach (QTEInteractable qte in m_QTEInteractables) qte.gameObject.SetActive(true);
 		m_NumInteractablesBeaten = 0;
+		m_CheckpointManager?.BeginCheckpoints();
 		//ChasePlayer[] enemies = FindObjectsByType<ChasePlayer>();
 		//foreach (ChasePlayer enemy in enemies)
 		//{
