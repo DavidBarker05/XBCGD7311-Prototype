@@ -22,7 +22,7 @@ public class Dialogue
 {
     public List<DialogueItem> DialogueItems;
 
-    public SerializedDialogue Serialised
+    public SerializedDialogue Serialized
     {
         get
         {

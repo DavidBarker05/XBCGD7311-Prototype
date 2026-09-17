@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class DialogueEditor : EditorWindow
 {
-    static readonly string s_ResourcesFolder = $"{Application.dataPath.TrimEnd('/')}/Resources";
+    static readonly string s_DialogueFolder = $"{Application.dataPath.TrimEnd('/')}/Resources/Dialogue";
 
     bool m_bClearOnDelete = true;
 
@@ -42,6 +42,17 @@ public class DialogueEditor : EditorWindow
 
     [MenuItem("Window/Edit Dialogue")]
     public static void ShowWindow() => GetWindow<DialogueEditor>("Dialogue Editor");
+
+    string FilePath => GetFullPath(m_SelectedFileOptionIndex == 0 ? null : m_DirectoryName, m_FileName);
+
+    string GetFullPath(string directory, string file)
+    {
+        if (string.IsNullOrWhiteSpace(file)) return null;
+        string path = file;
+        if (!string.IsNullOrWhiteSpace(directory)) path = Path.Combine(directory, path).Replace('\\', '/');
+        if (!path.EndsWith(".json", StringComparison.OrdinalIgnoreCase)) path += ".json";
+        return $"{s_DialogueFolder}/{path}";
+    }
 
     public void CreateGUI()
     {
@@ -122,114 +133,96 @@ public class DialogueEditor : EditorWindow
 
         if (m_SelectedFileOptionIndex == 0)
         {
-            if (GUILayout.Button($"Modify \"{m_FileName}\"")) ModifyFile();
+            if (GUILayout.Button($"Modify \"{m_FileName}\"")) SaveFile();
             if (GUILayout.Button($"Delete \"{m_FileName}\"")) DeleteFile();
         }
         else
         {
-            string path = GetFullPath(m_DirectoryName, m_FileName);
-            string partialPath = path.TrimStart($"{s_ResourcesFolder}/");
-            if (GUILayout.Button($"Create \"{partialPath}\"")) CreateFile(path, partialPath);
+            string partialPath = FilePath.TrimStart($"{s_DialogueFolder}/");
+            if (GUILayout.Button($"Create \"{partialPath}\"")) SaveFile();
         }
     }
 
     void GetFiles()
     {
-        List<string> _filesList = new List<string>();
-        string[] _files = Directory.GetFiles(s_ResourcesFolder, "*.json", SearchOption.AllDirectories);
-        for (int i = 0; i < _files.Length; ++i)
+        List<string> filesList = new List<string>();
+        if (Directory.Exists(s_DialogueFolder))
         {
-            _files[i] = _files[i].Replace('\\', '/');
-            _files[i] = _files[i][s_ResourcesFolder.Length..].TrimStart('/').TrimEnd(".json");
-            TextAsset json = Resources.Load<TextAsset>(_files[i]);
-            try
+            string[] files = Directory.GetFiles(s_DialogueFolder, "*.json", SearchOption.AllDirectories);
+            for (int i = 0; i < files.Length; ++i)
             {
-                Dialogue _dialogue = JsonUtility.FromJson<SerializedDialogue>(json.text).Deserialized;
-                _files[i] += ".json";
-                _filesList.Add(_files[i]);
+                string relativePath = files[i].Replace('\\', '/')[(s_DialogueFolder.Length + 1)..]; // Keeps any subdirectory, e.g. "Tutorial/TutorialStart.json"
+                string resourcePath = Path.ChangeExtension(relativePath, null);
+                TextAsset json = Resources.Load<TextAsset>($"Dialogue/{resourcePath}");
+                try
+                {
+                    _ = JsonUtility.FromJson<SerializedDialogue>(json.text).Deserialized;
+                    filesList.Add(relativePath);
+                }
+                catch { }
             }
-            catch { }
         }
-        m_Files = _filesList.ToArray();
+        m_Files = filesList.ToArray();
     }
 
     void GetDirectories()
     {
-        string[] _subDirectories = Directory.GetDirectories(s_ResourcesFolder, "*", SearchOption.AllDirectories);
-        for (int i = 0; i < _subDirectories.Length; ++i)
+        string[] subDirectories = Directory.Exists(s_DialogueFolder) ? Directory.GetDirectories(s_DialogueFolder, "*", SearchOption.AllDirectories) : Array.Empty<string>();
+        for (int i = 0; i < subDirectories.Length; ++i)
         {
-            _subDirectories[i] = _subDirectories[i].Replace('\\', '/');
-            _subDirectories[i] = _subDirectories[i].Substring(Application.dataPath.Length).TrimStart('/');
+            subDirectories[i] = subDirectories[i].Replace('\\', '/')[(s_DialogueFolder.Length + 1)..]; // Relative to s_DialogueFolder, matching what GetFullPath expects
         }
-        m_Directories = new string[_subDirectories.Length + 1];
-        m_Directories[0] = "Resources";
-        _subDirectories.CopyTo(m_Directories, 1);
+        m_Directories = new string[subDirectories.Length + 1];
+        m_Directories[0] = "";
+        subDirectories.CopyTo(m_Directories, 1);
     }
 
     void LoadFile()
     {
-        string jsonPath = m_FileName.TrimEnd(".json");
-        TextAsset json = Resources.Load<TextAsset>(jsonPath);
+        string resourcePath = Path.ChangeExtension(m_FileName, null); // Preserves any subdirectory, unlike Path.GetFileNameWithoutExtension
+        TextAsset json = Resources.Load<TextAsset>($"Dialogue/{resourcePath}");
         if (!json)
         {
-            Debug.LogError($"\"{jsonPath}.json\" does not exist!");
+            Debug.LogError($"\"{m_FileName}\" does not exist!");
             return;
         }
         try
         {
             Dialogue = JsonUtility.FromJson<SerializedDialogue>(json.text).Deserialized;
-            Debug.Log($"Successfully loaded \"{jsonPath}.json\"");
+            Debug.Log($"Successfully loaded \"{m_FileName}\"");
         }
         catch (ArgumentException)
         {
-            Debug.LogError($"Invalid data in \"{jsonPath}.json\"");
+            Debug.LogError($"Invalid data in \"{m_FileName}\"");
         }
     }
 
-    string GetFullPath(string directory, string file)
+    void SaveFile()
     {
-        if (string.IsNullOrWhiteSpace(file)) return null;
-        string path = file;
-        if (!string.IsNullOrWhiteSpace(directory)) path = Path.Combine(directory, path).Replace('\\', '/');
-        if (!path.StartsWith("Resources/", StringComparison.OrdinalIgnoreCase)) path = $"Resources/{path}";
-        if (!path.StartsWith($"{Application.dataPath.TrimEnd('/')}/", StringComparison.OrdinalIgnoreCase)) path = $"{Application.dataPath.TrimEnd('/')}/{path}";
-        if (!path.EndsWith(".json", StringComparison.OrdinalIgnoreCase)) path += ".json";
-        return path;
-    }
-
-    void SaveFile(string file)
-    {
-        string json = JsonUtility.ToJson(Dialogue.Serialised, prettyPrint: true);
-        File.WriteAllText(file, json);
-    }
-
-    void ModifyFile()
-    {
-        string path = GetFullPath(m_DirectoryName, m_FileName);
-        SaveFile(path);
-        Debug.Log($"Successfully modified \"{path.TrimStart($"{s_ResourcesFolder}/")}\"");
-    }
-
-    void CreateFile(string path, string partialPath)
-    {
-        if (!File.Exists(path))
-        {
-            SaveFile(path);
-            Debug.Log($"Successfully created \"{partialPath}\"");
-        }
-        else Debug.LogError($"\"{partialPath}\" already exists!");
+        string json = JsonUtility.ToJson(Dialogue.Serialized, prettyPrint: true);
+        string path = FilePath;
+        string message = $"Successfully {(File.Exists(path) ? "modified" : "created")} \"{m_FileName}\"";
+        Directory.CreateDirectory(Path.GetDirectoryName(path)); // Not just s_DialogueFolder - m_DirectoryName may add a subdirectory that doesn't exist yet
+        File.WriteAllText(path, json);
+        AssetDatabase.Refresh();
+        Debug.Log(message);
     }
 
     void DeleteFile()
     {
-        string fullPath = GetFullPath(m_DirectoryName, m_FileName);
-        string message = $"Successfully deleted \"{m_FileName}\"";
-        File.Delete(fullPath);
-        if (File.Exists($"{fullPath}.json"))
+        if (!File.Exists(FilePath))
         {
-            File.Delete($"{fullPath}.json");
+            Debug.LogError($"\"{m_FileName}\" doesn't exist inside Assets/Resources/Dialogue/");
+            return;
+        }
+        File.Delete(FilePath);
+        string message = $"Successfully deleted \"{m_FileName}\"";
+        if (File.Exists($"{FilePath}.meta"))
+        {
+            File.Delete($"{FilePath}.meta");
             message += $" and \"{m_FileName}.meta\"";
         }
+        AssetDatabase.Refresh();
         Debug.Log(message);
         if (m_bClearOnDelete) Clear();
     }

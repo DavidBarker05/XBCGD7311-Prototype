@@ -106,6 +106,7 @@ public class PipeGridDataEditor : EditorWindow
 				try
 				{
 					_ = JsonUtility.FromJson<SerializablePipeGridData>(json.text).Deserialized;
+					fileName += ".json";
 					filesList.Add(fileName);
 				}
 				catch { }
@@ -116,29 +117,30 @@ public class PipeGridDataEditor : EditorWindow
 
 	void LoadFile()
 	{
-		TextAsset json = Resources.Load<TextAsset>($"PipeGridData/{m_FileName}");
+		string fileNameNoExt = Path.GetFileNameWithoutExtension(m_FileName);
+		TextAsset json = Resources.Load<TextAsset>($"PipeGridData/{fileNameNoExt}");
 		if (!json)
 		{
-			Debug.LogError($"\"{m_FileName}.json\" does not exist!");
+			Debug.LogError($"\"{m_FileName}\" does not exist!");
 			return;
 		}
 		try
 		{
 			PipeGridData = JsonUtility.FromJson<SerializablePipeGridData>(json.text).Deserialized;
-			Debug.Log($"Successfully loaded \"{m_FileName}.json\"");
+			Debug.Log($"Successfully loaded \"{m_FileName}\"");
 		}
 		catch (ArgumentException)
 		{
-			Debug.LogError($"Invalid data in \"{m_FileName}.json\"");
+			Debug.LogError($"Invalid data in \"{m_FileName}\"");
 		}
 	}
 
-	string FilePath => $"{s_GridDataFolder}/{m_FileName}.json";
+	string FilePath => $"{s_GridDataFolder}/{m_FileName}";
 
 	void SaveFile()
 	{
 		string json = JsonUtility.ToJson(PipeGridData.Serialized, prettyPrint: true);
-		string message = $"Successfully {(File.Exists(FilePath) ? "modified" : "created")} \"{m_FileName}.json\"";
+		string message = $"Successfully {(File.Exists(FilePath) ? "modified" : "created")} \"{m_FileName}\"";
 		Directory.CreateDirectory(s_GridDataFolder);
 		File.WriteAllText(FilePath, json);
 		AssetDatabase.Refresh();
@@ -149,15 +151,15 @@ public class PipeGridDataEditor : EditorWindow
 	{
 		if (!File.Exists(FilePath))
 		{
-			Debug.LogError($"\"{m_FileName}.json\" doesn't exist inside Assets/Resources/PipeGridData/");
+			Debug.LogError($"\"{m_FileName}\" doesn't exist inside Assets/Resources/PipeGridData/");
 			return;
 		}
 		File.Delete(FilePath);
-		string message = $"Successfully deleted \"{m_FileName}.json\"";
+		string message = $"Successfully deleted \"{m_FileName}\"";
 		if (File.Exists($"{FilePath}.meta"))
 		{
 			File.Delete($"{FilePath}.meta");
-			message += $" and \"{m_FileName}.json.meta\"";
+			message += $" and \"{m_FileName}.meta\"";
 		}
 		AssetDatabase.Refresh();
 		Debug.Log(message);
