@@ -35,13 +35,38 @@ public static class PlayerSaveManager
         File.WriteAllText(saveLocation, encryptedJson);
     }
 
+    // Only used to peek the version number before picking which type to actually deserialise the save as
+    [System.Serializable]
+    class SaveDataVersionPeek
+    {
+        public int SaveDataVersionNumber = 0;
+    }
+
     public static void LoadSave()
     {
         string saveLocation = Path.Combine(Application.persistentDataPath, SaveFile);
         if (!File.Exists(saveLocation)) return;
         string encryptedJson = File.ReadAllText(saveLocation);
         string json = EncryptionUtility.DecryptString(encryptedJson);
-        CurrentSaveData = JsonUtility.FromJson<PlayerSaveData>(json);
+
+        int version = JsonUtility.FromJson<SaveDataVersionPeek>(json).SaveDataVersionNumber;
+        CurrentSaveData = ConvertToSaveData(json, version);
+        if (version < PlayerSaveData.CurrentVersionNumber) SaveGame();
+    }
+
+    static PlayerSaveData ConvertToSaveData(string json, int version) => version switch
+    {
+        0 => JsonUtility.FromJson<PlayerSaveDataV0>(json).ConvertToSaveData(),
+        PlayerSaveData.CurrentVersionNumber => JsonUtility.FromJson<PlayerSaveData>(json),
+        _ => UnknownVersionFallback(json, version)
+    };
+
+    static PlayerSaveData UnknownVersionFallback(string json, int version)
+    {
+#if UNITY_EDITOR
+        Debug.LogWarning($"Save data reports version {version}, which is newer than this build understands (current is {PlayerSaveData.CurrentVersionNumber}). Loading it as the current version and hoping for the best.");
+#endif
+        return JsonUtility.FromJson<PlayerSaveData>(json);
     }
 
     public static void GenerateRandomSeed() => CurrentSaveData.DaySeed = GenerateEntropySeed();
