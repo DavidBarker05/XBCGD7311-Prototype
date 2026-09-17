@@ -8,9 +8,6 @@ public class FirstPersonPlayerCharacterInitData : IPlayerCharacterInitData
     public PauseCharacter PauseCharacter { get; set; }
 
     public Camera Camera { get; set; }
-    public Camera HoldCamera { get; set; }
-    public Camera HoldClipCamera { get; set; }
-    public Transform HoldPosTransform { get; set; }
 }
 
 public class FirstPersonPlayerCharacterUpdateData : IPlayerCharacterUpdateData
@@ -69,9 +66,6 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
         m_FirstPersonPlayerCharacterInteraction.Init(new FirstPersonPlayerCharacterInteractionInitData()
         {
             Camera = m_Camera,
-            HoldCamera = initData.HoldCamera,
-            HoldClipCamera = initData.HoldClipCamera,
-            HoldPosTransform = initData.HoldPosTransform,
             Player = initData.Player,
             FirstPersonPlayerCharacter = this
         });

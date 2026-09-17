@@ -4,13 +4,9 @@ using UnityEngine;
 public class CameraSettings : ScriptableObject
 {
     [field: SerializeField, Min(0f)]
-    public float MouseHorizontalSensitivity { get; private set; } = 0.2f;
+    public float HorizontalSensitivity { get; private set; } = 0.2f;
     [field: SerializeField, Min(0f)]
-    public float MouseVerticalSensitivity { get; private set; } = 0.225f;
-    [field: SerializeField, Min(0f)]
-    public float ControllerHorizontalSensitivity { get; private set; } = 180f;
-    [field: SerializeField, Min(0f)]
-    public float ControllerVerticalSensitivity { get; private set; } = 202.5f;
+    public float VerticalSensitivity { get; private set; } = 0.225f;
     [field: SerializeField, Range(-90f, 0f)]
     public float MinVerticalAngle { get; private set; } = -80f;
     [field: SerializeField, Range(0f, 90f)]

@@ -1,10 +1,8 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public struct CameraInput
 {
     public Vector2 LookInput;
-    public InputDevice LookDevice;
 }
 
 public class PlayerCamera : MonoBehaviour
@@ -31,8 +29,8 @@ public class PlayerCamera : MonoBehaviour
     {
         float lY = input.LookInput.y;
         float lX = input.LookInput.x;
-        float vSens = input.LookDevice is Mouse ? m_CameraSettings.MouseVerticalSensitivity : (m_CameraSettings.ControllerVerticalSensitivity * deltaTime);
-        float hSens = input.LookDevice is Mouse ? m_CameraSettings.MouseHorizontalSensitivity : (m_CameraSettings.ControllerHorizontalSensitivity * deltaTime);
+        float vSens = m_CameraSettings.VerticalSensitivity * (GameUserSettingsManager.Instance?.VerticalSensitivityMultiplier ?? 1f);
+        float hSens = m_CameraSettings.HorizontalSensitivity * (GameUserSettingsManager.Instance?.HorizontalSensitivityMultiplier ?? 1f);
         float pitch = lY * vSens;
         float yaw = lX * hSens;
         m_EulerAngles.x = Mathf.Clamp(m_EulerAngles.x - pitch, m_CameraSettings.MinVerticalAngle, m_CameraSettings.MaxVerticalAngle);

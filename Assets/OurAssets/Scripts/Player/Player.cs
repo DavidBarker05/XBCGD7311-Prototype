@@ -17,12 +17,6 @@ public class Player : MonoBehaviour
     PlayerCamera m_PlayerCamera;
     [SerializeField]
     Camera m_Camera;
-    [SerializeField]
-    Camera m_HoldCamera;
-    [SerializeField]
-    Camera m_HoldClipCamera;
-    [SerializeField]
-    Transform m_HoldPosTransform;
 
     PlayerInput m_PlayerInput;
 
@@ -78,9 +72,6 @@ public class Player : MonoBehaviour
         FirstPersonPlayerCharacter => new FirstPersonPlayerCharacterInitData()
         {
             Camera = m_Camera,
-            HoldCamera = m_HoldCamera,
-            HoldClipCamera = m_HoldClipCamera,
-            HoldPosTransform = m_HoldPosTransform,
             CharacterSettings = m_PlayerSettings.CharacterSettings,
             Player = this,
             PauseCharacter = m_PauseCharacter
@@ -162,7 +153,6 @@ public class Player : MonoBehaviour
     {
         if (!m_PlayerCharacter.DoCameraRotation) return;
         m_CameraInput.LookInput = ctx.ReadValue<Vector2>();
-        m_CameraInput.LookDevice = ctx.control.device;
     }
 
     public void HandleSprintInput(InputAction.CallbackContext ctx)
@@ -209,11 +199,5 @@ public class Player : MonoBehaviour
     {
         SetDataValue<PipePlayerCharacterUpdateData>(updateData => updateData.PressedRightRotateThisFrame |= ctx.started);
     }
-
-    #region Control Scheme Change
-    public InputDevice CurrentDevice { get; private set; }
-
-    public void HandleControlsChange(PlayerInput input) => CurrentDevice = input.devices.Count > 0 ? input.devices[0] : null;
-    #endregion Control Scheme Change
     #endregion Handle PlayerInput Events
 }
