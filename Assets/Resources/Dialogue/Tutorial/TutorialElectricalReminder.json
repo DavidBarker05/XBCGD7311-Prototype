@@ -1,0 +1,16 @@
+{
+    "dialogueItems": [
+        {
+            "name": "Nomsa",
+            "text": "Still no lights, hey? That electrical box isn't going to fix itself.",
+            "fontSize": 24,
+            "charactersPerSecond": 50
+        },
+        {
+            "name": "Nomsa",
+            "text": "Go on, give it a look.",
+            "fontSize": 24,
+            "charactersPerSecond": 50
+        }
+    ]
+}

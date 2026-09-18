@@ -1,0 +1,10 @@
+{
+    "dialogueItems": [
+        {
+            "name": "Nomsa",
+            "text": "That pipe's still dripping away in there. Find that exposed brick wall and sort it out.",
+            "fontSize": 24,
+            "charactersPerSecond": 50
+        }
+    ]
+}

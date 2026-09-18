@@ -4,6 +4,10 @@ public class TutorialMinigameManager : MonoBehaviour
 {
     public static TutorialMinigameManager Instance { get; private set; }
 
+    // Fired right when a minigame is reported done, so listeners (TutorialHouse) can react to the
+    // specific one they're waiting on instead of polling IsMinigameBeaten every frame
+    public event System.Action<MinigameType> OnMinigameCompleted;
+
     bool[] m_MinigamesBeaten;
 
     public bool AllMinigamesBeaten
@@ -25,7 +29,11 @@ public class TutorialMinigameManager : MonoBehaviour
         }
     }
 
-    public void ReportMinigameCompleted(MinigameType type) => m_MinigamesBeaten[(int)type] = true;
+    public void ReportMinigameCompleted(MinigameType type)
+    {
+        m_MinigamesBeaten[(int)type] = true;
+        OnMinigameCompleted?.Invoke(type);
+    }
 
     public bool IsMinigameBeaten(MinigameType type) => m_MinigamesBeaten[(int)type];
 }

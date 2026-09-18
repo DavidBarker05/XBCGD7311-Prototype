@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public class ChaseMinigameInteract : Interactable
 {
@@ -6,6 +7,10 @@ public class ChaseMinigameInteract : Interactable
 	bool m_CanBePlayedAgain = false;
 	[SerializeField]
 	QTEInteractable[] m_QTEInteractables;
+
+	// Fired right when the chase actually starts lets other systems (waypoints, etc.)
+	// react without this class needing to know about them
+	public UnityEvent OnChaseStarted;
 
 	bool m_HasBeenPlayed = false;
 
@@ -22,6 +27,7 @@ public class ChaseMinigameInteract : Interactable
 			if ((!m_HasBeenPlayed || m_CanBePlayedAgain) && !ChaseMinigameStarter.Instance.ChaseMinigameIsRunning)
 			{
 				ChaseMinigameStarter.Instance.StartChaseMinigame(m_QTEInteractables);
+				OnChaseStarted?.Invoke();
 			}
 			m_HasBeenPlayed = true;
 		}

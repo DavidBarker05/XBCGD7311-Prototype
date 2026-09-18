@@ -1,0 +1,28 @@
+{
+    "dialogueItems": [
+        {
+            "name": "Nomsa",
+            "text": "Oh, hello there! You must be the new neighbour. Welcome to the settlement!",
+            "fontSize": 24,
+            "charactersPerSecond": 50
+        },
+        {
+            "name": "Nomsa",
+            "text": "I won't lie to you, this place needs a bit of work. The electricity's been acting up something terrible.",
+            "fontSize": 24,
+            "charactersPerSecond": 50
+        },
+        {
+            "name": "Nomsa",
+            "text": "There's an electrical box in the living room. Go take a look and see if you can sort it out.",
+            "fontSize": 24,
+            "charactersPerSecond": 50
+        },
+        {
+            "name": "Nomsa",
+            "text": "Careful with the wires though! You don't want to be the reason the lights go out for the whole street!",
+            "fontSize": 24,
+            "charactersPerSecond": 50
+        }
+    ]
+}

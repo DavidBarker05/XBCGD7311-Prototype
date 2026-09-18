@@ -1,8 +1,8 @@
 {
     "dialogueItems": [
         {
-            "name": "PersonName",
-            "text": "Hello",
+            "name": "Nomsa",
+            "text": "Enjoy the place, it's looking a lot more like a home now.",
             "fontSize": 24,
             "charactersPerSecond": 50
         }
