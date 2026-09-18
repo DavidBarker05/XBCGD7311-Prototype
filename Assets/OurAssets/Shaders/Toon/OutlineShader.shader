@@ -51,106 +51,106 @@ Shader "Toon/OutlineShader"
             };
 
             #ifdef USE_FULL_PRECISION_BLIT_TEXTURE
-            TEXTURE2D_X_FLOAT(_BlitTexture);
-        #else
-            TEXTURE2D_X(_BlitTexture);
-        #endif
-        TEXTURECUBE(_BlitCubeTexture);
-        SAMPLER(sampler_BlitTexture);
+                TEXTURE2D_X_FLOAT(_BlitTexture);
+            #else
+                TEXTURE2D_X(_BlitTexture);
+            #endif
+            TEXTURECUBE(_BlitCubeTexture);
+            SAMPLER(sampler_BlitTexture);
 
-        uniform float4 _BlitScaleBias;
-        uniform float4 _BlitScaleBiasRt;
-        uniform float4 _BlitTexture_TexelSize;
-        uniform float _BlitMipLevel;
-        uniform float2 _BlitTextureSize;
-        uniform uint _BlitPaddingSize;
-        uniform int _BlitTexArraySlice;
-        uniform float4 _BlitDecodeInstructions;
+            uniform float4 _BlitScaleBias;
+            uniform float4 _BlitScaleBiasRt;
+            uniform float4 _BlitTexture_TexelSize;
+            uniform float _BlitMipLevel;
+            uniform float2 _BlitTextureSize;
+            uniform uint _BlitPaddingSize;
+            uniform int _BlitTexArraySlice;
+            uniform float4 _BlitDecodeInstructions;
 
-        CBUFFER_START(UnityPerMaterial)
-            int _Scale;
-            float _DepthThreshold;
-            float _NormalThreshold;
-            float _DepthNormalThreshold;
-            float _DepthNormalThresholdScale;
-            float4 _OutlineColour;
-        CBUFFER_END
+            CBUFFER_START(UnityPerMaterial)
+                int _Scale;
+                float _DepthThreshold;
+                float _NormalThreshold;
+                float _DepthNormalThreshold;
+                float _DepthNormalThresholdScale;
+                float4 _OutlineColour;
+            CBUFFER_END
 
-        Varyings vert(Attributes IN)
-        {
-            Varyings OUT;
-            UNITY_SETUP_INSTANCE_ID(IN);
-            UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(OUT);
+            Varyings vert(Attributes IN)
+            {
+                Varyings OUT;
+                UNITY_SETUP_INSTANCE_ID(IN);
+                UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(OUT);
 
-            float4 pos = GetFullScreenTriangleVertexPosition(IN.vertexID);
-            float2 uv = GetFullScreenTriangleTexCoord(IN.vertexID);
+                float4 pos = GetFullScreenTriangleVertexPosition(IN.vertexID);
+                float2 uv = GetFullScreenTriangleTexCoord(IN.vertexID);
 
-            OUT.positionHCS = pos;
-            OUT.texcoord = DYNAMIC_SCALING_APPLY_SCALEBIAS(uv);
+                OUT.positionHCS = pos;
+                OUT.texcoord = DYNAMIC_SCALING_APPLY_SCALEBIAS(uv);
 
-            OUT.viewSpaceDirection = mul(unity_CameraInvProjection, OUT.positionHCS).xyz;
+                OUT.viewSpaceDirection = mul(unity_CameraInvProjection, OUT.positionHCS).xyz;
 
-            return OUT;
+                return OUT;
+            }
+
+            float4 alphaBlend(float4 top, float4 bottom)
+            {
+                float3 color = (top.rgb * top.a) + (bottom.rgb * (1 - top.a));
+                float alpha = top.a + bottom.a * (1 - top.a);
+                return float4(color, alpha);
+            }
+
+            float4 frag(Varyings IN) : SV_Target
+            {
+                float2 uv = IN.texcoord;
+
+                float halfScaleFloor = floor(_Scale * 0.5);
+                float halfScaleCeil = ceil(_Scale * 0.5);
+                float2 bottomLeftUV = uv - float2(_BlitTexture_TexelSize.x, _BlitTexture_TexelSize.y) * halfScaleFloor;
+                float2 topRightUV = uv + float2(_BlitTexture_TexelSize.x, _BlitTexture_TexelSize.y) * halfScaleCeil;
+                float2 bottomRightUV = uv + float2(_BlitTexture_TexelSize.x * halfScaleCeil, -_BlitTexture_TexelSize.y * halfScaleFloor);
+                float2 topLeftUV = uv + float2(-_BlitTexture_TexelSize.x * halfScaleFloor, _BlitTexture_TexelSize.y * halfScaleCeil);
+
+                float depth0 = LinearEyeDepth(SampleSceneDepth(bottomLeftUV), _ZBufferParams);
+                float depth1 = LinearEyeDepth(SampleSceneDepth(topRightUV), _ZBufferParams);
+                float depth2 = LinearEyeDepth(SampleSceneDepth(bottomRightUV), _ZBufferParams);
+                float depth3 = LinearEyeDepth(SampleSceneDepth(topLeftUV), _ZBufferParams);
+
+                float3x3 worldNormalToViewMatrix = (float3x3)UNITY_MATRIX_MV;
+                float3 normal0 = mul(worldNormalToViewMatrix, SampleSceneNormals(bottomLeftUV));
+                float3 normal1 = mul(worldNormalToViewMatrix, SampleSceneNormals(topRightUV));
+                float3 normal2 = mul(worldNormalToViewMatrix, SampleSceneNormals(bottomRightUV));
+                float3 normal3 = mul(worldNormalToViewMatrix, SampleSceneNormals(topLeftUV));
+
+                float3 normal = mul(worldNormalToViewMatrix, SampleSceneNormals(uv));
+                float3 viewNormal = normal * 2 - 1;
+                float NdotV = 1 - dot(viewNormal, -IN.viewSpaceDirection);
+
+                float normalThreshold01 = saturate((NdotV - _DepthNormalThreshold) / (1 - _DepthNormalThreshold));
+                float normalThreshold = normalThreshold01 * _DepthNormalThresholdScale + 1;
+
+                float depthFiniteDifference0 = depth1 - depth0;
+                float depthFiniteDifference1 = depth3 - depth2;
+
+                float depth = LinearEyeDepth(SampleSceneDepth(uv), _ZBufferParams);
+                float edgeDepth = sqrt(pow(depthFiniteDifference0, 2) + pow(depthFiniteDifference1, 2)) * 100;
+
+                float depthThreshold = _DepthThreshold * depth * normalThreshold;
+                edgeDepth = edgeDepth > depthThreshold ? 1 : 0;
+
+                float3 normalFiniteDifference0 = normal1 - normal0;
+                float3 normalFiniteDifference1 = normal3 - normal2;
+
+                float edgeNormal = sqrt(dot(normalFiniteDifference0, normalFiniteDifference0) + dot(normalFiniteDifference1, normalFiniteDifference1));
+                edgeNormal = edgeNormal > _NormalThreshold ? 1 : 0;
+
+                float edge = max(edgeDepth, edgeNormal);
+                float4 edgeColour = float4(_OutlineColour.rgb, edge);
+                float4 colour = SAMPLE_TEXTURE2D_X(_BlitTexture, sampler_BlitTexture, uv);
+
+                return alphaBlend(edgeColour, colour);
+            }
+            ENDHLSL
         }
-
-        float4 alphaBlend(float4 top, float4 bottom)
-        {
-            float3 color = (top.rgb * top.a) + (bottom.rgb * (1 - top.a));
-            float alpha = top.a + bottom.a * (1 - top.a);
-            return float4(color, alpha);
-        }
-
-        float4 frag(Varyings IN) : SV_Target
-        {
-            float2 uv = IN.texcoord;
-
-            float halfScaleFloor = floor(_Scale * 0.5);
-            float halfScaleCeil = ceil(_Scale * 0.5);
-            float2 bottomLeftUV = uv - float2(_BlitTexture_TexelSize.x, _BlitTexture_TexelSize.y) * halfScaleFloor;
-            float2 topRightUV = uv + float2(_BlitTexture_TexelSize.x, _BlitTexture_TexelSize.y) * halfScaleCeil;
-            float2 bottomRightUV = uv + float2(_BlitTexture_TexelSize.x * halfScaleCeil, -_BlitTexture_TexelSize.y * halfScaleFloor);
-            float2 topLeftUV = uv + float2(-_BlitTexture_TexelSize.x * halfScaleFloor, _BlitTexture_TexelSize.y * halfScaleCeil);
-
-            float depth0 = LinearEyeDepth(SampleSceneDepth(bottomLeftUV), _ZBufferParams);
-            float depth1 = LinearEyeDepth(SampleSceneDepth(topRightUV), _ZBufferParams);
-            float depth2 = LinearEyeDepth(SampleSceneDepth(bottomRightUV), _ZBufferParams);
-            float depth3 = LinearEyeDepth(SampleSceneDepth(topLeftUV), _ZBufferParams);
-
-            float3x3 worldNormalToViewMatrix = (float3x3)UNITY_MATRIX_MV;
-            float3 normal0 = mul(worldNormalToViewMatrix, SampleSceneNormals(bottomLeftUV));
-            float3 normal1 = mul(worldNormalToViewMatrix, SampleSceneNormals(topRightUV));
-            float3 normal2 = mul(worldNormalToViewMatrix, SampleSceneNormals(bottomRightUV));
-            float3 normal3 = mul(worldNormalToViewMatrix, SampleSceneNormals(topLeftUV));
-
-            float3 normal = mul(worldNormalToViewMatrix, SampleSceneNormals(uv));
-            float3 viewNormal = normal * 2 - 1;
-            float NdotV = 1 - dot(viewNormal, -IN.viewSpaceDirection);
-
-            float normalThreshold01 = saturate((NdotV - _DepthNormalThreshold) / (1 - _DepthNormalThreshold));
-            float normalThreshold = normalThreshold01 * _DepthNormalThresholdScale + 1;
-
-            float depthFiniteDifference0 = depth1 - depth0;
-            float depthFiniteDifference1 = depth3 - depth2;
-
-            float depth = LinearEyeDepth(SampleSceneDepth(uv), _ZBufferParams);
-            float edgeDepth = sqrt(pow(depthFiniteDifference0, 2) + pow(depthFiniteDifference1, 2)) * 100;
-
-            float depthThreshold = _DepthThreshold * depth * normalThreshold;
-            edgeDepth = edgeDepth > depthThreshold ? 1 : 0;
-
-            float3 normalFiniteDifference0 = normal1 - normal0;
-            float3 normalFiniteDifference1 = normal3 - normal2;
-
-            float edgeNormal = sqrt(dot(normalFiniteDifference0, normalFiniteDifference0) + dot(normalFiniteDifference1, normalFiniteDifference1));
-            edgeNormal = edgeNormal > _NormalThreshold ? 1 : 0;
-
-            float edge = max(edgeDepth, edgeNormal);
-            float4 edgeColour = float4(_OutlineColour.rgb, edge);
-            float4 colour = SAMPLE_TEXTURE2D_X(_BlitTexture, sampler_BlitTexture, uv);
-
-            return alphaBlend(edgeColour, colour);
-        }
-        ENDHLSL
     }
-}
 }

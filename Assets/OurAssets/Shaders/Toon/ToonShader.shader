@@ -74,7 +74,6 @@ Shader "Toon/ToonShader"
             Varyings vert(Attributes IN)
             {
                 Varyings OUT;
-                ZERO_INITIALIZE(Varyings, OUT);
                 OUT.positionHCS = TransformObjectToHClip(IN.positionOS.xyz);
                 OUT.normalWS = TransformObjectToWorldNormal(IN.normalOS);
                 OUT.uv = TRANSFORM_TEX(IN.uv, _BaseMap);
@@ -118,8 +117,8 @@ Shader "Toon/ToonShader"
 
             HLSLPROGRAM
             #pragma target 2.0
-            #pragma vertex ShadowPassVertex
-            #pragma fragment ShadowPassFragment
+            #pragma vertex vert
+            #pragma fragment frag
             #pragma multi_compile_vertex _ _CASTING_PUNCTUAL_LIGHT_SHADOW
 
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
@@ -134,33 +133,28 @@ Shader "Toon/ToonShader"
             float3 _LightDirection;
             float3 _LightPosition;
 
-            struct ShadowVaryings
+            struct Varyings
             {
                 float4 positionCS : SV_POSITION;
                 float2 uv : TEXCOORD0;
             };
 
-            float4 GetShadowPositionHClip(Attributes IN)
+            Varyings vert(Attributes IN)
             {
+                Varyings OUT;
                 float3 positionWS = TransformObjectToWorld(IN.positionOS.xyz);
                 float3 normalWS = TransformObjectToWorldNormal(IN.normalOS);
-            #if _CASTING_PUNCTUAL_LIGHT_SHADOW
-                float3 lightDirectionWS = normalize(_LightPosition - positionWS);
-            #else
-                float3 lightDirectionWS = _LightDirection;
-            #endif
-                return ApplyShadowClamping(TransformWorldToHClip(ApplyShadowBias(positionWS, normalWS, lightDirectionWS)));
-            }
-
-            ShadowVaryings ShadowPassVertex(Attributes IN)
-            {
-                ShadowVaryings OUT;
-                OUT.positionCS = GetShadowPositionHClip(IN);
+                #if _CASTING_PUNCTUAL_LIGHT_SHADOW
+                    float3 lightDirectionWS = normalize(_LightPosition - positionWS);
+                #else
+                    float3 lightDirectionWS = _LightDirection;
+                #endif
+                OUT.positionCS = ApplyShadowClamping(TransformWorldToHClip(ApplyShadowBias(positionWS, normalWS, lightDirectionWS)));
                 OUT.uv = TRANSFORM_TEX(IN.uv, _BaseMap);
                 return OUT;
             }
 
-            half4 ShadowPassFragment(ShadowVaryings IN) : SV_TARGET
+            half4 frag(Varyings IN) : SV_TARGET
             {
                 float4 colour = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, IN.uv) * _BaseColor;
                 ALPHA_CLIP(colour.a, _AlphaClippingThreshold);
@@ -199,7 +193,6 @@ Shader "Toon/ToonShader"
             Varyings vert(Attributes IN)
             {
                 Varyings OUT;
-                ZERO_INITIALIZE(Varyings, OUT);
                 OUT.positionHCS = TransformObjectToHClip(IN.positionOS.xyz);
                 OUT.uv = TRANSFORM_TEX(IN.uv, _BaseMap);
                 return OUT;
@@ -244,7 +237,6 @@ Shader "Toon/ToonShader"
             Varyings vert(Attributes IN)
             {
                 Varyings OUT;
-                ZERO_INITIALIZE(Varyings, OUT);
                 OUT.positionHCS = TransformObjectToHClip(IN.positionOS.xyz);
                 OUT.normalWS = TransformObjectToWorldNormal(IN.normalOS);
                 OUT.uv = TRANSFORM_TEX(IN.uv, _BaseMap);
@@ -257,41 +249,6 @@ Shader "Toon/ToonShader"
                 ALPHA_CLIP(colour.a, _AlphaClippingThreshold);
                 float3 normalWS = NormalizeNormalPerPixel(IN.normalWS);
                 return float4(normalWS, 1);
-            }
-            ENDHLSL
-        }
-
-        Pass
-        {
-            Name "Meta"
-            Tags
-            {
-                "LightMode" = "Meta"
-            }
-
-            Cull Off
-
-            HLSLPROGRAM
-            #pragma vertex UniversalVertexMeta
-            #pragma fragment UniversalFragmentMetaToon
-
-            #pragma shader_feature EDITOR_VISUALIZATION
-
-            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
-            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/MetaInput.hlsl"
-            #include "Packages/com.unity.render-pipelines.universal/Shaders/LitInput.hlsl"
-            #include "Packages/com.unity.render-pipelines.universal/Shaders/LitMetaPass.hlsl"
-
-            float4 UniversalFragmentMetaToon(Varyings input) : SV_Target
-            {
-                SurfaceData surfaceData;
-                InitializeStandardLitSurfaceData(input.uv, surfaceData);
-
-                MetaInput metaInput;
-                metaInput.Albedo = surfaceData.albedo;
-                metaInput.Emission = surfaceData.emission;
-
-                return UniversalFragmentMeta(input, metaInput);
             }
             ENDHLSL
         }
