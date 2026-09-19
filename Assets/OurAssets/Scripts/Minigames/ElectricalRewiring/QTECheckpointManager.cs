@@ -12,19 +12,30 @@ public class QTECheckpointManager : MonoBehaviour
 
     readonly HashSet<QTEInteractable> completedCheckpoints = new HashSet<QTEInteractable>();
 
+    readonly List<QTEInteractable> m_DynamicCheckpoints = new List<QTEInteractable>();
+
     void Awake()
     {
-        if (checkpoints.Count == 0)
-        {
-            Debug.LogWarning("QTECheckpointManager: No checkpoints assigned.");
-            return;
-        }
+        if (checkpoints.Count == 0) return;
 
         foreach (QTEInteractable checkpoint in checkpoints)
         {
             QTEInteractable capturedCheckpoint = checkpoint; // Local copy so each listener closes over its own checkpoint, not whichever one the loop variable ends on
             capturedCheckpoint.OnCompleted.AddListener(() => OnCheckpointCompleted(capturedCheckpoint));
         }
+    }
+
+    public void RegisterDynamicCheckpoint(QTEInteractable checkpoint)
+    {
+        QTEInteractable capturedCheckpoint = checkpoint;
+        capturedCheckpoint.OnCompleted.AddListener(() => OnCheckpointCompleted(capturedCheckpoint));
+        m_DynamicCheckpoints.Add(capturedCheckpoint);
+    }
+
+    public void ClearDynamicCheckpoints()
+    {
+        foreach (QTEInteractable checkpoint in m_DynamicCheckpoints) ClearMarkerFor(checkpoint);
+        m_DynamicCheckpoints.Clear();
     }
 
     public void BeginCheckpoints()
@@ -36,6 +47,11 @@ public class QTECheckpointManager : MonoBehaviour
             checkpoint.canInteract = true;
             SpawnMarkerFor(checkpoint);
         }
+        foreach (QTEInteractable checkpoint in m_DynamicCheckpoints)
+        {
+            checkpoint.canInteract = true;
+            SpawnMarkerFor(checkpoint);
+        }
     }
 
     void OnCheckpointCompleted(QTEInteractable checkpoint)
@@ -43,7 +59,7 @@ public class QTECheckpointManager : MonoBehaviour
         completedCheckpoints.Add(checkpoint);
         ClearMarkerFor(checkpoint);
 
-        if (completedCheckpoints.Count >= checkpoints.Count) Debug.Log("QTECheckpointManager: All checkpoints complete!");
+        if (completedCheckpoints.Count >= checkpoints.Count + m_DynamicCheckpoints.Count) Debug.Log("QTECheckpointManager: All checkpoints complete!");
     }
 
     void SpawnMarkerFor(QTEInteractable target)
@@ -61,5 +77,6 @@ public class QTECheckpointManager : MonoBehaviour
     void ClearAllMarkers()
     {
         foreach (QTEInteractable checkpoint in checkpoints) ClearMarkerFor(checkpoint);
+        foreach (QTEInteractable checkpoint in m_DynamicCheckpoints) ClearMarkerFor(checkpoint);
     }
 }
