@@ -4,8 +4,7 @@ public class TutorialNPC : Interactable
 {
     [SerializeField]
     TutorialHouse m_TutorialHouse;
-
-    [Header("Dialogue (same JSON format as the Dialogue Editor)")]
+    [Header("Dialogue")]
     [SerializeField]
     TextAsset m_WelcomeDialogue;
     [SerializeField]
@@ -45,7 +44,6 @@ public class TutorialNPC : Interactable
             TutorialHouse.Stage.Complete => (m_OutroDialogue, null),
             _ => (null, null)
         };
-
         if (dialogueAsset)
         {
             Dialogue dialogue = JsonUtility.FromJson<SerializedDialogue>(dialogueAsset.text).Deserialized;

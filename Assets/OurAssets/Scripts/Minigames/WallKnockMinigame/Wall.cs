@@ -116,11 +116,6 @@ public class Wall : MonoBehaviour
 #endif
 	}
 
-	void Start()
-	{
-		//StartWallKnockMinigame();
-	}
-
 	public void StartWallKnockMinigame()
 	{
 		if (m_bAlreadyPlaying) return;

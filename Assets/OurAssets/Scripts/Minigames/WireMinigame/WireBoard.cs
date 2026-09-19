@@ -21,8 +21,6 @@ public struct WireReleaseInfo
 public class WireBoard : MonoBehaviour
 {
 	[SerializeField]
-	bool m_Debug = false;
-	[SerializeField]
 	Transform m_UnscaledTransform;
 	[SerializeField]
 	Player m_Player;
@@ -86,10 +84,6 @@ public class WireBoard : MonoBehaviour
 		Sys.Assert(Arrays.IsValid(m_WireStarts), "m_WireStarts is not a valid array");
 		Sys.Assert(Arrays.IsValid(m_WireEnds), "m_WireEnds is not a valid array");
 		Sys.Assert(m_WireStartingPositions.Length.Equals(m_WireTipStartingPositions.Length, m_WireEndPositions.Length, m_WireStarts.Length, m_WireEnds.Length), "Mismatched array lengths");
-#if !UNITY_EDITOR
-        m_Debug = false;
-#endif
-		//if (m_Debug) CreateWires(Random.Range(m_MinWires - 1, m_WireStartingPositions.Length) + 1);
 	}
 
 	public void StartWireMinigame()

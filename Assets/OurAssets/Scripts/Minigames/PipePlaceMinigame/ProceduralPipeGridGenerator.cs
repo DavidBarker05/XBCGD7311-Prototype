@@ -15,14 +15,11 @@ public static class ProceduralPipeGridGenerator
         for (int i = 0; i < numStartPipes; ++i) startPipes[i] = PickTerminal(gridSize, usedCells);
         StartEndPipe[] endPipes = new StartEndPipe[numEndPipes];
         for (int i = 0; i < numEndPipes; ++i) endPipes[i] = PickTerminal(gridSize, usedCells);
-
         List<Vector2Int> terminalCells = new List<Vector2Int>(numStartPipes + numEndPipes);
         foreach (StartEndPipe startPipe in startPipes) terminalCells.Add(startPipe.CellPosition);
         foreach (StartEndPipe endPipe in endPipes) terminalCells.Add(endPipe.CellPosition);
-
         HashSet<Vector2Int> includedCells = BuildConnectingTree(gridSize, terminalCells, out Dictionary<Vector2Int, Vector2Int> parents);
         Dictionary<Vector2Int, HashSet<PipeSide>> openSidesPerCell = BuildOpenSides(includedCells, parents, startPipes, endPipes);
-
         return new PipeGridData()
         {
             GridSize = gridSize,
@@ -33,7 +30,6 @@ public static class ProceduralPipeGridGenerator
     }
 
     #region Terminal Selection
-    // Picks a random cell along one of the 4 edges (never a corner, so the outward direction is unambiguous)
     static StartEndPipe PickTerminal(Vector2Int gridSize, HashSet<Vector2Int> usedCells)
     {
         while (true)
@@ -73,7 +69,7 @@ public static class ProceduralPipeGridGenerator
         Vector2Int? lastJunctionHint = null;
         for (int i = 1; i < terminalCells.Count; ++i)
         {
-            if (includedCells.Contains(terminalCells[i])) continue; // Already connected via a previous walk passing through it
+            if (includedCells.Contains(terminalCells[i])) continue;
             Vector2Int target = lastJunctionHint ?? FindNearestCell(terminalCells[i], includedCells);
             Vector2Int connectedAt = ConnectCellToTree(terminalCells[i], gridSize, includedCells, parents, target, lastJunctionHint);
             lastJunctionHint = WouldBeJunction(connectedAt, parents, includedCells, terminalCellSet) ? connectedAt : null;
@@ -103,11 +99,9 @@ public static class ProceduralPipeGridGenerator
         Stack<Vector2Int> stack = new Stack<Vector2Int>();
         stack.Push(from);
         Dictionary<Vector2Int, Vector2Int> walkPredecessors = new Dictionary<Vector2Int, Vector2Int>();
-
         while (stack.Count > 0)
         {
             Vector2Int current = stack.Peek();
-
             Vector2Int? connectTo = null;
             foreach (Vector2Int neighbor in GetGridNeighbors(current, gridSize))
             {
@@ -121,7 +115,6 @@ public static class ProceduralPipeGridGenerator
                 MergeWalkIntoTree(current, connectTo.Value, walkPredecessors, includedCells, parents);
                 return connectTo.Value;
             }
-
             Vector2Int? next = PickWeightedUnvisitedNeighbor(current, gridSize, visitedThisWalk, includedCells, target);
             if (next.HasValue)
             {
@@ -140,7 +133,6 @@ public static class ProceduralPipeGridGenerator
         const int closerWeight = 6;
         const int furtherWeight = 1;
         int currentDistance = ManhattanDistance(current, target);
-
         List<Vector2Int> candidates = new List<Vector2Int>();
         List<int> weights = new List<int>();
         int totalWeight = 0;
@@ -153,7 +145,6 @@ public static class ProceduralPipeGridGenerator
             totalWeight += weight;
         }
         if (candidates.Count == 0) return null;
-
         int roll = Random.Range(0, totalWeight);
         for (int i = 0; i < candidates.Count; ++i)
         {
@@ -251,7 +242,6 @@ public static class ProceduralPipeGridGenerator
             requiredCounts.TryGetValue(resourcePath, out uint count);
             requiredCounts[resourcePath] = count + 1;
         }
-
         PipeData[] pipes = new PipeData[requiredCounts.Count];
         int i = 0;
         foreach (KeyValuePair<string, uint> requiredCount in requiredCounts)

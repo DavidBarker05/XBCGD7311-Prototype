@@ -2,12 +2,6 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-// Everything a house needs remembered across a scene reload:
-// - which minigames it has and which of those are beaten
-// - which minigame the player was playing/just beat, so it can be processed once
-// - whether the player is currently inside (so the interior can be respawned)
-// - what the door currently is (Entry/Exit) and whether the house is fully beaten and locked
-// - where the player (and camera) were, in case something needs to put them back
 [Serializable]
 public class HouseProgress
 {
@@ -64,7 +58,6 @@ public static class HouseProgressTracker
         Mathf.Round(housePosition.y * PositionKeyPrecision) / PositionKeyPrecision,
         Mathf.Round(housePosition.z * PositionKeyPrecision) / PositionKeyPrecision);
 
-    // Clears every house's progress - call when starting a new day/level
     public static void ClearAll() => s_Houses.Clear();
 
     public static HouseProgress GetOrRegisterHouse(Vector3 housePosition, Func<MinigameType[]> generatePlan)
@@ -105,7 +98,6 @@ public static class HouseProgressTracker
     }
     #endregion Active House
 
-    // Cheap no-op when no house is active (nothing to save to) - safe to call every frame
     public static void UpdateActiveHousePlayerTransform(Vector3 playerPosition, Quaternion playerRotation, Quaternion cameraRotation)
     {
         if (!s_ActiveHousePosition.HasValue) return;

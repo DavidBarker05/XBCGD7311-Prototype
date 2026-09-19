@@ -5,8 +5,7 @@ using UnityEngine.UI;
 public class WaypointIndicator : MonoBehaviour
 {
     [SerializeField]
-    Vector3 m_WorldOffset = new Vector3(0f, 2f, 0f); // Points a little above the target by default rather than through the floor
-
+    Vector3 m_WorldOffset = new Vector3(0f, 2f, 0f);
     RectTransform m_RectTransform;
     Image m_Image;
     Transform m_Target;
@@ -35,7 +34,6 @@ public class WaypointIndicator : MonoBehaviour
             m_Image.enabled = false;
             return;
         }
-
         Vector3 screenPosition = m_Camera.WorldToScreenPoint(m_Target.position + m_WorldOffset);
         bool bInFrontOfCamera = screenPosition.z > 0f;
         m_Image.enabled = bInFrontOfCamera;

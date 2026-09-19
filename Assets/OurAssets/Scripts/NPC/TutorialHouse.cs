@@ -20,7 +20,7 @@ public class TutorialHouse : MonoBehaviour
     [SerializeField]
     TutorialNPC m_NPC;
     [SerializeField]
-    Sprite m_TalkWaypointIcon; // Falls back to WaypointManager's default icon if left unset
+    Sprite m_TalkWaypointIcon;
 
     [Header("Electrical")]
     [SerializeField]
@@ -38,7 +38,7 @@ public class TutorialHouse : MonoBehaviour
 
     [Header("Disconnect")]
     [SerializeField]
-    ChaseMinigameInteract m_DisconnectInteractable; // Visually a door, same convention as the main house's chase door swap
+    ChaseMinigameInteract m_DisconnectInteractable;
     [SerializeField]
     Sprite m_DisconnectWaypointIcon;
 
@@ -90,7 +90,6 @@ public class TutorialHouse : MonoBehaviour
     }
 
     #region Electrical
-    // Called by TutorialNPC once the welcome dialogue finishes
     public void OnWelcomeDialogueFinished()
     {
         CurrentStage = Stage.ElectricalPending;
@@ -110,7 +109,6 @@ public class TutorialHouse : MonoBehaviour
     #endregion Electrical
 
     #region Pipe
-    // Called by TutorialNPC once the "electricity's fixed, now the pipe" dialogue finishes
     public void OnPipeDialogueFinished()
     {
         CurrentStage = Stage.PipePending;
@@ -129,7 +127,6 @@ public class TutorialHouse : MonoBehaviour
     #endregion Pipe
 
     #region Disconnect
-    // Called by TutorialNPC once the "go disconnect the illegal connections" dialogue finishes
     public void OnDisconnectDialogueFinished()
     {
         CurrentStage = Stage.DisconnectPending;
@@ -139,9 +136,6 @@ public class TutorialHouse : MonoBehaviour
         WaypointManager.Instance?.AddWaypoint(m_DisconnectInteractable.transform, m_DisconnectWaypointIcon);
     }
 
-    // Hooked to ChaseMinigameInteract.OnChaseStarted in the Inspector
-    // Removes the marker the moment the player actually engages it,
-    // rather than waiting for the whole chase to finish
     public void OnDisconnectInteracted()
     {
         if (m_DisconnectInteractable) WaypointManager.Instance?.RemoveWaypoint(m_DisconnectInteractable.transform);
@@ -155,7 +149,6 @@ public class TutorialHouse : MonoBehaviour
     #endregion Disconnect
 
     #region Reward
-    // Called by TutorialNPC once the reward dialogue finishes
     public void OnRewardDialogueFinished()
     {
         CurrentStage = Stage.Complete;

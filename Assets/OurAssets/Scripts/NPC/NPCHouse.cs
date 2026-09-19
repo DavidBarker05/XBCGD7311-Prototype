@@ -10,7 +10,7 @@ public class NPCHouse : MonoBehaviour
     [SerializeField]
     NPC[] m_PossibleNPCs;
 
-    // Minigames vvv
+    // vvv Minigames vvv
 
     [Header("Minigame Counts")]
     [SerializeField, Min(2)]
@@ -36,7 +36,7 @@ public class NPCHouse : MonoBehaviour
     [SerializeField]
     ChaseMinigameInteract m_ChaseMinigameInteractPrefab;
 
-    // Minigames ^^^
+    // ^^^ Minigames ^^^
 
     [Header("Door")]
     [SerializeField]
@@ -94,7 +94,6 @@ public class NPCHouse : MonoBehaviour
             wallKnockCount = Random.Range(0, m_MaxWallKnockMinigames + 1);
             chaseCount = Random.Range(0, m_MaxChaseMinigames + 1);
         } while (wireCount + wallKnockCount + chaseCount < m_MinTotalMinigames);
-
         List<MinigameType> plan = new List<MinigameType>();
         for (int i = 0; i < wireCount; ++i) plan.Add(MinigameType.Wires);
         for (int i = 0; i < wallKnockCount; ++i) plan.Add(MinigameType.WallKnockAndPipes);
@@ -143,11 +142,9 @@ public class NPCHouse : MonoBehaviour
 
     void ReplaceChaseInteractableWithExitDoor()
     {
-        Vector3 position = m_ActiveDoorObject.transform.position;
-        Quaternion rotation = m_ActiveDoorObject.transform.rotation;
+        m_ActiveDoorObject.transform.GetPositionAndRotation(out Vector3 position, out Quaternion rotation);
         m_SpawnedInteriorObjects.Remove(m_ActiveDoorObject);
         Destroy(m_ActiveDoorObject);
-
         Door exitDoor = Instantiate(m_NonChaseDoorPrefab, position, rotation);
         exitDoor.OwningHouse = this;
         exitDoor.DoorType = DoorType.Exit;
@@ -192,7 +189,6 @@ public class NPCHouse : MonoBehaviour
 #endif
             return;
         }
-
         Transform[] shuffledLocations = (Transform[])possibleLocations.Clone();
         shuffledLocations.Shuffle();
         int spawnCount = Mathf.Min(count, shuffledLocations.Length);
@@ -216,7 +212,6 @@ public class NPCHouse : MonoBehaviour
         HouseProgressTracker.SetActiveHouse(transform.position);
         SpawnNPC();
         SpawnMinigameInteractables();
-
         if (HasUnbeatenChase())
         {
             Vector3 position = doorUsedToEnter.transform.position;

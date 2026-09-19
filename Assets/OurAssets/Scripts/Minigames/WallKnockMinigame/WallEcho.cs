@@ -22,21 +22,14 @@ public class WallEcho : MonoBehaviour
 		m_bDoUpdate = false;
 	}
 
-	// Start is called once before the first execution of Update after the MonoBehaviour is created
-	void Start()
-    {
-		//StartEcho(10);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
+	void Update()
+	{
 		if (!m_bDoUpdate) return;
 		m_CurrentSize += m_GrowSpeed * Time.deltaTime;
 		m_MaterialProperyBlock.SetFloat("_SquareSize", m_CurrentSize);
 		m_Renderer.SetPropertyBlock(m_MaterialProperyBlock);
 		if (m_CurrentSize >= m_MaxGrowSize) Destroy(gameObject);
-    }
+	}
 
 	public void StartEcho(int numCircles)
 	{

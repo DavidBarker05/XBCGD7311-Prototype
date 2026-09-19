@@ -1,6 +1,4 @@
-using System.Collections.Generic;
 using UnityEngine;
-using Util.UnityUtils;
 
 public class WireColour
 {

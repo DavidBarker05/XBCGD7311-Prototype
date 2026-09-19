@@ -24,7 +24,6 @@ public class NPCHouseDailyManager : MonoBehaviour
     public NPCHouse GenerateHousesForDay()
     {
         if (m_LoadedHouses.Count > 0) ClearHouses();
-
         int houseCount = Mathf.Clamp(Random.Range(m_MinHousesPerDay, m_MaxHousesPerDay + 1), 0, m_NPCHouses.Length);
         NPCHouse[] shuffledHouses = (NPCHouse[])m_NPCHouses.Clone();
         shuffledHouses.Shuffle();

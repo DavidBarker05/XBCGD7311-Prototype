@@ -31,7 +31,7 @@ public class UpgradeButton : MonoBehaviour
 
     void HandleUpgradePurchased(PlayerUpgrade upgrade, int level) => Refresh();
 
-    void Purchase() => PlayerUpgradeSystem.TryPurchase(m_Upgrade, m_Level); // Refresh happens via OnUpgradePurchased on success; nothing changes on failure
+    void Purchase() => PlayerUpgradeSystem.TryPurchase(m_Upgrade, m_Level);
 
     void Refresh()
     {

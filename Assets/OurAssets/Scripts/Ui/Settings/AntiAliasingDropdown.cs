@@ -6,11 +6,11 @@ using UnityEngine;
 public class AntiAliasingDropdown : MonoBehaviour
 {
     [SerializeField]
-    TMP_Dropdown m_ModeDropdown; // None / FXAA / SMAA / TAA / MSAA
+    TMP_Dropdown m_ModeDropdown;
     [SerializeField]
-    TMP_Dropdown m_QualityDropdown; // Populated from GameUserSettingsManager.AntiAliasingQualities[mode]
+    TMP_Dropdown m_QualityDropdown;
     [SerializeField]
-    GameObject m_QualityDropdownContainer; // Shown/hidden as a whole (eg. a row/label+dropdown group). Falls back to just m_QualityDropdown's own GameObject if left unset
+    GameObject m_QualityDropdownContainer;
 
     void Awake()
     {
@@ -22,14 +22,11 @@ public class AntiAliasingDropdown : MonoBehaviour
     {
         m_ModeDropdown.onValueChanged.RemoveAllListeners();
         m_QualityDropdown.onValueChanged.RemoveAllListeners();
-
         string current = GameUserSettingsManager.Instance?.AntiAliasing ?? GameUserSettingsManager.AntiAliasingTypes[0];
         (string mode, string quality) = GameUserSettingsManager.SplitAntiAliasingType(current);
-
         int modeIndex = Mathf.Max(Array.IndexOf(GameUserSettingsManager.AntiAliasingModes, mode), 0);
         m_ModeDropdown.SetValueWithoutNotify(modeIndex);
         RefreshQualityDropdown(mode, quality);
-
         m_ModeDropdown.onValueChanged.AddListener(OnModeChanged);
         m_QualityDropdown.onValueChanged.AddListener(OnQualityChanged);
     }
@@ -38,7 +35,7 @@ public class AntiAliasingDropdown : MonoBehaviour
     {
         string mode = GameUserSettingsManager.AntiAliasingModes[index];
         string[] qualities = GameUserSettingsManager.AntiAliasingQualities[mode];
-        string quality = qualities.Length > 0 ? qualities[0] : null; // Default to the first quality option when switching into a mode that has one
+        string quality = qualities.Length > 0 ? qualities[0] : null;
         RefreshQualityDropdown(mode, quality);
         Apply(mode, quality);
     }
@@ -55,10 +52,8 @@ public class AntiAliasingDropdown : MonoBehaviour
         string[] qualities = GameUserSettingsManager.AntiAliasingQualities[mode];
         bool bHasQualities = qualities.Length > 0;
         (m_QualityDropdownContainer ? m_QualityDropdownContainer : m_QualityDropdown.gameObject).SetActive(bHasQualities);
-
         m_QualityDropdown.ClearOptions();
         if (!bHasQualities) return;
-
         m_QualityDropdown.AddOptions(new List<string>(qualities));
         int qualityIndex = Mathf.Max(Array.IndexOf(qualities, currentQuality), 0);
         m_QualityDropdown.SetValueWithoutNotify(qualityIndex);

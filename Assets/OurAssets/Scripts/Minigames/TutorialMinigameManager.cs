@@ -4,8 +4,6 @@ public class TutorialMinigameManager : MonoBehaviour
 {
     public static TutorialMinigameManager Instance { get; private set; }
 
-    // Fired right when a minigame is reported done, so listeners (TutorialHouse) can react to the
-    // specific one they're waiting on instead of polling IsMinigameBeaten every frame
     public event System.Action<MinigameType> OnMinigameCompleted;
 
     bool[] m_MinigamesBeaten;

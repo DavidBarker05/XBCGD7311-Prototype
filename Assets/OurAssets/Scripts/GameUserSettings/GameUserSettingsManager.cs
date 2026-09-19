@@ -154,8 +154,6 @@ public class GameUserSettingsManager : MonoBehaviour
         if (Instance == this) SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
-    // Volume/resolution/vsync don't care what scene is loaded, but antialiasing is per-camera, and
-    // every scene brings its own camera(s) that have never had the setting applied to them
     void OnSceneLoaded(Scene scene, LoadSceneMode mode) => AntiAliasingApplier.Apply(m_UserSettings.AntiAliasing);
 
     void Start() => ApplySettings();
@@ -187,9 +185,6 @@ public class GameUserSettingsManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Update UserSettings to match all the settings that were input into the different fields and save it to storage
-    /// </summary>
     public void SaveSettings()
     {
         m_TempSettings.InputBindingOverridesJson = m_InputActions.SaveBindingOverridesAsJson();
@@ -219,7 +214,7 @@ public class GameUserSettingsManager : MonoBehaviour
     public void ClearTempSettings()
     {
         m_TempSettings = new GameUserSettings(m_UserSettings);
-        ApplyKeybindOverrides(m_TempSettings.InputBindingOverridesJson); // Revert any live rebind that was never saved
+        ApplyKeybindOverrides(m_TempSettings.InputBindingOverridesJson);
     }
 
     #region Keybinds
@@ -241,25 +236,13 @@ public class GameUserSettingsManager : MonoBehaviour
         return action;
     }
 
-    /// <summary>
-    /// The key/button currently bound to a rebindable action, for display in a settings UI.
-    /// bindingIndex defaults to 0 (the whole binding, for a plain single-key action from
-    /// RebindableActions), pass a specific index from GetCompositePartBindings for a composite part
-    /// </summary>
     public string GetBindingDisplayString(string actionMapName, string actionName, int bindingIndex = 0) => FindRebindableAction(actionMapName, actionName)?.GetBindingDisplayString(bindingIndex) ?? "";
 
-    /// <summary>
-    /// Every part-binding of a composite action (e.g. Move's up/down/left/right), with the binding
-    /// index each one needs passed to StartRebind/GetBindingDisplayString/ResetKeybind, use this
-    /// instead of hardcoding indices, since a part's name can repeat (e.g. "up" for both W and the
-    /// up arrow key), so it's each part's index, not its name, that's the reliable identifier
-    /// </summary>
     public List<(int BindingIndex, string PartName, string CurrentDisplayString)> GetCompositePartBindings(string actionMapName, string actionName)
     {
         List<(int, string, string)> parts = new List<(int, string, string)>();
         InputAction action = FindRebindableAction(actionMapName, actionName);
         if (action == null) return parts;
-
         var bindings = action.bindings;
         for (int i = 0; i < bindings.Count; ++i)
         {
@@ -268,23 +251,14 @@ public class GameUserSettingsManager : MonoBehaviour
         return parts;
     }
 
-    /// <summary>
-    /// Starts an interactive rebind of a single binding on an action (only meant for the actions
-    /// listed in RebindableActions/RebindableCompositeActions). bindingIndex defaults to 0 for a plain
-    /// single-key action, pass a specific index from GetCompositePartBindings to rebind one composite
-    /// part (e.g. just "up") without touching the rest. Listen for completion/cancellation to refresh
-    /// whatever's showing the current binding in the UI
-    /// </summary>
     public void StartRebind(string actionMapName, string actionName, int bindingIndex = 0, System.Action onComplete = null, System.Action onCancel = null)
     {
-        if (m_ActiveRebindOperation != null) return; // Already rebinding something else
-
+        if (m_ActiveRebindOperation != null) return;
         InputAction action = FindRebindableAction(actionMapName, actionName);
         if (action == null) return;
-
         action.Disable();
         m_ActiveRebindOperation = action.PerformInteractiveRebinding(bindingIndex)
-            .WithControlsHavingToMatchPath("<Keyboard>") // Keyboard only
+            .WithControlsHavingToMatchPath("<Keyboard>")
             .WithCancelingThrough("<Keyboard>/escape")
             .OnCancel(_ =>
             {
@@ -307,10 +281,6 @@ public class GameUserSettingsManager : MonoBehaviour
         m_ActiveRebindOperation = null;
     }
 
-    /// <summary>
-    /// Reverts one binding back to its default (from the .inputactions asset). bindingIndex defaults
-    /// to 0 for a plain single-key action, pass a specific index to reset just one composite part
-    /// </summary>
     public void ResetKeybind(string actionMapName, string actionName, int bindingIndex = 0) => FindRebindableAction(actionMapName, actionName)?.RemoveBindingOverride(bindingIndex);
     #endregion Keybinds
 }

@@ -444,7 +444,6 @@ public class PipeGrid : MonoBehaviour
         toSearch.Enqueue(adjacentIndex);
     }
 
-    // Multi-source BFS: returns every cell reachable by water starting from any of the given (already-validated) start cells
     HashSet<Vector2Int> FindReachableCells(List<Vector2Int> startIndices)
     {
         HashSet<Vector2Int> searched = new HashSet<Vector2Int>();

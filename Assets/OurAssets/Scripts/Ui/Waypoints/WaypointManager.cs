@@ -6,13 +6,13 @@ public class WaypointManager : MonoBehaviour
     public static WaypointManager Instance { get; private set; }
 
     [SerializeField]
-    RectTransform m_WaypointParent; // Any RectTransform under a Canvas - a HUD panel works fine, and lets that panel's active state toggle all waypoints at once
+    RectTransform m_WaypointParent;
     [SerializeField]
     WaypointIndicator m_WaypointIndicatorPrefab;
     [SerializeField]
     Sprite m_DefaultIcon;
     [SerializeField]
-    Camera m_Camera; // Falls back to Camera.main if left unset
+    Camera m_Camera;
     [SerializeField]
     Vector3 m_DefaultWorldOffset = new Vector3(0f, 2f, 0f);
 
@@ -28,7 +28,6 @@ public class WaypointManager : MonoBehaviour
     {
         if (!target) return null;
         if (m_ActiveWaypoints.TryGetValue(target, out WaypointIndicator existing) && existing) return existing;
-
         WaypointIndicator indicator = Instantiate(m_WaypointIndicatorPrefab, m_WaypointParent);
         indicator.Init(target, m_Camera ? m_Camera : Camera.main, icon ? icon : m_DefaultIcon, worldOffset ?? m_DefaultWorldOffset);
         m_ActiveWaypoints[target] = indicator;
