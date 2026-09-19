@@ -27,6 +27,35 @@ public class GameUserSettingsManager : MonoBehaviour
         "MSAA (8X)"
     };
 
+    // For a two-dropdown AA UI: the first dropdown picks one of these, the second (if the mode has any
+    // qualities) picks one of AntiAliasingQualities[mode]. Split/ComposeAntiAliasingType convert between
+    // that pair and the single AntiAliasingTypes string AntiAliasingApplier/GameUserSettings actually store
+    public static readonly string[] AntiAliasingModes = new string[] { "None", "FXAA", "SMAA", "TAA", "MSAA" };
+
+    public static readonly Dictionary<string, string[]> AntiAliasingQualities = new Dictionary<string, string[]>
+    {
+        { "None", new string[0] },
+        { "FXAA", new string[0] },
+        { "SMAA", new string[] { "Low", "Medium", "High" } },
+        { "TAA", new string[] { "Very Low", "Low", "Medium", "High", "Very High" } },
+        { "MSAA", new string[] { "2X", "4X", "8X" } }
+    };
+
+    /// <summary>
+    /// Splits a combined AntiAliasingTypes entry (eg. "SMAA (Medium)") into its mode ("SMAA") and
+    /// quality ("Medium"). Quality is null for modes with none (eg. "FXAA" -> ("FXAA", null))
+    /// </summary>
+    public static (string Mode, string Quality) SplitAntiAliasingType(string fullType)
+    {
+        int parenIndex = fullType.IndexOf(" (");
+        if (parenIndex < 0) return (fullType, null);
+        string mode = fullType.Substring(0, parenIndex);
+        string quality = fullType.Substring(parenIndex + 2, fullType.Length - parenIndex - 3);
+        return (mode, quality);
+    }
+
+    public static string ComposeAntiAliasingType(string mode, string quality) => string.IsNullOrEmpty(quality) ? mode : $"{mode} ({quality})";
+
     const string FILE_NAME = "user_settings.json";
 
     // The only single-key actions exposed for user rebinding

@@ -1,19 +1,52 @@
 using System.IO;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public static class PlayerSaveManager
 {
     public static PlayerSaveData CurrentSaveData { get; private set; }
 
+    public static bool DoesSaveExist { get; private set; }
+
     static readonly string SaveFile = "save.dat";
+
+    static readonly int s_MainMenuSceneIndex = 0;
+    static readonly int s_TutorialSceneIndex = 1;
+    static readonly int s_MainGameSceneIndex = 2;
 
     const int TutorialRandomSeed = 761218;
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-    static void Bootstrap() // Actually keep this so if we want to display save info in menu
+    static void Bootstrap()
     {
         LoadSave();
-        if (CurrentSaveData == null) CreateNewSave();
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    static void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        int sceneIndex = scene.buildIndex;
+        if (sceneIndex == s_MainMenuSceneIndex) DoesSaveExist = CurrentSaveData != null;
+        else if (sceneIndex == s_TutorialSceneIndex)
+        {
+            DoesSaveExist = true;
+            CreateNewSave();
+            UseSeedForCurrentDay();
+        }
+        else if (sceneIndex == s_MainGameSceneIndex)
+        {
+            DoesSaveExist = true;
+            if (CurrentSaveData == null)
+            {
+                CurrentSaveData = new PlayerSaveData()
+                {
+                    DayNumber = 1,
+                    DaySeed = GenerateEntropySeed()
+                };
+                SaveGame();
+            }
+            UseSeedForCurrentDay();
+        }
     }
 
     public static void CreateNewSave()
