@@ -8,6 +8,15 @@ public class ChaseMinigameInteract : Interactable
 	[SerializeField]
 	QTEInteractable[] m_QTEInteractables;
 
+	[Header("Per-house teleport spots")]
+	[SerializeField]
+	Transform m_ChaseSpawn; // Where the player is teleported to when the chase starts (eg. outside the house)
+	[SerializeField]
+	Transform m_ReturnSpawn; // Where the player is teleported back to once the chase is beaten (eg. inside the house)
+
+	public Transform ChaseSpawn { get => m_ChaseSpawn; set => m_ChaseSpawn = value; }
+	public Transform ReturnSpawn { get => m_ReturnSpawn; set => m_ReturnSpawn = value; }
+
 	// Fired right when the chase actually starts lets other systems (waypoints, etc.)
 	// react without this class needing to know about them
 	public UnityEvent OnChaseStarted;
@@ -26,7 +35,10 @@ public class ChaseMinigameInteract : Interactable
 		{
 			if ((!m_HasBeenPlayed || m_CanBePlayedAgain) && !ChaseMinigameStarter.Instance.ChaseMinigameIsRunning)
 			{
-				ChaseMinigameStarter.Instance.StartChaseMinigame(m_QTEInteractables);
+#if UNITY_EDITOR
+				if (!m_ChaseSpawn || !m_ReturnSpawn) Debug.LogWarning($"WARNING: {name} is missing its chase spawn and/or return spawn transform");
+#endif
+				ChaseMinigameStarter.Instance.StartChaseMinigame(m_QTEInteractables, m_ChaseSpawn, m_ReturnSpawn);
 				OnChaseStarted?.Invoke();
 			}
 			m_HasBeenPlayed = true;

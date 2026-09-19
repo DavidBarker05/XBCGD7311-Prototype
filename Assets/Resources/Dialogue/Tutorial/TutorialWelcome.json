@@ -14,7 +14,7 @@
         },
         {
             "name": "Nomsa",
-            "text": "There's an electrical box in the living room. Go take a look and see if you can sort it out.",
+            "text": "There's an electrical box next to you. Go take a look and see if you can sort it out.",
             "fontSize": 24,
             "charactersPerSecond": 50
         },

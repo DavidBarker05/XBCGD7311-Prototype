@@ -9,15 +9,13 @@ public class ChaseMinigameStarter : MonoBehaviour
 	[SerializeField]
 	FirstPersonPlayerCharacter m_FPPCharacter;
 	[SerializeField]
-	Transform m_ChaseSpawn;
-	[SerializeField]
-	Transform m_HouseSpawn;
-	[SerializeField]
 	QTECheckpointManager m_CheckpointManager;
 
 	public bool ChaseMinigameIsRunning { get; private set; }
 
 	QTEInteractable[] m_QTEInteractables;
+	Transform m_ChaseSpawn;
+	Transform m_HouseSpawn;
 	int m_NumInteractables;
 	int m_NumInteractablesBeaten;
 
@@ -27,9 +25,11 @@ public class ChaseMinigameStarter : MonoBehaviour
 		else Instance = this;
 	}
 
-	public void StartChaseMinigame(QTEInteractable[] qteInteractables)
+	public void StartChaseMinigame(QTEInteractable[] qteInteractables, Transform chaseSpawn, Transform houseSpawn)
 	{
 		ChaseMinigameIsRunning = true;
+		m_ChaseSpawn = chaseSpawn;
+		m_HouseSpawn = houseSpawn;
 		m_FPPCharacter.GetComponent<CharacterController>().enabled = false;
 		m_FPPCharacter.gameObject.transform.position = m_ChaseSpawn.position;
 		m_FPPCharacter.GetComponent<CharacterController>().enabled = true;
@@ -38,14 +38,9 @@ public class ChaseMinigameStarter : MonoBehaviour
 		foreach (QTEInteractable qte in m_QTEInteractables) qte.gameObject.SetActive(true);
 		m_NumInteractablesBeaten = 0;
 		m_CheckpointManager?.BeginCheckpoints();
-		//ChasePlayer[] enemies = FindObjectsByType<ChasePlayer>();
-		//foreach (ChasePlayer enemy in enemies)
-		//{
-		//	enemy.ResetToStart();
-		//}
 	}
 
-	public void RestartChaseMinigame() => StartChaseMinigame(m_QTEInteractables);
+	public void RestartChaseMinigame() => StartChaseMinigame(m_QTEInteractables, m_ChaseSpawn, m_HouseSpawn);
 
 	public void InteractableBeaten()
 	{

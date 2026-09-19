@@ -96,6 +96,10 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 246ce93e87198e84da711d90dc4752e1, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 246ce93e87198e84da711d90dc4752e1, type: 3}
       propertyPath: m_Name
       value: Armchair

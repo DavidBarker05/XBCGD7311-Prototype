@@ -126,6 +126,8 @@ public class NPCHouse : MonoBehaviour
         if (HasUnbeatenChase())
         {
             ChaseMinigameInteract chaseInteract = Instantiate(m_ChaseMinigameInteractPrefab, m_DoorSpawnLocation.position, m_DoorSpawnLocation.rotation);
+            chaseInteract.ChaseSpawn = OutsideTeleportSpot;
+            chaseInteract.ReturnSpawn = HouseTeleportSpot;
             m_ActiveDoorObject = chaseInteract.gameObject;
             m_SpawnedInteriorObjects.Add(m_ActiveDoorObject);
         }
@@ -222,6 +224,8 @@ public class NPCHouse : MonoBehaviour
             Destroy(doorUsedToEnter.gameObject);
 
             ChaseMinigameInteract chaseInteract = Instantiate(m_ChaseMinigameInteractPrefab, position, rotation);
+            chaseInteract.ChaseSpawn = OutsideTeleportSpot;
+            chaseInteract.ReturnSpawn = HouseTeleportSpot;
             m_ActiveDoorObject = chaseInteract.gameObject;
             m_SpawnedInteriorObjects.Add(chaseInteract.gameObject);
         }
