@@ -11,6 +11,7 @@ public class TutorialHouse : MonoBehaviour
         PipeDone,
         DisconnectPending,
         DisconnectDone,
+        LeaveHousePending,
         Complete
     }
 
@@ -46,10 +47,17 @@ public class TutorialHouse : MonoBehaviour
     [SerializeField, Min(0)]
     int m_MoneyReward = 50;
 
+    [Header("Leave House")]
+    [SerializeField]
+    PlayerHouseDoor m_PlayerHouseDoor;
+    [SerializeField]
+    Sprite m_LeaveHouseWaypointIcon;
+
     readonly DisplayTask m_TalkDisplayTask = new DisplayTask("Talk to Nomsa", 1, 0, false);
     readonly DisplayTask m_ElectricalDisplayTask = new DisplayTask("Fix the electrical box", 1, 0, false);
     readonly DisplayTask m_PipeDisplayTask = new DisplayTask("Fix the leaking pipe", 1, 0, false);
     readonly DisplayTask m_DisconnectDisplayTask = new DisplayTask("Disconnect the illegal wiring", 1, 0, false);
+    readonly DisplayTask m_LeaveHouseDisplayTask = new DisplayTask("Head outside to start helping others", 1, 0, false);
 
     void Awake()
     {
@@ -164,10 +172,22 @@ public class TutorialHouse : MonoBehaviour
     #region Reward
     public void OnRewardDialogueFinished()
     {
-        CurrentStage = Stage.Complete;
+        CurrentStage = Stage.LeaveHousePending;
         HideTalkWaypoint();
         PlayerSaveManager.CurrentSaveData.Money += m_MoneyReward;
         PlayerSaveManager.SaveGame();
+        if (m_PlayerHouseDoor) WaypointManager.Instance?.AddWaypoint(m_PlayerHouseDoor.transform, m_LeaveHouseWaypointIcon);
+        TaskList.Instance?.AddTask(m_LeaveHouseDisplayTask);
     }
     #endregion Reward
+
+    #region Leave House
+    public void OnLeaveHouseInteracted()
+    {
+        if (CurrentStage != Stage.LeaveHousePending) return;
+        CurrentStage = Stage.Complete;
+        if (m_PlayerHouseDoor) WaypointManager.Instance?.RemoveWaypoint(m_PlayerHouseDoor.transform);
+        TaskList.Instance?.RemoveTask(m_LeaveHouseDisplayTask);
+    }
+    #endregion Leave House
 }

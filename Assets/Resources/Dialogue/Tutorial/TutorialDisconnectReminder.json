@@ -2,7 +2,7 @@
     "dialogueItems": [
         {
             "name": "Nomsa",
-            "text": "Those illegal connections are still out there costing you money. Head outside and sort them out when you're ready.",
+            "text": "Those illegal connections are still out there costing me money. Head outside and sort them out when you're ready.",
             "fontSize": 24,
             "charactersPerSecond": 50
         }

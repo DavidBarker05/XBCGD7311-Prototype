@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PlayerHouseDoor : Interactable
 {
@@ -14,6 +15,8 @@ public class PlayerHouseDoor : Interactable
     MenuCharacter m_MenuCharacter;
     [SerializeField]
     GameObject m_HUD;
+
+    public UnityEvent OnPlayerLeft;
 
     bool m_bPlayerInside = true;
     int m_LastMarkersShownDay = int.MinValue;
@@ -44,7 +47,11 @@ public class PlayerHouseDoor : Interactable
                 cc.enabled = true;
             }
             m_bPlayerInside = !m_bPlayerInside;
-            if (!m_bPlayerInside) TryShowDailyHouseMarkers();
+            if (!m_bPlayerInside)
+            {
+                TryShowDailyHouseMarkers();
+                OnPlayerLeft?.Invoke();
+            }
         }
         else
         {
