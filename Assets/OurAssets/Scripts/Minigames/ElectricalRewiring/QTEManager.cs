@@ -10,6 +10,11 @@ public class QTEManager : MonoBehaviour
 
     private QTEInteractable currentInteractable;
 
+    [Header("Difficulty Scaling")]
+    public float baseMoveSpeed = 150f;
+    public float speedIncreasePerSuccess = 0.25f;
+    private int successCount = 0;
+
     public void StartQTE(QTEInteractable interactable)
     {
         currentInteractable = interactable;
@@ -17,12 +22,16 @@ public class QTEManager : MonoBehaviour
         currentQTE = Instantiate(qtePrefab, canvas.transform);
         PointerController pointer = currentQTE.GetComponentInChildren<PointerController>();
         player.ChangeCharacter(qteCharacter);
-        pointer.Begin(this, qteCharacter);
+
+        float currentSpeed = baseMoveSpeed + (speedIncreasePerSuccess * successCount);
+        pointer.Begin(this, qteCharacter, currentSpeed);
+
         Time.timeScale = 0f;
     }
 
     public void Success()
     {
+        successCount++;
         currentInteractable.OnQTESuccess();
         EndQTE();
     }

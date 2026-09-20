@@ -31,11 +31,12 @@ public class PointerController : MonoBehaviour
         targetPosition = pointB.position;
     }
 
-    public void Begin(QTEManager manager, QTEPlayerCharacter player)
+    public void Begin(QTEManager manager, QTEPlayerCharacter player, float speed)
     {
         qteManager = manager;
         qtePlayer = player;
         qtePlayer.OnQTEInput.AddListener(DoQTEInput);
+        moveSpeed = speed;
         RandomizeSafeZone();
         isRunning = true;
     }
