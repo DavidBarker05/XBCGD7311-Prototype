@@ -46,6 +46,11 @@ public class TutorialHouse : MonoBehaviour
     [SerializeField, Min(0)]
     int m_MoneyReward = 50;
 
+    readonly DisplayTask m_TalkDisplayTask = new DisplayTask("Talk to Nomsa", 1, 0, false);
+    readonly DisplayTask m_ElectricalDisplayTask = new DisplayTask("Fix the electrical box", 1, 0, false);
+    readonly DisplayTask m_PipeDisplayTask = new DisplayTask("Fix the leaking pipe", 1, 0, false);
+    readonly DisplayTask m_DisconnectDisplayTask = new DisplayTask("Disconnect the illegal wiring", 1, 0, false);
+
     void Awake()
     {
         if (m_ElectricalBoxInteractable) m_ElectricalBoxInteractable.gameObject.SetActive(false);
@@ -76,11 +81,13 @@ public class TutorialHouse : MonoBehaviour
     void ShowTalkWaypoint()
     {
         if (m_NPC) WaypointManager.Instance?.AddWaypoint(m_NPC.transform, m_TalkWaypointIcon);
+        TaskList.Instance?.AddTask(m_TalkDisplayTask);
     }
 
     void HideTalkWaypoint()
     {
         if (m_NPC) WaypointManager.Instance?.RemoveWaypoint(m_NPC.transform);
+        TaskList.Instance?.RemoveTask(m_TalkDisplayTask);
     }
     #endregion Waypoints
 
@@ -97,12 +104,14 @@ public class TutorialHouse : MonoBehaviour
         if (!m_ElectricalBoxInteractable) return;
         m_ElectricalBoxInteractable.gameObject.SetActive(true);
         WaypointManager.Instance?.AddWaypoint(m_ElectricalBoxInteractable.transform, m_ElectricalWaypointIcon);
+        TaskList.Instance?.AddTask(m_ElectricalDisplayTask);
     }
 
     void OnElectricalMinigameCompleted()
     {
         CurrentStage = Stage.ElectricalDone;
         if (m_ElectricalBoxInteractable) WaypointManager.Instance?.RemoveWaypoint(m_ElectricalBoxInteractable.transform);
+        TaskList.Instance?.RemoveTask(m_ElectricalDisplayTask);
         SetLights(true);
         ShowTalkWaypoint();
     }
@@ -116,12 +125,14 @@ public class TutorialHouse : MonoBehaviour
         if (!m_PipeWallInteractable) return;
         m_PipeWallInteractable.gameObject.SetActive(true);
         WaypointManager.Instance?.AddWaypoint(m_PipeWallInteractable.transform, m_PipeWaypointIcon);
+        TaskList.Instance?.AddTask(m_PipeDisplayTask);
     }
 
     void OnPipeMinigameCompleted()
     {
         CurrentStage = Stage.PipeDone;
         if (m_PipeWallInteractable) WaypointManager.Instance?.RemoveWaypoint(m_PipeWallInteractable.transform);
+        TaskList.Instance?.RemoveTask(m_PipeDisplayTask);
         ShowTalkWaypoint();
     }
     #endregion Pipe
@@ -134,11 +145,13 @@ public class TutorialHouse : MonoBehaviour
         if (!m_DisconnectInteractable) return;
         m_DisconnectInteractable.gameObject.SetActive(true);
         WaypointManager.Instance?.AddWaypoint(m_DisconnectInteractable.transform, m_DisconnectWaypointIcon);
+        TaskList.Instance?.AddTask(m_DisconnectDisplayTask);
     }
 
     public void OnDisconnectInteracted()
     {
         if (m_DisconnectInteractable) WaypointManager.Instance?.RemoveWaypoint(m_DisconnectInteractable.transform);
+        TaskList.Instance?.RemoveTask(m_DisconnectDisplayTask);
     }
 
     void OnDisconnectMinigameCompleted()

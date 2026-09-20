@@ -1,11 +1,13 @@
 using UnityEngine;
 
-public class WireMinigameInteractable : Interactable
+public class WireMinigameInteractable : Interactable, IHouseTaskInteractable
 {
 	[SerializeField]
 	bool m_CanBePlayedAgain = false;
 
 	bool m_HasBeenPlayed = false;
+
+	public NPCHouse OwningHouse { get; set; }
 
 	public override InteractionStatus Interact(params object[] inputParameters)
 	{
@@ -15,9 +17,13 @@ public class WireMinigameInteractable : Interactable
 			Debug.LogWarning($"WARNING: WireMinigameInteractable objects needs 0 input parameters. Received {inputParameters.Length} input parameters");
 #endif
 		}
-		else
+		else if (OwningHouse == null || OwningHouse.Progress.HasTalkedToNPC)
 		{
-			if (!m_HasBeenPlayed || m_CanBePlayedAgain) WireMinigameStarter.Instance.StartWireMinigame();
+			if (!m_HasBeenPlayed || m_CanBePlayedAgain)
+			{
+				OwningHouse?.HideTaskMarker(transform);
+				WireMinigameStarter.Instance.StartWireMinigame();
+			}
 			m_HasBeenPlayed = true;
 		}
 		return new InteractionStatus() { EndInteraction = true };

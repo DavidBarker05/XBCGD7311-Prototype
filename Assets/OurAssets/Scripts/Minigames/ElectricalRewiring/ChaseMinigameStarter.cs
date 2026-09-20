@@ -33,7 +33,6 @@ public class ChaseMinigameStarter : MonoBehaviour
 		m_FPPCharacter.GetComponent<CharacterController>().enabled = false;
 		m_FPPCharacter.gameObject.transform.position = m_ChaseSpawn.position;
 		m_FPPCharacter.GetComponent<CharacterController>().enabled = true;
-
 		if (m_CheckpointManager && qteInteractables != m_QTEInteractables)
 		{
 			m_CheckpointManager.ClearDynamicCheckpoints();
@@ -42,7 +41,6 @@ public class ChaseMinigameStarter : MonoBehaviour
 				if (!m_CheckpointManager.checkpoints.Contains(qte)) m_CheckpointManager.RegisterDynamicCheckpoint(qte);
 			}
 		}
-
 		m_QTEInteractables = qteInteractables;
 		m_NumInteractables = m_QTEInteractables.Length;
 		foreach (QTEInteractable qte in m_QTEInteractables) qte.gameObject.SetActive(true);
@@ -68,6 +66,7 @@ public class ChaseMinigameStarter : MonoBehaviour
 		TutorialMinigameManager.Instance?.ReportMinigameCompleted(MinigameType.ChaseMinigame);
 		ChaseMinigameIsRunning = false;
 		m_CheckpointManager?.ClearDynamicCheckpoints();
+		m_CheckpointManager?.ClearChaseTask();
 		foreach (QTEInteractable qte in m_QTEInteractables) if (qte) Destroy(qte.gameObject);
 		m_QTEInteractables = null;
 	}

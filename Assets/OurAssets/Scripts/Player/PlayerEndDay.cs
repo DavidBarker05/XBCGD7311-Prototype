@@ -11,6 +11,29 @@ public class PlayerEndDay : Interactable
     FirstPersonPlayerCharacter m_FirstPersonPlayerCharacter;
     [SerializeField]
     GameObject m_HUD;
+    [Header("Waypoint")]
+    [SerializeField]
+    Sprite m_EndDayWaypointIcon;
+
+    bool m_bMarkerShown;
+    readonly DisplayTask m_EndDayDisplayTask = new DisplayTask("Head to bed for the night", 1, 0, false);
+
+    void Update()
+    {
+        bool bShouldShow = NPCHouseDailyManager.Instance && NPCHouseDailyManager.Instance.AllMinigamesBeatenForToday();
+        if (bShouldShow == m_bMarkerShown) return;
+        m_bMarkerShown = bShouldShow;
+        if (bShouldShow)
+        {
+            WaypointManager.Instance?.AddWaypoint(transform, m_EndDayWaypointIcon);
+            TaskList.Instance?.AddTask(m_EndDayDisplayTask);
+        }
+        else
+        {
+            WaypointManager.Instance?.RemoveWaypoint(transform);
+            TaskList.Instance?.RemoveTask(m_EndDayDisplayTask);
+        }
+    }
 
     public override InteractionStatus Interact(params object[] inputParameters)
     {

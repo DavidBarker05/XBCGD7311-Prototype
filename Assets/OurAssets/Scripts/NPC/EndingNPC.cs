@@ -13,7 +13,7 @@ public class EndingNPC : Interactable
     [SerializeField]
     Sprite m_TalkWaypointIcon;
 
-    [Header("Waypoints only - the couch/door keep their own existing scripts and colliders")]
+    [Header("Waypoints")]
     [SerializeField]
     Transform m_CouchTransform;
     [SerializeField]
@@ -25,6 +25,10 @@ public class EndingNPC : Interactable
 
     bool m_bChoicePresented;
     bool m_bEndingChosen;
+
+    readonly DisplayTask m_TalkDisplayTask = new DisplayTask("Talk to Nomsa", 1, 0, false);
+    readonly DisplayTask m_CouchDisplayTask = new DisplayTask("Rest on the couch", 1, 0, false);
+    readonly DisplayTask m_DoorDisplayTask = new DisplayTask("Head back out to help more people", 1, 0, false);
 
     void Awake()
     {
@@ -44,23 +48,39 @@ public class EndingNPC : Interactable
         }
         SetVisualActive(bIsEndingDay && !m_bChoicePresented);
         IsChoiceActive = bIsEndingDay && m_bChoicePresented && !m_bEndingChosen;
-        SetWaypoint(m_CouchTransform, IsChoiceActive, m_CouchWaypointIcon);
-        SetWaypoint(m_DoorTransform, IsChoiceActive, m_DoorWaypointIcon);
+        SetWaypoint(m_CouchTransform, IsChoiceActive, m_CouchWaypointIcon, m_CouchDisplayTask);
+        SetWaypoint(m_DoorTransform, IsChoiceActive, m_DoorWaypointIcon, m_DoorDisplayTask);
     }
 
     void SetVisualActive(bool bActive)
     {
         if (!m_VisualsRoot || m_VisualsRoot.gameObject.activeSelf == bActive) return;
         m_VisualsRoot.gameObject.SetActive(bActive);
-        if (bActive) WaypointManager.Instance?.AddWaypoint(m_VisualsRoot, m_TalkWaypointIcon);
-        else WaypointManager.Instance?.RemoveWaypoint(m_VisualsRoot);
+        if (bActive)
+        {
+            WaypointManager.Instance?.AddWaypoint(m_VisualsRoot, m_TalkWaypointIcon);
+            TaskList.Instance?.AddTask(m_TalkDisplayTask);
+        }
+        else
+        {
+            WaypointManager.Instance?.RemoveWaypoint(m_VisualsRoot);
+            TaskList.Instance?.RemoveTask(m_TalkDisplayTask);
+        }
     }
 
-    void SetWaypoint(Transform target, bool bActive, Sprite icon)
+    void SetWaypoint(Transform target, bool bActive, Sprite icon, DisplayTask task)
     {
         if (!target) return;
-        if (bActive) WaypointManager.Instance?.AddWaypoint(target, icon);
-        else WaypointManager.Instance?.RemoveWaypoint(target);
+        if (bActive)
+        {
+            WaypointManager.Instance?.AddWaypoint(target, icon);
+            TaskList.Instance?.AddTask(task);
+        }
+        else
+        {
+            WaypointManager.Instance?.RemoveWaypoint(target);
+            TaskList.Instance?.RemoveTask(task);
+        }
     }
 
     public override InteractionStatus Interact(params object[] inputParameters)

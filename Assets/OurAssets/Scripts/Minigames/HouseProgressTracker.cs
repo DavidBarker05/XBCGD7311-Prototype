@@ -12,6 +12,7 @@ public class HouseProgress
     public bool IsPlayerInside;
     public DoorType DoorType = DoorType.Entry;
     public bool HasBeatenHouse;
+    public bool HasTalkedToNPC;
     public Vector3 PlayerPosition;
     public Quaternion PlayerRotation;
     public Quaternion CameraRotation;

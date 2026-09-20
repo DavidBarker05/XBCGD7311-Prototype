@@ -10,7 +10,17 @@ public class NPC : Interactable
 
     public override InteractionStatus Interact(params object[] inputParameters)
     {
-        // TODO: Start dialogue
+        if (inputParameters.Length != 1)
+        {
+#if UNITY_EDITOR
+            Debug.LogWarning($"WARNING: NPC objects needs 1 input parameter. Received {inputParameters.Length} input parameters");
+#endif
+        }
+        else
+        {
+            // TODO: Start dialogue, for now this just unlocks the house's tasks, same as if dialogue had played and finished
+            OwningHouse?.OnNPCTalkedTo();
+        }
         return new InteractionStatus() { EndInteraction = true };
     }
 }

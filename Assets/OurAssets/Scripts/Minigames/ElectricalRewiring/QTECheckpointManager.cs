@@ -3,16 +3,21 @@ using UnityEngine;
 
 public class QTECheckpointManager : MonoBehaviour
 {
-    [Header("Checkpoints (can be completed in any order)")]
+    [Header("Checkpoints")]
     public List<QTEInteractable> checkpoints = new List<QTEInteractable>();
 
     [Header("Marker Settings")]
-    public Sprite markerIcon; // Uses WaypointManager's default icon if left unset
+    public Sprite markerIcon;
     public float markerHeightOffset = 2f;
+
+    [Header("Task List")]
+    public string taskDisplayName = "Deal with the illegal connections";
 
     readonly HashSet<QTEInteractable> completedCheckpoints = new HashSet<QTEInteractable>();
 
     readonly List<QTEInteractable> m_DynamicCheckpoints = new List<QTEInteractable>();
+
+    DisplayTask m_ChaseDisplayTask;
 
     void Awake()
     {
@@ -20,7 +25,7 @@ public class QTECheckpointManager : MonoBehaviour
 
         foreach (QTEInteractable checkpoint in checkpoints)
         {
-            QTEInteractable capturedCheckpoint = checkpoint; // Local copy so each listener closes over its own checkpoint, not whichever one the loop variable ends on
+            QTEInteractable capturedCheckpoint = checkpoint;
             capturedCheckpoint.OnCompleted.AddListener(() => OnCheckpointCompleted(capturedCheckpoint));
         }
     }
@@ -52,12 +57,25 @@ public class QTECheckpointManager : MonoBehaviour
             checkpoint.canInteract = true;
             SpawnMarkerFor(checkpoint);
         }
+
+        ClearChaseTask();
+        int totalCount = checkpoints.Count + m_DynamicCheckpoints.Count;
+        m_ChaseDisplayTask = new DisplayTask(taskDisplayName, totalCount, 0, false);
+        TaskList.Instance?.AddTask(m_ChaseDisplayTask);
+    }
+
+    public void ClearChaseTask()
+    {
+        if (m_ChaseDisplayTask == null) return;
+        TaskList.Instance?.RemoveTask(m_ChaseDisplayTask);
+        m_ChaseDisplayTask = null;
     }
 
     void OnCheckpointCompleted(QTEInteractable checkpoint)
     {
         completedCheckpoints.Add(checkpoint);
         ClearMarkerFor(checkpoint);
+        if (m_ChaseDisplayTask != null) TaskList.Instance?.IncrementAmountDoneForTask(m_ChaseDisplayTask);
 
         if (completedCheckpoints.Count >= checkpoints.Count + m_DynamicCheckpoints.Count) Debug.Log("QTECheckpointManager: All checkpoints complete!");
     }

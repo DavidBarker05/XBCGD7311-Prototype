@@ -48,10 +48,35 @@ public class NPCHouse : MonoBehaviour
     [field: SerializeField]
     public Transform OutsideTeleportSpot { get; private set; }
 
+    [Header("Lights")]
+    [SerializeField]
+    Light[] m_HouseLights;
+
+    [Header("Waypoint Icons")]
+    [SerializeField]
+    Sprite m_TalkWaypointIcon;
+    [SerializeField]
+    Sprite m_TaskWaypointIcon;
+    [SerializeField]
+    Sprite m_ExitWaypointIcon;
+
+    public Transform EntryPoint => m_DoorSpawnLocation;
     public HouseProgress Progress { get; private set; }
 
+    class HouseTaskEntry
+    {
+        public Transform Target;
+        public MinigameType Type;
+        public DisplayTask DisplayTask;
+    }
+
     GameObject m_ActiveDoorObject;
+    Transform m_CurrentNPCTransform;
+    bool m_bHouseCompletionReported;
     readonly List<GameObject> m_SpawnedInteriorObjects = new List<GameObject>();
+    readonly List<HouseTaskEntry> m_TaskEntries = new List<HouseTaskEntry>();
+    DisplayTask m_TalkDisplayTask;
+    DisplayTask m_ExitDisplayTask;
 
     public void LoadHouse()
     {
@@ -65,7 +90,10 @@ public class NPCHouse : MonoBehaviour
         HouseProgressTracker.SetActiveHouse(transform.position);
         SpawnNPC();
         SpawnMinigameInteractables();
+        RefreshLights();
         SpawnDoorSpotForCurrentProgress();
+        RefreshTaskAndTalkMarkers();
+        RefreshExitDoorMarker();
     }
 
     public void UnloadHouse()
@@ -74,6 +102,11 @@ public class NPCHouse : MonoBehaviour
         m_ActiveDoorObject = null;
         foreach (GameObject spawnedObject in m_SpawnedInteriorObjects) if (spawnedObject) Destroy(spawnedObject);
         m_SpawnedInteriorObjects.Clear();
+        ClearAllTaskEntries();
+        m_TalkDisplayTask = null;
+        m_ExitDisplayTask = null;
+        m_CurrentNPCTransform = null;
+        m_bHouseCompletionReported = false;
         Progress = null;
     }
 
@@ -127,8 +160,10 @@ public class NPCHouse : MonoBehaviour
             ChaseMinigameInteract chaseInteract = Instantiate(m_ChaseMinigameInteractPrefab, m_DoorSpawnLocation.position, m_DoorSpawnLocation.rotation);
             chaseInteract.ChaseSpawn = OutsideTeleportSpot;
             chaseInteract.ReturnSpawn = HouseTeleportSpot;
+            chaseInteract.OwningHouse = this;
             m_ActiveDoorObject = chaseInteract.gameObject;
             m_SpawnedInteriorObjects.Add(m_ActiveDoorObject);
+            RegisterTaskEntry(chaseInteract.transform, MinigameType.ChaseMinigame);
         }
         else
         {
@@ -169,6 +204,7 @@ public class NPCHouse : MonoBehaviour
         NPC spawnedNPC = Instantiate(npcPrefab, spawnLocation.position, spawnLocation.rotation);
         spawnedNPC.OwningHouse = this;
         m_SpawnedInteriorObjects.Add(spawnedNPC.gameObject);
+        m_CurrentNPCTransform = spawnedNPC.transform;
     }
 
     void SpawnMinigameInteractables()
@@ -177,9 +213,9 @@ public class NPCHouse : MonoBehaviour
         SpawnInteractablesOfType(MinigameType.WallKnockAndPipes, m_PossiblePipeMinigameLocations, m_WallKnockInteractablePrefab);
     }
 
-    void SpawnInteractablesOfType<T>(MinigameType type, Transform[] possibleLocations, T prefab) where T : Component
+    void SpawnInteractablesOfType<T>(MinigameType type, Transform[] possibleLocations, T prefab) where T : Component, IHouseTaskInteractable
     {
-        int count = 0; // Only the ones not already beaten need spawning, matters if this house's interior is ever rebuilt after some were already completed
+        int count = 0;
         for (int i = 0; i < Progress.MinigameTypes.Length; ++i) if (Progress.MinigameTypes[i] == type && !Progress.MinigamesBeaten[i]) ++count;
         if (count <= 0) return;
         if (!Arrays.IsValid(possibleLocations) || !prefab)
@@ -195,34 +231,175 @@ public class NPCHouse : MonoBehaviour
         for (int i = 0; i < spawnCount; ++i)
         {
             T instance = Instantiate(prefab, shuffledLocations[i].position, shuffledLocations[i].rotation);
+            instance.OwningHouse = this;
             m_SpawnedInteriorObjects.Add(instance.gameObject);
+            RegisterTaskEntry(instance.transform, type);
         }
     }
     #endregion Spawning
 
+    static string TaskDisplayNameFor(MinigameType type) => type switch
+    {
+        MinigameType.Wires => "Fix the wiring",
+        MinigameType.WallKnockAndPipes => "Find and patch the leak",
+        MinigameType.ChaseMinigame => "Deal with the illegal connections",
+        _ => "Do the task"
+    };
+
+    void RegisterTaskEntry(Transform target, MinigameType type)
+    {
+        m_TaskEntries.Add(new HouseTaskEntry
+        {
+            Target = target,
+            Type = type,
+            DisplayTask = new DisplayTask(TaskDisplayNameFor(type), 1, 0, strikeThroughOnCompletion: true)
+        });
+    }
+
+    #region Lights
+    void RefreshLights()
+    {
+        bool bAllWireTasksBeaten = true;
+        for (int i = 0; i < Progress.MinigameTypes.Length; ++i)
+        {
+            if (Progress.MinigameTypes[i] == MinigameType.Wires && !Progress.MinigamesBeaten[i]) { bAllWireTasksBeaten = false; break; }
+        }
+        foreach (Light light in m_HouseLights) if (light) light.enabled = bAllWireTasksBeaten;
+    }
+    #endregion Lights
+
+    #region Markers
+    void RefreshTaskAndTalkMarkers()
+    {
+        if (Progress.HasTalkedToNPC) RevealTaskEntries();
+        else if (m_CurrentNPCTransform)
+        {
+            WaypointManager.Instance?.AddWaypoint(m_CurrentNPCTransform, m_TalkWaypointIcon);
+            m_TalkDisplayTask ??= new DisplayTask("Talk to the resident", 1, 0, false);
+            TaskList.Instance?.AddTask(m_TalkDisplayTask);
+        }
+    }
+
+    void RevealTaskEntries()
+    {
+        foreach (HouseTaskEntry entry in m_TaskEntries)
+        {
+            if (entry.Target) WaypointManager.Instance?.AddWaypoint(entry.Target, m_TaskWaypointIcon);
+            TaskList.Instance?.AddTask(entry.DisplayTask);
+        }
+    }
+
+    void ShowRemainingTaskMarkers()
+    {
+        foreach (HouseTaskEntry entry in m_TaskEntries)
+        {
+            if (entry.Target && entry.DisplayTask.AmountDone == 0) WaypointManager.Instance?.AddWaypoint(entry.Target, m_TaskWaypointIcon);
+        }
+    }
+
+    void HideAllTaskMarkers()
+    {
+        foreach (HouseTaskEntry entry in m_TaskEntries) if (entry.Target) WaypointManager.Instance?.RemoveWaypoint(entry.Target);
+    }
+
+    public void HideTaskMarker(Transform target) => WaypointManager.Instance?.RemoveWaypoint(target);
+
+    void CompleteTaskEntry(MinigameType type)
+    {
+        foreach (HouseTaskEntry entry in m_TaskEntries)
+        {
+            if (entry.Type != type || entry.DisplayTask.AmountDone != 0) continue;
+            TaskList.Instance?.IncrementAmountDoneForTask(entry.DisplayTask);
+            if (entry.Target) WaypointManager.Instance?.RemoveWaypoint(entry.Target);
+            break;
+        }
+    }
+
+    void ClearAllTaskEntries()
+    {
+        foreach (HouseTaskEntry entry in m_TaskEntries)
+        {
+            if (entry.Target) WaypointManager.Instance?.RemoveWaypoint(entry.Target);
+            TaskList.Instance?.RemoveTask(entry.DisplayTask);
+        }
+        m_TaskEntries.Clear();
+    }
+
+    void RefreshExitDoorMarker()
+    {
+        if (!m_ActiveDoorObject) return;
+        if (Progress.AllMinigamesBeaten)
+        {
+            ClearAllTaskEntries();
+            WaypointManager.Instance?.AddWaypoint(m_ActiveDoorObject.transform, m_ExitWaypointIcon);
+            m_ExitDisplayTask ??= new DisplayTask("Head back outside", 1, 0, false);
+            TaskList.Instance?.AddTask(m_ExitDisplayTask);
+            ReportHouseCompletedOnce();
+        }
+        else
+        {
+            WaypointManager.Instance?.RemoveWaypoint(m_ActiveDoorObject.transform);
+            if (m_ExitDisplayTask != null) TaskList.Instance?.RemoveTask(m_ExitDisplayTask);
+        }
+    }
+
+    void ReportHouseCompletedOnce()
+    {
+        if (m_bHouseCompletionReported) return;
+        m_bHouseCompletionReported = true;
+        NPCHouseDailyManager.Instance?.ReportHouseCompleted();
+    }
+
+    public void OnNPCTalkedTo()
+    {
+        if (Progress.HasTalkedToNPC) return;
+        Progress.HasTalkedToNPC = true;
+        if (m_CurrentNPCTransform) WaypointManager.Instance?.RemoveWaypoint(m_CurrentNPCTransform);
+        if (m_TalkDisplayTask != null) TaskList.Instance?.RemoveTask(m_TalkDisplayTask);
+        RevealTaskEntries();
+        RefreshExitDoorMarker();
+    }
+
+    public void OnChaseTaskStarted(Transform chaseDoorTransform)
+    {
+        HideTaskMarker(chaseDoorTransform);
+        HideAllTaskMarkers();
+    }
+    #endregion Markers
+
     void OnMinigameCompleted(MinigameType type)
     {
         Progress.MarkMinigameBeaten(type);
-        if (type == MinigameType.ChaseMinigame) ReplaceChaseInteractableWithExitDoor();
+        if (type == MinigameType.Wires) RefreshLights();
+        CompleteTaskEntry(type);
+        if (type == MinigameType.ChaseMinigame)
+        {
+            ReplaceChaseInteractableWithExitDoor();
+            ShowRemainingTaskMarkers();
+        }
+        RefreshExitDoorMarker();
     }
 
     public void EnterHouse(Door doorUsedToEnter)
     {
         Progress.IsPlayerInside = true;
         HouseProgressTracker.SetActiveHouse(transform.position);
+        NPCHouseDailyManager.Instance?.HideAllHouseMarkers();
         SpawnNPC();
         SpawnMinigameInteractables();
+        RefreshLights();
         if (HasUnbeatenChase())
         {
             Vector3 position = doorUsedToEnter.transform.position;
             Quaternion rotation = doorUsedToEnter.transform.rotation;
             Destroy(doorUsedToEnter.gameObject);
-
             ChaseMinigameInteract chaseInteract = Instantiate(m_ChaseMinigameInteractPrefab, position, rotation);
             chaseInteract.ChaseSpawn = OutsideTeleportSpot;
             chaseInteract.ReturnSpawn = HouseTeleportSpot;
+            chaseInteract.OwningHouse = this;
             m_ActiveDoorObject = chaseInteract.gameObject;
             m_SpawnedInteriorObjects.Add(chaseInteract.gameObject);
+            RegisterTaskEntry(chaseInteract.transform, MinigameType.ChaseMinigame);
         }
         else
         {
@@ -230,13 +407,22 @@ public class NPCHouse : MonoBehaviour
             Progress.DoorType = DoorType.Exit;
             m_ActiveDoorObject = doorUsedToEnter.gameObject;
         }
+        RefreshTaskAndTalkMarkers();
+        RefreshExitDoorMarker();
     }
 
     public void ExitHouse()
     {
         Progress.IsPlayerInside = false;
         HouseProgressTracker.SetActiveHouse(null);
+        ClearAllTaskEntries();
+        if (m_CurrentNPCTransform) WaypointManager.Instance?.RemoveWaypoint(m_CurrentNPCTransform);
+        if (m_TalkDisplayTask != null) TaskList.Instance?.RemoveTask(m_TalkDisplayTask);
+        if (m_ActiveDoorObject) WaypointManager.Instance?.RemoveWaypoint(m_ActiveDoorObject.transform);
+        if (m_ExitDisplayTask != null) TaskList.Instance?.RemoveTask(m_ExitDisplayTask);
         foreach (GameObject spawnedObject in m_SpawnedInteriorObjects) if (spawnedObject) Destroy(spawnedObject);
         m_SpawnedInteriorObjects.Clear();
+        m_CurrentNPCTransform = null;
+        NPCHouseDailyManager.Instance?.ShowMarkersForIncompleteHouses();
     }
 }
