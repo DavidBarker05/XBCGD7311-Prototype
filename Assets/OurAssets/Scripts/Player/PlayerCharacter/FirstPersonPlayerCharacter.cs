@@ -135,7 +135,13 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
     void UpdateMovementSpeed(bool bSprintPressedThisFrame)
     {
         m_bIsSprinting = ((m_bIsGrounded && !m_bIsFalling) || m_CharacterSettings.CanSprintInAir) && bSprintPressedThisFrame;
-        m_MovementSpeed = m_bIsSprinting ? m_CharacterSettings.SprintSpeed : m_CharacterSettings.MovementSpeed;
+        m_MovementSpeed = m_bIsSprinting ? PlayerUpgradeSystem.GetLevel(PlayerUpgrade.FasterSprint) switch
+        {
+            1 => m_CharacterSettings.SprintSpeedUpgrade1,
+            2 => m_CharacterSettings.SprintSpeedUpgrade2,
+            3 => m_CharacterSettings.SprintSpeedUpgrade3,
+            _ => m_CharacterSettings.SprintSpeed
+        } : m_CharacterSettings.MovementSpeed;
     }
 
     void UpdateHorizontalVelocity(Vector2 movementInput)

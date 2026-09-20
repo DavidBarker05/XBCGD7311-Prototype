@@ -28,19 +28,19 @@ public static class PlayerUpgrades
     {
         PlayerUpgrade.BiggerWallBreakHole => level switch
         {
-            1 => 0, // TODO: Implement cost
-            2 => 0, // TODO: Implement cost
-            3 => 0, // TODO: Implement cost
+            1 => 300,
+            2 => 550,
+            3 => 850,
             _ => throw new System.ArgumentException($"{level} is not a valid level for BiggerWallBreakHole")
         },
         PlayerUpgrade.FasterSprint => level switch
         {
-            1 => 0, // TODO: Implement cost
-            2 => 0, // TODO: Implement cost
-            3 => 0, // TODO: Implement cost
+            1 => 320,
+            2 => 600,
+            3 => 1000,
             _ => throw new System.ArgumentException($"{level} is not a valid level for FasterSprint")
         },
-        PlayerUpgrade.EarnMoreMoney => level == 1 ? 0 : throw new System.ArgumentException($"{level} is not a valid level for EarnMoreMoney"), // TODO: Implement cost
+        PlayerUpgrade.EarnMoreMoney => level == 1 ? 400 : throw new System.ArgumentException($"{level} is not a valid level for EarnMoreMoney"),
         _ => throw new System.NotImplementedException($"Unknown upgrade \"{upgrade}\"")
     };
 }

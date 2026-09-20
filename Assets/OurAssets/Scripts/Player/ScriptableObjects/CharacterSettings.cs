@@ -10,13 +10,19 @@ public class CharacterSettings : ScriptableObject
     [field: SerializeField, Min(1f)]
     public float SprintSpeed { get; private set; } = 10f;
     [field: SerializeField, Min(1f)]
+    public float SprintSpeedUpgrade1 { get; private set; } = 11f;
+    [field: SerializeField, Min(1f)]
+    public float SprintSpeedUpgrade2 { get; private set; } = 12.5f;
+    [field: SerializeField, Min(1f)]
+    public float SprintSpeedUpgrade3 { get; private set; } = 14f;
+    [field: SerializeField, Min(1f)]
     public float StepsPerSecond { get; private set; } = 2f;
     [field: SerializeField, Min(1f)]
     public float SprintStepsPerSecond { get; private set; } = 4f;
     [field: SerializeField, Range(0f, 180f)]
     public float VerticalFieldOfView { get; private set; } = 60f;
     [field: SerializeField, Range(0f, 180f)]
-    public float SprintVerticalFieldOfView { get; private set; } = 80f;
+    public float SprintVerticalFieldOfView { get; private set; } = 75f;
     [field: SerializeField, Min(0f)]
     public float FieldOfViewTransitionDuration { get; private set; } = 0.25f;
     [field: SerializeField, Min(0f)]

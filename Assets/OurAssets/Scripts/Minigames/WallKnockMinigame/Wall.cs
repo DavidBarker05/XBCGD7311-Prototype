@@ -27,7 +27,13 @@ public class Wall : MonoBehaviour
 	[SerializeField]
 	Vector3 m_PipeSpawnUpperBound;
 	[SerializeField, Min(0.01f)]
-	float m_BreakTolerance = 0.675f;
+	float m_BreakTolerance = 1f;
+	[SerializeField, Min(0.01f)]
+	float m_BreakToleranceUpgrade1 = 1.125f;
+	[SerializeField, Min(0.01f)]
+	float m_BreakToleranceUpgrade2 = 1.25f;
+	[SerializeField, Min(0.01f)]
+	float m_BreakToleranceUpgrade3 = 1.375f;
 	[SerializeField]
 	WallEcho m_WallEchoPrefab;
 	[SerializeField]
@@ -36,8 +42,14 @@ public class Wall : MonoBehaviour
 	EchoIntensity m_ClosestIntensity;
 	[SerializeField]
 	EchoIntensity m_FurthestIntensity;
+	[Header("Money Reward")]
+	[SerializeField, Min(0f)]
+	float m_FastCompletionTime = 30f;
+	[SerializeField, Min(0f)]
+	float m_SlowCompletionTime = 90f;
 
 	bool m_bAlreadyPlaying;
+	float m_StartTime;
 
 	List<GameObject> m_Holes = new List<GameObject>();
 
@@ -121,6 +133,7 @@ public class Wall : MonoBehaviour
 		if (m_bAlreadyPlaying) return;
 		m_bAlreadyPlaying = true;
 		m_AvailableTries = m_MaxTries;
+		m_StartTime = Time.time;
 		EnsureBoundsAreValid();
 		m_PipePosition = RandomPipePosition;
 		m_UnscaledTransform.gameObject.SetActive(true);
@@ -134,10 +147,16 @@ public class Wall : MonoBehaviour
 		{
 			ClearHoles();
 			m_UnscaledTransform.gameObject.SetActive(false);
-			m_PipePlaceMinigameGenerator.StartPipeMinigame();
+			m_PipePlaceMinigameGenerator.StartPipeMinigame(CalculateSpeedMultiplier());
 			MinigameManager.Instance?.OnMinigameBeaten();
 		}
 		if (!bWon) ResetMinigame();
+	}
+
+	float CalculateSpeedMultiplier()
+	{
+		float timeT = Mathf.InverseLerp(m_FastCompletionTime, m_SlowCompletionTime, Time.time - m_StartTime);
+		return Mathf.Lerp(1.2f, 0.8f, timeT);
 	}
 
 	void ClearHoles()
@@ -168,10 +187,17 @@ public class Wall : MonoBehaviour
 		GameObject hole = Instantiate(m_HolePrefab, m_UnscaledTransform);
 		hole.transform.position = position + transform.up * 0.02f;
 		MaterialPropertyBlock materialPropertyBlock = new MaterialPropertyBlock();
-		materialPropertyBlock.SetFloat("_HoleSize", m_BreakTolerance);
+		float breakTolerance = PlayerUpgradeSystem.GetLevel(PlayerUpgrade.BiggerWallBreakHole) switch
+		{
+			1 => m_BreakToleranceUpgrade1,
+			2 => m_BreakToleranceUpgrade2,
+			3 => m_BreakToleranceUpgrade3,
+			_ => m_BreakTolerance
+		};
+		materialPropertyBlock.SetFloat("_HoleSize", breakTolerance);
 		hole.GetComponent<Renderer>().SetPropertyBlock(materialPropertyBlock);
 		m_Holes.Add(hole);
-		if (Vector3.Distance(position, m_PipePosition) <= m_BreakTolerance) EndWallKnockMinigame(true);
+		if (Vector3.Distance(position, m_PipePosition) <= breakTolerance) EndWallKnockMinigame(true);
 		else if (m_AvailableTries <= 0) EndWallKnockMinigame(false);
 	}
 

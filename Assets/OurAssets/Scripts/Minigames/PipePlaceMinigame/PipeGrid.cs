@@ -22,6 +22,13 @@ public class PipeGrid : MonoBehaviour
     FirstPersonPlayerCharacter m_FirstPersonPlayerCharacter;
     [SerializeField]
     PipePlayerCharacter m_PipePlayerCharacter;
+    [Header("Money Reward")]
+    [SerializeField, Min(0f)]
+    float m_MinMoneyReward = 40f;
+    [SerializeField, Min(0f)]
+    float m_MaxMoneyReward = 80f;
+
+    float m_SpeedMultiplier = 1f;
 
     PlaneGridGenerator m_PlaneGrid;
     Vector2Int Size => m_PlaneGrid.GridSize;
@@ -132,11 +139,12 @@ public class PipeGrid : MonoBehaviour
         return startEndPipes;
     }
 
-    public void StartMinigame(PipeGridData pipeGridData)
+    public void StartMinigame(PipeGridData pipeGridData, float wallKnockSpeedMultiplier = 1f)
     {
         if (!m_PlaneGrid) m_PlaneGrid = GetComponent<PlaneGridGenerator>();
         if (!m_Grid) m_Grid = GetComponent<Grid>();
         m_PlaneGrid.GridSize = pipeGridData.GridSize;
+        m_SpeedMultiplier = wallKnockSpeedMultiplier;
         m_UnscaledTransform.gameObject.SetActive(true);
         if (m_PipeUI) m_PipeUI.SetActive(true);
         InitCells(ref m_PipeCells, ref m_Grid, Size);
@@ -149,11 +157,22 @@ public class PipeGrid : MonoBehaviour
         if (m_PipeUI) m_PipeUI.SetActive(false);
         m_PipePlayerCharacter.DeleteCellIndicator();
         if (m_Player && m_FirstPersonPlayerCharacter) m_Player.ChangeCharacter(m_FirstPersonPlayerCharacter);
+        AwardMoney();
         MinigameManager.Instance?.OnMinigameBeaten();
         HouseProgressTracker.ReportMinigameCompleted(MinigameType.WallKnockAndPipes);
         TutorialMinigameManager.Instance?.ReportMinigameCompleted(MinigameType.WallKnockAndPipes);
         DeletePipes(ref m_PipeCells);
         m_UnscaledTransform.gameObject.SetActive(false);
+    }
+
+    void AwardMoney()
+    {
+        int totalOpenings = m_StartPipes.Length + m_EndPipes.Length;
+        float sizeT = Mathf.InverseLerp(6f, 8f, (Size.x + Size.y) / 2f);
+        float openingsT = Mathf.InverseLerp(2f, 4f, totalOpenings);
+        float difficultyT = (sizeT + openingsT) / 2f;
+        float baseMoney = Mathf.Lerp(m_MinMoneyReward, m_MaxMoneyReward, difficultyT);
+        MinigameMoneyReward.Award(baseMoney, m_SpeedMultiplier);
     }
     #endregion Start & End Minigame
 
@@ -484,14 +503,11 @@ public class PipeGrid : MonoBehaviour
     {
         List<Vector2Int> openStartIndices = OpenIndices(m_StartPipes, IsOpenStartEndPipe);
         List<Vector2Int> openEndIndices = OpenIndices(m_EndPipes, IsOpenStartEndPipe);
-        if (openStartIndices.Count != m_StartPipes.Length || openEndIndices.Count != m_EndPipes.Length) return; // Every start/end must be open, not just some of them
-
+        if (openStartIndices.Count != m_StartPipes.Length || openEndIndices.Count != m_EndPipes.Length) return;
         HashSet<Vector2Int> reachableFromStarts = FindReachableCells(openStartIndices);
         foreach (Vector2Int endIndex in openEndIndices) if (!reachableFromStarts.Contains(endIndex)) return;
-
         HashSet<Vector2Int> reachableFromEnds = FindReachableCells(openEndIndices);
         foreach (Vector2Int startIndex in openStartIndices) if (!reachableFromEnds.Contains(startIndex)) return;
-
         List<Pipe> reachedPipes = new List<Pipe>(m_StartPipes.Length + m_EndPipes.Length);
         foreach (ResolvedStartEndPipe startPipe in m_StartPipes) reachedPipes.Add(startPipe.PipeCell);
         foreach (ResolvedStartEndPipe endPipe in m_EndPipes) reachedPipes.Add(endPipe.PipeCell);

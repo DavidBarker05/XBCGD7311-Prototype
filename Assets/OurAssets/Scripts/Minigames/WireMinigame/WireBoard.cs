@@ -34,6 +34,15 @@ public class WireBoard : MonoBehaviour
 	int m_MinWires = 3;
 	[SerializeField]
 	Material m_WireMaterial;
+	[Header("Money Reward")]
+	[SerializeField, Min(0f)]
+	float m_MinMoneyReward = 40f;
+	[SerializeField, Min(0f)]
+	float m_MaxMoneyReward = 80f;
+	[SerializeField, Min(0f)]
+	float m_FastCompletionTime = 20f;
+	[SerializeField, Min(0f)]
+	float m_SlowCompletionTime = 60f;
 	[SerializeField, Min(0f)]
 	float m_GrabTolerance = 1f;
 	[SerializeField, Min(0f)]
@@ -64,6 +73,7 @@ public class WireBoard : MonoBehaviour
 	GrabReleasePoint[] m_ReleasePoints;
 	Dictionary<WireColour, int> m_WireColoursUsed;
 	int m_CurrentFails;
+	float m_StartTime;
 
 	bool m_bIsAlreadyPlaying = false;
 
@@ -91,11 +101,25 @@ public class WireBoard : MonoBehaviour
 		if (m_bIsAlreadyPlaying) return;
 		m_bIsAlreadyPlaying = true;
 		m_CurrentFails = 0;
+		m_StartTime = Time.time;
 		CreateWires(Random.Range(m_MinWires, m_WireStartingPositions.Length + 1));
 		m_UnscaledTransform.gameObject.SetActive(true);
 	}
 
-	void EndWireMinigame() => StartCoroutine(CloseMinigame());
+	void EndWireMinigame()
+	{
+		AwardMoney();
+		StartCoroutine(CloseMinigame());
+	}
+
+	void AwardMoney()
+	{
+		float difficultyT = Mathf.InverseLerp(m_MinWires, m_WireStartingPositions.Length, m_Wires.Length);
+		float baseMoney = Mathf.Lerp(m_MinMoneyReward, m_MaxMoneyReward, difficultyT);
+		float timeT = Mathf.InverseLerp(m_FastCompletionTime, m_SlowCompletionTime, Time.time - m_StartTime);
+		float timeMultiplier = Mathf.Lerp(1.2f, 1f, timeT);
+		MinigameMoneyReward.Award(baseMoney, timeMultiplier);
+	}
 
 	IEnumerator CloseMinigame()
 	{

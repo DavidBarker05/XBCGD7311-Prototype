@@ -24,7 +24,7 @@ public class PipePlaceMinigameGenerator : MonoBehaviour
 	[SerializeField, Min(0)]
 	int m_ProceduralExtraPiecesMax = 2;
 
-	public void StartPipeMinigame()
+	public void StartPipeMinigame(float wallKnockSpeedMultiplier = 1f)
 	{
 		m_Player.ChangeCharacter(m_PipePlayerCharacter);
 		bool bUseProcedural = m_PreGeneratedPuzzles.Count == 0 || Random.value < m_ProceduralPuzzleChance;
@@ -33,7 +33,7 @@ public class PipePlaceMinigameGenerator : MonoBehaviour
 		{
 			m_PipePlayerCharacter.SetPipeQuantity(pipe.PipeType, pipe.PipeQuantity);
 		}
-		m_PipeGrid.StartMinigame(gridData);
+		m_PipeGrid.StartMinigame(gridData, wallKnockSpeedMultiplier);
 	}
 
 	PipeGridData LoadPreGeneratedPuzzle()
