@@ -81,6 +81,8 @@ public class Wall : MonoBehaviour
 	int m_AvailableTries;
 	int m_TimesFailed;
 
+	bool m_bInTutorial;
+
 	void OnValidate() => EnsureBoundsAreValid();
 
 	void OnEnable() => EnsureBoundsAreValid();
@@ -143,29 +145,35 @@ public class Wall : MonoBehaviour
 		if (m_bAlreadyPlaying) m_TimeTaken += Time.deltaTime;
 	}
 
-	void ShowTutorialScreen() => m_MenuCharacter.OnMenuOpen(m_WallKnockPlayerCharacter,)
+	void ShowTutorialScreen() => m_MenuCharacter.OnMenuOpen(m_WallKnockPlayerCharacter, null, m_InstructionsScreen);
+
+	void PartialStartWallKnockMinigame()
+	{
+		m_bAlreadyPlaying = true;
+		m_AvailableTries = m_MaxTries;
+		if (m_bInTutorial && m_TimesFailed % m_RetriesToShowTutorial == 0) ShowTutorialScreen();
+		m_PipePosition = RandomPipePosition;
+	}
 
 	public void StartWallKnockMinigame()
 	{
 		if (m_bAlreadyPlaying) return;
-		m_bAlreadyPlaying = true;
-		m_AvailableTries = m_MaxTries;
+		m_bInTutorial = TutorialMinigameManager.Instance;
 		m_TimeTaken = 0.0f;
+		m_TimesFailed = 0;
 		EnsureBoundsAreValid();
-		m_PipePosition = RandomPipePosition;
 		m_UnscaledTransform.gameObject.SetActive(true);
+		PartialStartWallKnockMinigame();
 	}
 
 	void EndWallKnockMinigame(bool bWon)
 	{
 		m_bAlreadyPlaying = false;
-		Debug.Log(bWon);
 		if (bWon)
 		{
 			ClearHoles();
 			m_UnscaledTransform.gameObject.SetActive(false);
 			m_PipePlaceMinigameGenerator.StartPipeMinigame(CalculateSpeedMultiplier());
-			MinigameManager.Instance?.OnMinigameBeaten();
 		}
 		if (!bWon) ResetMinigame();
 	}
@@ -187,10 +195,9 @@ public class Wall : MonoBehaviour
 
 	void ResetMinigame()
 	{
-		float timeTaken = m_TimeTaken;
+		++m_TimesFailed;
 		ClearHoles();
-		StartWallKnockMinigame();
-		m_TimeTaken = timeTaken;
+		PartialStartWallKnockMinigame();
 	}
 
 	public void KnockWall(Vector3 position)
