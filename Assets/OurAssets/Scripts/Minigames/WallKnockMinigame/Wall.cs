@@ -19,6 +19,8 @@ public class Wall : MonoBehaviour
 	[SerializeField]
 	PipePlaceMinigameGenerator m_PipePlaceMinigameGenerator;
 	[SerializeField]
+	WallKnockPlayerCharacter m_WallKnockPlayerCharacter;
+	[SerializeField]
 	GameObject m_HolePrefab;
 	[SerializeField, Min(1)]
 	int m_MaxTries = 3;
@@ -47,9 +49,16 @@ public class Wall : MonoBehaviour
 	float m_FastCompletionTime = 30f;
 	[SerializeField, Min(0f)]
 	float m_SlowCompletionTime = 90f;
+	[Header("Tutorial Instructions")]
+	[SerializeField]
+	GameObject m_InstructionsScreen;
+	[SerializeField]
+	MenuCharacter m_MenuCharacter;
+	[SerializeField, Min(1)]
+	int m_RetriesToShowTutorial;
 
 	bool m_bAlreadyPlaying;
-	float m_StartTime;
+	float m_TimeTaken;
 
 	List<GameObject> m_Holes = new List<GameObject>();
 
@@ -70,6 +79,7 @@ public class Wall : MonoBehaviour
 	Vector3 m_PipePosition;
 
 	int m_AvailableTries;
+	int m_TimesFailed;
 
 	void OnValidate() => EnsureBoundsAreValid();
 
@@ -128,12 +138,19 @@ public class Wall : MonoBehaviour
 #endif
 	}
 
+	void Update()
+	{
+		if (m_bAlreadyPlaying) m_TimeTaken += Time.deltaTime;
+	}
+
+	void ShowTutorialScreen() => m_MenuCharacter.OnMenuOpen(m_WallKnockPlayerCharacter,)
+
 	public void StartWallKnockMinigame()
 	{
 		if (m_bAlreadyPlaying) return;
 		m_bAlreadyPlaying = true;
 		m_AvailableTries = m_MaxTries;
-		m_StartTime = Time.time;
+		m_TimeTaken = 0.0f;
 		EnsureBoundsAreValid();
 		m_PipePosition = RandomPipePosition;
 		m_UnscaledTransform.gameObject.SetActive(true);
@@ -155,7 +172,7 @@ public class Wall : MonoBehaviour
 
 	float CalculateSpeedMultiplier()
 	{
-		float timeT = Mathf.InverseLerp(m_FastCompletionTime, m_SlowCompletionTime, Time.time - m_StartTime);
+		float timeT = Mathf.InverseLerp(m_FastCompletionTime, m_SlowCompletionTime, m_TimeTaken);
 		return Mathf.Lerp(1.2f, 0.8f, timeT);
 	}
 
@@ -170,8 +187,10 @@ public class Wall : MonoBehaviour
 
 	void ResetMinigame()
 	{
+		float timeTaken = m_TimeTaken;
 		ClearHoles();
 		StartWallKnockMinigame();
+		m_TimeTaken = timeTaken;
 	}
 
 	public void KnockWall(Vector3 position)
