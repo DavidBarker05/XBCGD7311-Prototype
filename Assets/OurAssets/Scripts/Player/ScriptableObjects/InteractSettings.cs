@@ -7,6 +7,4 @@ public class InteractSettings : ScriptableObject
     public float InteractionDistance { get; private set; } = 2f;
     [field: SerializeField]
     public LayerMask InteractableLayer { get; private set; }
-    [field: SerializeField]
-    public LayerMask HoldLayer { get; private set; }
 }

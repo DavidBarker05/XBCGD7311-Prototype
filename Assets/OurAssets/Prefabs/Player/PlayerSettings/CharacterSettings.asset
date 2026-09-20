@@ -15,6 +15,11 @@ MonoBehaviour:
   <CanSprintInAir>k__BackingField: 1
   <MovementSpeed>k__BackingField: 4.5
   <SprintSpeed>k__BackingField: 10
+  <StepsPerSecond>k__BackingField: 2
+  <SprintStepsPerSecond>k__BackingField: 3
+  <VerticalFieldOfView>k__BackingField: 60
+  <SprintVerticalFieldOfView>k__BackingField: 80
+  <FieldOfViewTransitionDuration>k__BackingField: 0.15
   <JumpHeight>k__BackingField: 1
   <TimeToReachJumpHeight>k__BackingField: 0.25
   <JumpBuffer>k__BackingField: 0.125

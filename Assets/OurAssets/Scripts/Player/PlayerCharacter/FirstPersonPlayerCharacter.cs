@@ -29,6 +29,8 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
 
     [SerializeField]
     FirstPersonPlayerCharacterInteraction m_FirstPersonPlayerCharacterInteraction;
+    [SerializeField]
+    AudioSource m_FootstepSource;
 
     Camera m_Camera;
     CharacterSettings m_CharacterSettings;
@@ -44,7 +46,9 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
     float m_CurrentJumpBufferTimer;
     float m_CurrentCoyoteTimer;
 
+    bool m_bIsSprinting;
     float m_MovementSpeed;
+    float m_CurrentFootstepTime;
 
     public override bool HasBeenInitialised { get; protected set; }
 
@@ -98,6 +102,8 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
         UpdateHorizontalVelocity(updateData.MovementInput);
         JumpChecks(updateData.JumpPressedThisFrame);
         UpdateVerticalVelocity(updateData.DeltaTime);
+        HandleFootstep(updateData.DeltaTime);
+        HandleCameraFOV(updateData.DeltaTime);
         m_CC.Move(m_Velocity * updateData.DeltaTime);
     }
 
@@ -128,8 +134,8 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
 
     void UpdateMovementSpeed(bool bSprintPressedThisFrame)
     {
-        bool bIsSprinting = ((m_bIsGrounded && !m_bIsFalling) || m_CharacterSettings.CanSprintInAir) && bSprintPressedThisFrame;
-        m_MovementSpeed = bIsSprinting ? m_CharacterSettings.SprintSpeed : m_CharacterSettings.MovementSpeed;
+        m_bIsSprinting = ((m_bIsGrounded && !m_bIsFalling) || m_CharacterSettings.CanSprintInAir) && bSprintPressedThisFrame;
+        m_MovementSpeed = m_bIsSprinting ? m_CharacterSettings.SprintSpeed : m_CharacterSettings.MovementSpeed;
     }
 
     void UpdateHorizontalVelocity(Vector2 movementInput)
@@ -181,8 +187,34 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
     {
         if (m_bIsJumping) UpdateVerticalVelocityWhileJumping(deltaTime);
         else if (!m_bIsGrounded) UpdateVerticalVelocityWhileFalling(deltaTime);
+        else m_Velocity.y = -1f;
     }
     #endregion
+
+    void HandleFootstep(float deltaTime)
+    {
+        if (!m_bIsGrounded)
+        {
+            m_CurrentFootstepTime = 0f;
+            return;
+        }
+        float hSqrSpeed = new Vector2(m_Velocity.x, m_Velocity.z).sqrMagnitude;
+        if (hSqrSpeed < s_SqrEpsilon) return;
+        if (m_CurrentFootstepTime == 0f) m_FootstepSource.Play();
+        m_CurrentFootstepTime += deltaTime;
+        float stepsPerSecond = m_bIsSprinting ? m_CharacterSettings.SprintStepsPerSecond : m_CharacterSettings.StepsPerSecond;
+        if (m_CurrentFootstepTime < 1f / stepsPerSecond) return;
+        m_FootstepSource.Play();
+        m_CurrentFootstepTime = 0f;
+    }
+
+    void HandleCameraFOV(float deltaTime)
+    {
+        float targetFOV = m_bIsSprinting ? m_CharacterSettings.SprintVerticalFieldOfView : m_CharacterSettings.VerticalFieldOfView;
+        float fovRange = Mathf.Abs(m_CharacterSettings.SprintVerticalFieldOfView - m_CharacterSettings.VerticalFieldOfView);
+        float transitionSpeed = m_CharacterSettings.FieldOfViewTransitionDuration > 0f ? fovRange / m_CharacterSettings.FieldOfViewTransitionDuration : float.MaxValue;
+        m_Camera.fieldOfView = Mathf.MoveTowards(m_Camera.fieldOfView, targetFOV, transitionSpeed * deltaTime);
+    }
     #endregion Movement
 
     #region Interaction
