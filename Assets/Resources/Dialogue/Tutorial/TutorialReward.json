@@ -8,19 +8,25 @@
         },
         {
             "name": "Nomsa",
-            "text": "Electricity's fixed, pipe's fixed, and those freeloaders are disconnected. You've done more for this house in one day than the previous owners managed all year.",
+            "text": "Electricity's fixed, pipe's fixed, and those freeloaders are disconnected. You've done so much to help me than I could have imagined.",
             "fontSize": 24,
             "charactersPerSecond": 50
         },
         {
             "name": "Nomsa",
-            "text": "Here, take this. It's not much, but it should cover the TV license at least. Wouldn't want the inspectors knocking on your door next.",
+            "text": "I don't have much but here, take this.",
             "fontSize": 24,
             "charactersPerSecond": 50
         },
         {
             "name": "Nomsa",
-            "text": "Welcome home.",
+            "text": "I know it's not much, but it should cover the TV license at least. Wouldn't want the inspectors knocking on your door next.",
+            "fontSize": 24,
+            "charactersPerSecond": 50
+        },
+        {
+            "name": "Nomsa",
+            "text": "There's a lot more with problems like me in the area, but hey, welcome to the neighbourhod!",
             "fontSize": 24,
             "charactersPerSecond": 50
         }

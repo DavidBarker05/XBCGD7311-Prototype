@@ -20,6 +20,8 @@ public class TutorialNPC : Interactable
     [SerializeField]
     TextAsset m_RewardDialogue;
     [SerializeField]
+    TextAsset m_LeaveHouseReminderDialogue;
+    [SerializeField]
     TextAsset m_OutroDialogue;
 
     public override InteractionStatus Interact(params object[] inputParameters)
@@ -41,6 +43,7 @@ public class TutorialNPC : Interactable
             TutorialHouse.Stage.PipeDone => (m_DisconnectIntroDialogue, (System.Action)m_TutorialHouse.OnDisconnectDialogueFinished),
             TutorialHouse.Stage.DisconnectPending => (m_DisconnectReminderDialogue, null),
             TutorialHouse.Stage.DisconnectDone => (m_RewardDialogue, (System.Action)m_TutorialHouse.OnRewardDialogueFinished),
+            TutorialHouse.Stage.LeaveHousePending => (m_LeaveHouseReminderDialogue, null),
             TutorialHouse.Stage.Complete => (m_OutroDialogue, null),
             _ => (null, null)
         };
