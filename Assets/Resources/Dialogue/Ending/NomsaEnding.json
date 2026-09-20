@@ -1,0 +1,34 @@
+{
+    "dialogueItems": [
+        {
+            "name": "Nomsa",
+            "text": "Well, look at you! Ten days in, and I barely recognise this place anymore.",
+            "fontSize": 24,
+            "charactersPerSecond": 50
+        },
+        {
+            "name": "Nomsa",
+            "text": "I just wanted to come by and say thank you. Really. You've done more for this community than I ever could have asked.",
+            "fontSize": 24,
+            "charactersPerSecond": 50
+        },
+        {
+            "name": "Nomsa",
+            "text": "You've more than earned a rest, if you want one. Nobody would blame you for putting your feet up after all that.",
+            "fontSize": 24,
+            "charactersPerSecond": 50
+        },
+        {
+            "name": "Nomsa",
+            "text": "But if you're not done yet... well, there's still plenty of folks out there who could use a hand.",
+            "fontSize": 24,
+            "charactersPerSecond": 50
+        },
+        {
+            "name": "Nomsa",
+            "text": "That's entirely up to you, though. Sit down for a while, or head back out there. The choice is yours. Either way, I'm proud of you.",
+            "fontSize": 24,
+            "charactersPerSecond": 50
+        }
+    ]
+}
