@@ -114,6 +114,7 @@ public class WireBoard : MonoBehaviour
 
 	void AwardMoney()
 	{
+		if (TutorialMinigameManager.Instance) return;
 		float difficultyT = Mathf.InverseLerp(m_MinWires, m_WireStartingPositions.Length, m_Wires.Length);
 		float baseMoney = Mathf.Lerp(m_MinMoneyReward, m_MaxMoneyReward, difficultyT);
 		float timeT = Mathf.InverseLerp(m_FastCompletionTime, m_SlowCompletionTime, Time.time - m_StartTime);

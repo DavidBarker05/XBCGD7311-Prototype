@@ -167,6 +167,7 @@ public class PipeGrid : MonoBehaviour
 
     void AwardMoney()
     {
+        if (TutorialMinigameManager.Instance) return;
         int totalOpenings = m_StartPipes.Length + m_EndPipes.Length;
         float sizeT = Mathf.InverseLerp(6f, 8f, (Size.x + Size.y) / 2f);
         float openingsT = Mathf.InverseLerp(2f, 4f, totalOpenings);
