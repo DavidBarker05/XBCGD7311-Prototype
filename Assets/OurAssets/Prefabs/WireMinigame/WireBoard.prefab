@@ -1007,14 +1007,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50cdac12299ba424eb6a199a4ae75878, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WireBoard
-  m_Debug: 1
   m_UnscaledTransform: {fileID: 7135223587995993542}
   m_Player: {fileID: 0}
+  m_FirstPersonPlayerCharacter: {fileID: 0}
   m_TimeActiveAfterCompleted: 0.3
+  m_FailsToLoseColour: 3
   m_MinWires: 6
   m_WireMaterial: {fileID: 2100000, guid: e334f31605e2440448ab91d03a805d78, type: 2}
-  m_GrabTolerance: 0.05
-  m_ReleaseTolerance: 0.05
+  m_MinMoneyReward: 40
+  m_MaxMoneyReward: 80
+  m_FastCompletionTime: 20
+  m_SlowCompletionTime: 60
+  m_GrabTolerance: 0.075
+  m_ReleaseTolerance: 0.075
   m_IgnoreDepthAxis: 1
   m_WireStartingPositions:
   - {fileID: 6641942006340294899}
