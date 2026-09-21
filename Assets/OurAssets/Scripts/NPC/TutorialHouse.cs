@@ -53,7 +53,7 @@ public class TutorialHouse : MonoBehaviour
     [SerializeField]
     Sprite m_LeaveHouseWaypointIcon;
 
-    readonly DisplayTask m_TalkDisplayTask = new DisplayTask("Talk to Nomsa", 1, 0, false);
+    readonly DisplayTask m_TalkDisplayTask = new DisplayTask("Talk to Themba", 1, 0, false);
     readonly DisplayTask m_ElectricalDisplayTask = new DisplayTask("Fix the electrical box", 1, 0, false);
     readonly DisplayTask m_PipeDisplayTask = new DisplayTask("Fix the leaking pipe", 1, 0, false);
     readonly DisplayTask m_DisconnectDisplayTask = new DisplayTask("Disconnect the illegal wiring", 1, 0, false);

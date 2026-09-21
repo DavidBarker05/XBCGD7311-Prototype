@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[RequireComponent(typeof(Collider))]
 public class EndingNPC : Interactable
 {
     public static EndingNPC Instance { get; private set; }
@@ -23,17 +24,23 @@ public class EndingNPC : Interactable
     [SerializeField]
     Sprite m_DoorWaypointIcon;
 
+    Collider m_InteractionCollider;
+
     bool m_bChoicePresented;
     bool m_bEndingChosen;
 
-    readonly DisplayTask m_TalkDisplayTask = new DisplayTask("Talk to Nomsa", 1, 0, false);
+    readonly DisplayTask m_TalkDisplayTask = new DisplayTask("Talk to Themba", 1, 0, false);
     readonly DisplayTask m_CouchDisplayTask = new DisplayTask("Rest on the couch", 1, 0, false);
     readonly DisplayTask m_DoorDisplayTask = new DisplayTask("Head back out to help more people", 1, 0, false);
 
     void Awake()
     {
         if (Instance && Instance != this) Destroy(gameObject);
-        else Instance = this;
+        else
+        {
+            Instance = this;
+            m_InteractionCollider = GetComponent<Collider>();
+        }
     }
 
     void Update() => Refresh();
@@ -54,6 +61,7 @@ public class EndingNPC : Interactable
 
     void SetVisualActive(bool bActive)
     {
+        m_InteractionCollider.enabled = bActive;
         if (!m_VisualsRoot || m_VisualsRoot.gameObject.activeSelf == bActive) return;
         m_VisualsRoot.gameObject.SetActive(bActive);
         if (bActive)
@@ -92,7 +100,8 @@ public class EndingNPC : Interactable
 #endif
             return new InteractionStatus() { EndInteraction = true };
         }
-        if (!m_bChoicePresented && m_EndingDialogue)
+        bool bIsEndingDay = PlayerSaveManager.CurrentSaveData != null && PlayerSaveManager.CurrentSaveData.DayNumber == 10;
+        if (bIsEndingDay && !m_bChoicePresented && m_EndingDialogue)
         {
             Dialogue dialogue = JsonUtility.FromJson<SerializedDialogue>(m_EndingDialogue.text).Deserialized;
             DialogueManager.Instance.StartDialogue(dialogue, OnEndingDialogueFinished);

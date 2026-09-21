@@ -1,8 +1,14 @@
 {
     "dialogueItems": [
         {
-            "name": "Nomsa",
+            "name": "Themba",
             "text": "Thank you for fixing my house, it's looking amazing.",
+            "fontSize": 24,
+            "charactersPerSecond": 50
+        },
+        {
+            "name": "Themba",
+            "text": "The rest of the settlement could use a hand too, you know. Head on out and see who else needs help.",
             "fontSize": 24,
             "charactersPerSecond": 50
         }
