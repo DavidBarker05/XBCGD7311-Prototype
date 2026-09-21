@@ -293,6 +293,8 @@ MonoBehaviour:
   m_Player: {fileID: 0}
   m_FirstPersonPlayerCharacter: {fileID: 0}
   m_PipePlayerCharacter: {fileID: 0}
+  m_MinMoneyReward: 40
+  m_MaxMoneyReward: 80
 --- !u!1 &324972741
 GameObject:
   m_ObjectHideFlags: 0
@@ -311,7 +313,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &324972742
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1664,14 +1666,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 145719061603609728, guid: 2288494715f42ad4a8ce262dee2b745b, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 1.7
-      objectReference: {fileID: 0}
-    - target: {fileID: 145719061603609728, guid: 2288494715f42ad4a8ce262dee2b745b, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 966743820705505671, guid: 2288494715f42ad4a8ce262dee2b745b, type: 3}
       propertyPath: m_DefaultActionMap
       value: 747851f0-7e01-4bcc-bc08-541a6fc83d1c
