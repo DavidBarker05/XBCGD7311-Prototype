@@ -38,6 +38,8 @@ public class NPCHouseDailyManager : MonoBehaviour
             m_LoadedHouses.Add(shuffledHouses[i]);
             if (shuffledHouses[i].Progress.IsPlayerInside) houseWithPlayer = shuffledHouses[i];
         }
+        for (int i = houseCount; i < shuffledHouses.Length; ++i) shuffledHouses[i].MarkNotNeededToday();
+
         m_DailyDisplayTask = new DisplayTask("Help out the neighbourhood", m_LoadedHouses.Count, 0, strikeThroughOnCompletion: false);
         TaskList.Instance?.AddTask(m_DailyDisplayTask);
         return houseWithPlayer;

@@ -65,7 +65,7 @@ public class FirstPersonPlayerCharacterInteraction : PlayerInteraction
         {
             if (targetInteraction is QTEInteractable) targetInteraction.Interact(m_Player, m_FirstPersonPlayerCharacter);
             else if (targetInteraction is WireMinigameInteractable or WallKnockInteractable or ChaseMinigameInteract) targetInteraction.Interact();
-            else if (targetInteraction is Door or NPC or PlayerHouseDoor) targetInteraction.Interact(m_FirstPersonPlayerCharacter);
+            else if (targetInteraction is Door or NPC or PlayerHouseDoor or TutorialHouseDoor) targetInteraction.Interact(m_FirstPersonPlayerCharacter);
             else
             {
                 m_CurrentInteraction = targetInteraction;

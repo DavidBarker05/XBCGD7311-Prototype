@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public class TutorialHouse : MonoBehaviour
 {
@@ -49,9 +50,12 @@ public class TutorialHouse : MonoBehaviour
 
     [Header("Leave House")]
     [SerializeField]
-    PlayerHouseDoor m_PlayerHouseDoor;
+    TutorialHouseDoor m_TutorialHouseDoor;
     [SerializeField]
     Sprite m_LeaveHouseWaypointIcon;
+
+    public UnityEvent OnEnteredHouse;
+    public UnityEvent OnTutorialComplete;
 
     readonly DisplayTask m_TalkDisplayTask = new DisplayTask("Talk to Themba", 1, 0, false);
     readonly DisplayTask m_ElectricalDisplayTask = new DisplayTask("Fix the electrical box", 1, 0, false);
@@ -64,18 +68,25 @@ public class TutorialHouse : MonoBehaviour
         if (m_ElectricalBoxInteractable) m_ElectricalBoxInteractable.gameObject.SetActive(false);
         if (m_PipeWallInteractable) m_PipeWallInteractable.gameObject.SetActive(false);
         if (m_DisconnectInteractable) m_DisconnectInteractable.gameObject.SetActive(false);
+        if (m_TutorialHouseDoor) m_TutorialHouseDoor.gameObject.SetActive(true);
         SetLights(false);
     }
 
     void Start()
     {
         if (TutorialMinigameManager.Instance) TutorialMinigameManager.Instance.OnMinigameCompleted += HandleMinigameCompleted;
-        ShowTalkWaypoint();
     }
 
     void OnDestroy()
     {
         if (TutorialMinigameManager.Instance) TutorialMinigameManager.Instance.OnMinigameCompleted -= HandleMinigameCompleted;
+    }
+
+    public void OnPlayerEnteredHouse()
+    {
+        if (CurrentStage != Stage.NotStarted) return;
+        ShowTalkWaypoint();
+        OnEnteredHouse?.Invoke();
     }
 
     void HandleMinigameCompleted(MinigameType type)
@@ -151,6 +162,7 @@ public class TutorialHouse : MonoBehaviour
         CurrentStage = Stage.DisconnectPending;
         HideTalkWaypoint();
         if (!m_DisconnectInteractable) return;
+        if (m_TutorialHouseDoor) m_TutorialHouseDoor.gameObject.SetActive(false);
         m_DisconnectInteractable.gameObject.SetActive(true);
         WaypointManager.Instance?.AddWaypoint(m_DisconnectInteractable.transform, m_DisconnectWaypointIcon);
         TaskList.Instance?.AddTask(m_DisconnectDisplayTask);
@@ -165,6 +177,8 @@ public class TutorialHouse : MonoBehaviour
     void OnDisconnectMinigameCompleted()
     {
         CurrentStage = Stage.DisconnectDone;
+        if (m_DisconnectInteractable) m_DisconnectInteractable.gameObject.SetActive(false);
+        if (m_TutorialHouseDoor) m_TutorialHouseDoor.gameObject.SetActive(true);
         ShowTalkWaypoint();
     }
     #endregion Disconnect
@@ -176,7 +190,7 @@ public class TutorialHouse : MonoBehaviour
         HideTalkWaypoint();
         PlayerSaveManager.CurrentSaveData.Money += m_MoneyReward;
         PlayerSaveManager.SaveGame();
-        if (m_PlayerHouseDoor) WaypointManager.Instance?.AddWaypoint(m_PlayerHouseDoor.transform, m_LeaveHouseWaypointIcon);
+        if (m_TutorialHouseDoor) WaypointManager.Instance?.AddWaypoint(m_TutorialHouseDoor.transform, m_LeaveHouseWaypointIcon);
         TaskList.Instance?.AddTask(m_LeaveHouseDisplayTask);
     }
     #endregion Reward
@@ -186,7 +200,7 @@ public class TutorialHouse : MonoBehaviour
     {
         if (CurrentStage != Stage.LeaveHousePending) return;
         CurrentStage = Stage.Complete;
-        if (m_PlayerHouseDoor) WaypointManager.Instance?.RemoveWaypoint(m_PlayerHouseDoor.transform);
+        if (m_TutorialHouseDoor) WaypointManager.Instance?.RemoveWaypoint(m_TutorialHouseDoor.transform);
         TaskList.Instance?.RemoveTask(m_LeaveHouseDisplayTask);
     }
     #endregion Leave House

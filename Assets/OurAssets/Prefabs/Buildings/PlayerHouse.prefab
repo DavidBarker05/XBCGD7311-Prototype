@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 335961009285322237}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 9.420554e-16, z: -2.1981293e-15, w: 1}
-  m_LocalPosition: {x: -0.053519595, y: -0.1840097, z: 5.811499}
+  m_LocalPosition: {x: -0.053519595, y: 0, z: 5.811499}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6415,8 +6415,35 @@ PrefabInstance:
     - {fileID: 7390696554640250389, guid: 8ddd7f9f39a7c84468e5b81d8d8f1ccf, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2108514894548535535, guid: 8ddd7f9f39a7c84468e5b81d8d8f1ccf, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8011698574429430953}
   m_SourcePrefab: {fileID: 100100000, guid: 8ddd7f9f39a7c84468e5b81d8d8f1ccf, type: 3}
+--- !u!1 &7915340648622192444 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2108514894548535535, guid: 8ddd7f9f39a7c84468e5b81d8d8f1ccf, type: 3}
+  m_PrefabInstance: {fileID: 8113801260537905107}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8011698574429430953
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7915340648622192444}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e696fe1357e1f2641b4343edc2bc7950, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerEndDay
+  m_SleepEndingScreen: {fileID: 0}
+  m_MenuCharacter: {fileID: 0}
+  m_FirstPersonPlayerCharacter: {fileID: 0}
+  m_HUD: {fileID: 0}
+  m_EndDayWaypointIcon: {fileID: 0}
+  m_TutorialLoadingScreen: {fileID: 0}
+  m_TutorialMainLevelSceneIndex: 0
 --- !u!4 &9088382575778007820 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1061275617475130591, guid: 8ddd7f9f39a7c84468e5b81d8d8f1ccf, type: 3}

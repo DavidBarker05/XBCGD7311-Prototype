@@ -11,6 +11,14 @@ public class Door : Interactable
     public DoorType DoorType { get; set; } = DoorType.Entry;
     public NPCHouse OwningHouse { get; set; }
 
+    public bool CanInteract { get; set; } = true;
+
+    public void ResetForNewDay()
+    {
+        DoorType = DoorType.Entry;
+        CanInteract = true;
+    }
+
     public override InteractionStatus Interact(params object[] inputParameters)
     {
         if (inputParameters.Length != 1)
@@ -21,13 +29,14 @@ public class Door : Interactable
         }
         else if (inputParameters[0] is FirstPersonPlayerCharacter player)
         {
+            if (!CanInteract) return new InteractionStatus() { EndInteraction = true };
             if (DoorType == DoorType.Entry && !OwningHouse.Progress.HasBeatenHouse)
             {
                 CharacterController cc = player.GetComponent<CharacterController>();
                 cc.enabled = false;
                 player.transform.SetPositionAndRotation(OwningHouse.HouseTeleportSpot.position, OwningHouse.HouseTeleportSpot.rotation);
                 cc.enabled = true;
-                OwningHouse.EnterHouse(this);
+                OwningHouse.EnterHouse();
             }
             else if (DoorType == DoorType.Exit)
             {

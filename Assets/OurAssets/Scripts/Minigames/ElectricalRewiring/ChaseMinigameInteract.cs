@@ -24,9 +24,17 @@ public class ChaseMinigameInteract : Interactable, IHouseTaskInteractable
 
 	public NPCHouse OwningHouse { get; set; }
 
+	public bool CanInteract { get; set; } = true;
+
 	public UnityEvent OnChaseStarted;
 
 	bool m_HasBeenPlayed = false;
+
+	public void ResetForNewDay()
+	{
+		m_HasBeenPlayed = false;
+		CanInteract = true;
+	}
 
 	public override InteractionStatus Interact(params object[] inputParameters)
 	{
@@ -36,7 +44,7 @@ public class ChaseMinigameInteract : Interactable, IHouseTaskInteractable
 			Debug.LogWarning($"WARNING: ChaseMinigameInteract objects needs 0 input parameters. Received {inputParameters.Length} input parameters");
 #endif
 		}
-		else if ((OwningHouse == null || OwningHouse.Progress.HasTalkedToNPC) && m_QTEInteractableSpawns != null && m_QTEInteractableSpawns.Length > 0)
+		else if (CanInteract && (OwningHouse == null || OwningHouse.Progress.HasTalkedToNPC) && m_QTEInteractableSpawns != null && m_QTEInteractableSpawns.Length > 0)
 		{
 			if ((!m_HasBeenPlayed || m_CanBePlayedAgain) && !ChaseMinigameStarter.Instance.ChaseMinigameIsRunning)
 			{
