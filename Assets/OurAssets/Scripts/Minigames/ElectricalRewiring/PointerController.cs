@@ -18,7 +18,6 @@ public class PointerController : MonoBehaviour
     private RectTransform pointerTransform;
     private Vector3 targetPosition;
 
-    private QTEManager qteManager;
     private bool isRunning;
 
     private QTEPlayerCharacter qtePlayer;
@@ -31,9 +30,8 @@ public class PointerController : MonoBehaviour
         targetPosition = pointB.position;
     }
 
-    public void Begin(QTEManager manager, QTEPlayerCharacter player, float speed)
+    public void Begin(QTEPlayerCharacter player, float speed)
     {
-        qteManager = manager;
         qtePlayer = player;
         qtePlayer.OnQTEInput.AddListener(DoQTEInput);
         moveSpeed = speed;
@@ -114,12 +112,12 @@ public class PointerController : MonoBehaviour
         if (RectTransformUtility.RectangleContainsScreenPoint(safeZone, pointerTransform.position, null))
         {
             Debug.Log("Success!");
-            qteManager.Success();
+            QTEManager.Instance.Success();
         }
         else
         {
             Debug.Log("Failure!");
-            qteManager.Falilure();
+            QTEManager.Instance.Falilure();
         }
     }
 }

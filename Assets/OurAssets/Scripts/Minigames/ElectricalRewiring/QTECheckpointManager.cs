@@ -49,12 +49,12 @@ public class QTECheckpointManager : MonoBehaviour
         completedCheckpoints.Clear();
         foreach (QTEInteractable checkpoint in checkpoints)
         {
-            checkpoint.canInteract = true;
+            checkpoint.CanInteract = true;
             SpawnMarkerFor(checkpoint);
         }
         foreach (QTEInteractable checkpoint in m_DynamicCheckpoints)
         {
-            checkpoint.canInteract = true;
+            checkpoint.CanInteract = true;
             SpawnMarkerFor(checkpoint);
         }
 

@@ -1684,7 +1684,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3524224750697147432, guid: 2288494715f42ad4a8ce262dee2b745b, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 1.4
       objectReference: {fileID: 0}
     - target: {fileID: 3524224750697147432, guid: 2288494715f42ad4a8ce262dee2b745b, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1740,7 +1740,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7002874808214083310, guid: 2288494715f42ad4a8ce262dee2b745b, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8184540134110917077, guid: 2288494715f42ad4a8ce262dee2b745b, type: 3}
       propertyPath: m_WallKnockPlayerCharacter

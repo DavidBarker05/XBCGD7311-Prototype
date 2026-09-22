@@ -3,28 +3,17 @@ using UnityEngine.Events;
 
 public class QTEInteractable : Interactable
 {
-    public QTEManager qteManager;
     private bool hasTriggered = false;
     private Player player;
 
     private PlayerCharacter lastPlayer;
 
-    [Header("Checkpoint Gating")]
-    public bool canInteract = true; // manager flips this on/off
-    public UnityEvent OnCompleted;  // fired on success, checkpoint manager listens to this
-
-    void Start()
-    {
-
-    }
-
-    void Update()
-    {
-    }
+    public bool CanInteract { get; set; } = true;
+    public UnityEvent OnCompleted;
 
     public override InteractionStatus Interact(params object[] inputParameters)
     {
-        if (!canInteract)
+        if (!CanInteract)
         {
             return new InteractionStatus() { EndInteraction = true };
         }
@@ -44,7 +33,7 @@ public class QTEInteractable : Interactable
                     hasTriggered = true;
                     this.player = player;
                     lastPlayer = currentPlayer;
-                    qteManager.StartQTE(this);
+                    QTEManager.Instance.StartQTE(this);
                 }
             }
             else

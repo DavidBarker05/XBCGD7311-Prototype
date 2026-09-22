@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class QTEManager : MonoBehaviour
 {
+    public static QTEManager Instance { get; private set; }
+
     public Canvas canvas;
     public GameObject qtePrefab;
     public Player player;
@@ -15,6 +17,12 @@ public class QTEManager : MonoBehaviour
     public float speedIncreasePerSuccess = 0.25f;
     private int successCount = 0;
 
+    void Awake()
+    {
+        if (Instance != null && Instance != this) Destroy(gameObject);
+        else Instance = this;
+    }
+
     public void StartQTE(QTEInteractable interactable)
     {
         currentInteractable = interactable;
@@ -24,7 +32,7 @@ public class QTEManager : MonoBehaviour
         player.ChangeCharacter(qteCharacter);
 
         float currentSpeed = baseMoveSpeed + (speedIncreasePerSuccess * successCount);
-        pointer.Begin(this, qteCharacter, currentSpeed);
+        pointer.Begin(qteCharacter, currentSpeed);
 
         Time.timeScale = 0f;
     }
