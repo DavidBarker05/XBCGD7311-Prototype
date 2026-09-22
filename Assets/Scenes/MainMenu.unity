@@ -1934,7 +1934,7 @@ GameObject:
   - component: {fileID: 175910798}
   - component: {fileID: 175910797}
   m_Layer: 5
-  m_Name: CharacterModels
+  m_Name: CharacterModel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1979,7 +1979,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Character Models
+  m_text: Character Model
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 08d7b27e243b2d344b8542366ac39a2a, type: 2}
   m_sharedMaterial: {fileID: 421668749461937333, guid: 08d7b27e243b2d344b8542366ac39a2a, type: 2}
@@ -14029,7 +14029,7 @@ GameObject:
   - component: {fileID: 1002979757}
   - component: {fileID: 1002979756}
   m_Layer: 5
-  m_Name: TBA (1)
+  m_Name: Tristan (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14074,7 +14074,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: TBA
+  m_text: Tristan Robinson
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -19588,7 +19588,7 @@ GameObject:
   - component: {fileID: 1333334183}
   - component: {fileID: 1333334182}
   m_Layer: 5
-  m_Name: TBA
+  m_Name: Barrie (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -19633,7 +19633,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: TBA
+  m_text: Barrie-George Davies
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
