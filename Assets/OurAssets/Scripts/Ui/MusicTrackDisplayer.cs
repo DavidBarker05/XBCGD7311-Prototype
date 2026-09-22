@@ -2,9 +2,10 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 
-[RequireComponent(typeof(TMP_Text))]
 public class MusicTrackDisplayer : MonoBehaviour
 {
+    [SerializeField]
+    TMP_Text m_Text;
     [SerializeField, TextArea]
     string m_DisplayFormat = "Current Song:\n<i>{0}</i>\nBy {1}";
     [SerializeField]
@@ -12,13 +13,8 @@ public class MusicTrackDisplayer : MonoBehaviour
 
     public MusicTrack CurrentMusicTrack { get; set; }
 
-    TMP_Text m_Text;
-
-    void Awake() => m_Text = GetComponent<TMP_Text>();
-
     void OnEnable()
     {
-        m_Text ??= GetComponent<TMP_Text>();
         m_Text.text = string.Format(m_DisplayFormat, CurrentMusicTrack.SongName, CurrentMusicTrack.ArtistName);
         StartCoroutine(Disappear());
     }

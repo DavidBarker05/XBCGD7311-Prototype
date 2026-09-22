@@ -1,7 +1,5 @@
 using UnityEngine;
 
-// The point of this script is to ensure that the correct generation order happens when
-// loading into a level
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
@@ -31,7 +29,7 @@ public class GameManager : MonoBehaviour
         HouseProgressTracker.UpdateActiveHousePlayerTransform(m_FirstPersonPlayerCharacter.transform.position, m_FirstPersonPlayerCharacter.transform.rotation, m_PlayerCamera.transform.rotation);
     }
 
-    void Start() => LoadDay(); // Load the day when loading into the level
+    void Start() => LoadDay();
 
     void LoadDay()
     {
@@ -51,7 +49,6 @@ public class GameManager : MonoBehaviour
         m_PlayerCamera.SetRotation(house.Progress.CameraRotation);
     }
 
-    // Load day and exit end of day menu
     public void StartDay()
     {
         LoadDay();

@@ -7,24 +7,32 @@ public class TutorialFlow : MonoBehaviour
     PlayerHouseDoor m_OwnDoor;
     [SerializeField]
     Sprite m_OwnDoorWaypointIcon;
+    [SerializeField]
+    Vector3 m_OwnDoorWaypointOffset = Vector3.zero;
 
     [Header("Themba's Door")]
     [SerializeField]
     TutorialHouseDoor m_ThembaDoor;
     [SerializeField]
     Sprite m_ThembaDoorWaypointIcon;
+    [SerializeField]
+    Vector3 m_ThembaDoorWaypointOffset = Vector3.zero;
 
     [Header("TV")]
     [SerializeField]
     TVInteractable m_TV;
     [SerializeField]
     Sprite m_TVWaypointIcon;
+    [SerializeField]
+    Vector3 m_TVWaypointOffset = Vector3.zero;
 
     [Header("Couch")]
     [SerializeField]
     PlayerEndDay m_Couch;
     [SerializeField]
     Sprite m_CouchWaypointIcon;
+    [SerializeField]
+    Vector3 m_CouchWaypointOffset = Vector3.zero;
 
     readonly DisplayTask m_OwnDoorTask = new DisplayTask("Go say hello to your neighbour", 1, 0, false);
     readonly DisplayTask m_ThembaDoorTask = new DisplayTask("Head to your neighbour's house", 1, 0, false);
@@ -36,7 +44,7 @@ public class TutorialFlow : MonoBehaviour
     void ShowOwnDoorMarker()
     {
         if (!m_OwnDoor) return;
-        WaypointManager.Instance?.AddWaypoint(m_OwnDoor.transform, m_OwnDoorWaypointIcon);
+        WaypointManager.Instance?.AddWaypoint(m_OwnDoor.transform, m_OwnDoorWaypointIcon, m_OwnDoorWaypointOffset);
         TaskList.Instance?.AddTask(m_OwnDoorTask);
     }
 
@@ -50,7 +58,7 @@ public class TutorialFlow : MonoBehaviour
     void ShowThembaDoorMarker()
     {
         if (!m_ThembaDoor) return;
-        WaypointManager.Instance?.AddWaypoint(m_ThembaDoor.transform, m_ThembaDoorWaypointIcon);
+        WaypointManager.Instance?.AddWaypoint(m_ThembaDoor.transform, m_ThembaDoorWaypointIcon, m_ThembaDoorWaypointOffset);
         TaskList.Instance?.AddTask(m_ThembaDoorTask);
     }
 
@@ -63,7 +71,7 @@ public class TutorialFlow : MonoBehaviour
     public void OnFinishedThembaHouse()
     {
         if (!m_TV) return;
-        WaypointManager.Instance?.AddWaypoint(m_TV.transform, m_TVWaypointIcon);
+        WaypointManager.Instance?.AddWaypoint(m_TV.transform, m_TVWaypointIcon, m_TVWaypointOffset);
         TaskList.Instance?.AddTask(m_TVTask);
     }
 
@@ -77,7 +85,7 @@ public class TutorialFlow : MonoBehaviour
     void ShowCouchMarker()
     {
         if (!m_Couch) return;
-        WaypointManager.Instance?.AddWaypoint(m_Couch.transform, m_CouchWaypointIcon);
+        WaypointManager.Instance?.AddWaypoint(m_Couch.transform, m_CouchWaypointIcon, m_CouchWaypointOffset);
         TaskList.Instance?.AddTask(m_CouchTask);
     }
 }

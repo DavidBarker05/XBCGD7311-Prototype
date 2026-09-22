@@ -3,7 +3,6 @@ using UnityEngine.InputSystem;
 
 public class PointerController : MonoBehaviour
 {
-
     public Transform pointA;
     public Transform pointB;
     public RectTransform safeZone;
@@ -14,7 +13,6 @@ public class PointerController : MonoBehaviour
     public float maxSafeZoneWidth = 150f;
     public bool randomizeWidth = true;
 
-    private float direction = 1f;
     private RectTransform pointerTransform;
     private Vector3 targetPosition;
 
@@ -23,7 +21,6 @@ public class PointerController : MonoBehaviour
     private QTEPlayerCharacter qtePlayer;
     private bool didQTEInput;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         pointerTransform = GetComponent<RectTransform>();
@@ -83,13 +80,11 @@ public class PointerController : MonoBehaviour
         if (Vector3.Distance(pointerTransform.position, pointA.position) < 0.1f)
         {
             targetPosition = pointB.position;
-            direction = 1f;
         }
 
         else if (Vector3.Distance(pointerTransform.position, pointB.position) < 0.1f)
         {
             targetPosition = pointA.position;
-            direction = -1f;
         }
 
         //if (Input.GetKeyDown(KeyCode.Space))

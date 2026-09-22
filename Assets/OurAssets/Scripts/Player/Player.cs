@@ -82,6 +82,7 @@ public class Player : MonoBehaviour
         QTEPlayerCharacter => new QTEPlayerCharacterInitData(),
         MenuCharacter => new MenuCharacterInitData() { Player = this },
         PauseCharacter => new PauseCharacterInitData() { Player = this },
+        DialoguePlayerCharacter => new DialoguePlayerCharacterInitData(),
         _ => null
     };
 
@@ -94,6 +95,7 @@ public class Player : MonoBehaviour
         QTEPlayerCharacter => new QTEPlayerCharacterUpdateData(),
         MenuCharacter => new MenuCharacterUpdateData(),
         PauseCharacter => new PauseCharacterUpdateData(),
+        DialoguePlayerCharacter => new DialoguePlayerCharacterUpdateData(),
         _ => null
     };
     #endregion Change Character

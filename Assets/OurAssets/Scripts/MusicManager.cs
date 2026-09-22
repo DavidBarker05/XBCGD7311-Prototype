@@ -100,8 +100,9 @@ public class MusicManager : MonoBehaviour
             if (m_bChaseActive) continue;
             MusicTrack track = BackgroundMusicTrack;
             AddToCooldown(s_TracksOnCooldown, track);
-            m_MusicSource.volume = 1f;
+            m_MusicSource.volume = 0f;
             PlayMusic(track);
+            yield return FadeVolume(0f, 1f, m_FadeDuration);
             yield return new WaitWhile(() => m_MusicSource.isPlaying && m_MusicSource.clip == track.MusicClip);
         }
     }

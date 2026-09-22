@@ -26,10 +26,12 @@ public class WireBoard : MonoBehaviour
 	Player m_Player;
 	[SerializeField]
 	FirstPersonPlayerCharacter m_FirstPersonPlayerCharacter;
+	[SerializeField]
+	WirePlayerCharacter m_WirePlayerCharacter;
 	[SerializeField, Range(0f, 1f)]
 	float m_TimeActiveAfterCompleted = 0.3f;
-	[SerializeField, Min(1)]
-	int m_FailsToLoseColour = 3;
+	[field: SerializeField, Min(1)]
+	public int FailsToLoseColour { get; private set; } = 3;
 	[SerializeField, Min(0)]
 	int m_MinWires = 3;
 	[SerializeField]
@@ -59,6 +61,13 @@ public class WireBoard : MonoBehaviour
 	LineRenderer[] m_WireStarts;
 	[SerializeField]
 	LineRenderer[] m_WireEnds;
+	[Header("Tutorial Instructions")]
+	[SerializeField]
+	GameObject m_InstructionsScreen;
+	[SerializeField]
+	GameObject m_ColourblindInstructionsScreen;
+	[SerializeField]
+	MenuCharacter m_MenuCharacter;
 
 	public struct GrabReleasePoint
 	{
@@ -73,9 +82,10 @@ public class WireBoard : MonoBehaviour
 	GrabReleasePoint[] m_ReleasePoints;
 	Dictionary<WireColour, int> m_WireColoursUsed;
 	int m_CurrentFails;
-	float m_StartTime;
+	float m_TimeTaken;
 
 	bool m_bIsAlreadyPlaying = false;
+	bool m_bAlreadyColourblind = false;
 
 	void OnValidate() => EnsureMinWires();
 
@@ -96,14 +106,21 @@ public class WireBoard : MonoBehaviour
 		Sys.Assert(m_WireStartingPositions.Length.Equals(m_WireTipStartingPositions.Length, m_WireEndPositions.Length, m_WireStarts.Length, m_WireEnds.Length), "Mismatched array lengths");
 	}
 
+	void Update()
+	{
+		if (m_bIsAlreadyPlaying) m_TimeTaken += Time.deltaTime;
+	}
+
 	public void StartWireMinigame()
 	{
 		if (m_bIsAlreadyPlaying) return;
 		m_bIsAlreadyPlaying = true;
+		m_bAlreadyColourblind = false;
 		m_CurrentFails = 0;
-		m_StartTime = Time.time;
+		m_TimeTaken = 0f;
 		CreateWires(Random.Range(m_MinWires, m_WireStartingPositions.Length + 1));
 		m_UnscaledTransform.gameObject.SetActive(true);
+		m_MenuCharacter.OnMenuOpen(m_WirePlayerCharacter, null, m_InstructionsScreen);
 	}
 
 	void EndWireMinigame()
@@ -117,7 +134,7 @@ public class WireBoard : MonoBehaviour
 		if (TutorialMinigameManager.Instance) return;
 		float difficultyT = Mathf.InverseLerp(m_MinWires, m_WireStartingPositions.Length, m_Wires.Length);
 		float baseMoney = Mathf.Lerp(m_MinMoneyReward, m_MaxMoneyReward, difficultyT);
-		float timeT = Mathf.InverseLerp(m_FastCompletionTime, m_SlowCompletionTime, Time.time - m_StartTime);
+		float timeT = Mathf.InverseLerp(m_FastCompletionTime, m_SlowCompletionTime, m_TimeTaken);
 		float timeMultiplier = Mathf.Lerp(1.2f, 1f, timeT);
 		MinigameMoneyReward.Award(baseMoney, timeMultiplier);
 	}
@@ -249,6 +266,23 @@ public class WireBoard : MonoBehaviour
 		return null;
 	}
 
+	void SetColourBlind()
+	{
+		m_bAlreadyColourblind = true;
+		for (int i = 0; i < m_Wires.Length; ++i)
+		{
+			m_Wires[i].ResetWire();
+			m_Wires[i].SetColourblind(true);
+			if (m_CurrentFails >= FailsToLoseColour)
+			{
+				m_WireStarts[i].material.color = Color.black;
+				m_WireEnds[i].material.color = Color.black;
+			}
+		}
+		m_UsedReleasePoints.Clear();
+		m_MenuCharacter.OnMenuOpen(m_WirePlayerCharacter, null, m_ColourblindInstructionsScreen);
+	}
+
 	public WireReleaseInfo TryReleaseWire(Wire wire, Vector3 position)
 	{
 		if (m_IgnoreDepthAxis) position = Vector3.ProjectOnPlane(position, transform.up);
@@ -270,18 +304,8 @@ public class WireBoard : MonoBehaviour
 				}
 				else
 				{
-					++m_CurrentFails;
-					for (int j = 0; j < m_Wires.Length; ++j)
-					{
-						m_Wires[j].ResetWire();
-						m_Wires[j].SetColourblind(m_CurrentFails >= m_FailsToLoseColour);
-						if (m_CurrentFails >= m_FailsToLoseColour)
-						{
-							m_WireStarts[j].material.color = Color.black;
-							m_WireEnds[j].material.color = Color.black;
-						}
-					}
-					m_UsedReleasePoints.Clear();
+					if (!m_bAlreadyColourblind && ++m_CurrentFails >= FailsToLoseColour)
+						SetColourBlind();
 					return new WireReleaseInfo() { ReleaseStatus = WireReleaseStatus.Reset };
 				}
 			}

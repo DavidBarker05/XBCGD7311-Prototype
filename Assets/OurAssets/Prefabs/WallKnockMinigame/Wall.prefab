@@ -112,12 +112,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Wall
   m_UnscaledTransform: {fileID: 5304736747382252985}
-  m_Player: {fileID: 0}
+  m_PipePlaceMinigameGenerator: {fileID: 0}
+  m_WallKnockPlayerCharacter: {fileID: 0}
   m_HolePrefab: {fileID: 4869659471843458809, guid: 508b793c3d8ac92438c1a5f7dc9e603a, type: 3}
   m_MaxTries: 3
   m_PipeSpawnLowerBound: {x: -9.5, y: 0, z: -5.5}
   m_PipeSpawnUpperBound: {x: 9.5, y: 0, z: 5.5}
-  m_BreakTolerance: 0.675
+  m_BreakTolerance: 1
+  m_BreakToleranceUpgrade1: 1.125
+  m_BreakToleranceUpgrade2: 1.25
+  m_BreakToleranceUpgrade3: 1.375
   m_WallEchoPrefab: {fileID: 3500153299824405778, guid: 72f0a16b348b3884b85bf15b6465aead, type: 3}
   m_DistanceCurve:
     serializedVersion: 2
@@ -149,7 +153,11 @@ MonoBehaviour:
   m_FurthestIntensity:
     <Distance>k__BackingField: 5
     <NumberOfCircles>k__BackingField: 5
-  m_Indicator: {fileID: 0}
+  m_FastCompletionTime: 30
+  m_SlowCompletionTime: 90
+  m_InstructionsScreen: {fileID: 0}
+  m_MenuCharacter: {fileID: 0}
+  m_RetriesToShowTutorial: 3
 --- !u!1001 &836016625164717129
 PrefabInstance:
   m_ObjectHideFlags: 0

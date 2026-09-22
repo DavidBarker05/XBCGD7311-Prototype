@@ -3,7 +3,10 @@ using UnityEngine.AI;
 
 public class ChasePlayer : MonoBehaviour
 {
+    private static readonly int RunningHash = Animator.StringToHash("Running");
+
     public NavMeshAgent enemy;
+    public Animator animator;
     public Transform player;
     private Vector3 startPosition;
     private Quaternion startRotation;
@@ -24,12 +27,14 @@ public class ChasePlayer : MonoBehaviour
         if (!ChaseMinigameStarter.Instance.ChaseMinigameIsRunning)
         {
             transform.SetPositionAndRotation(startPosition, startRotation);
+            animator.SetBool(RunningHash, false);
             return;
         }
 
         if (player != null && !enemy.pathPending && Vector3.Distance(transform.position, player.position) > enemy.stoppingDistance)
         {
             enemy.SetDestination(player.position);
+            animator.SetBool(RunningHash, true);
         }
     }
 

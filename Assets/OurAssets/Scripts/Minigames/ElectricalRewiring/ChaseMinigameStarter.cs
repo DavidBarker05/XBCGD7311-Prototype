@@ -10,6 +10,8 @@ public class ChaseMinigameStarter : MonoBehaviour
 	FirstPersonPlayerCharacter m_FPPCharacter;
 	[SerializeField]
 	QTECheckpointManager m_CheckpointManager;
+	[SerializeField]
+	EnemySpawner m_EnemySpawner;
 
 	[Header("Money Reward")]
 	[SerializeField, Min(0f)]
@@ -37,6 +39,7 @@ public class ChaseMinigameStarter : MonoBehaviour
 	public void StartChaseMinigame(QTEInteractable[] qteInteractables, Transform chaseSpawn, Transform houseSpawn)
 	{
 		bool bIsNewChase = qteInteractables != m_QTEInteractables;
+		m_EnemySpawner?.ResetSpawner();
 		ChaseMinigameIsRunning = true;
 		m_ChaseSpawn = chaseSpawn;
 		m_HouseSpawn = houseSpawn;

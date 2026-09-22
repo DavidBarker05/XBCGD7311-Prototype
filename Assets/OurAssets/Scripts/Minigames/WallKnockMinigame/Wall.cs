@@ -55,7 +55,7 @@ public class Wall : MonoBehaviour
 	[SerializeField]
 	MenuCharacter m_MenuCharacter;
 	[SerializeField, Min(1)]
-	int m_RetriesToShowTutorial;
+	int m_RetriesToShowTutorial = 3;
 
 	bool m_bAlreadyPlaying;
 	float m_TimeTaken;

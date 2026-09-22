@@ -82,10 +82,10 @@ MonoBehaviour:
   - MusicClip: {fileID: 8300000, guid: 5d0cd1131d63870449b9d0f3901079cd, type: 3}
     ArtistName: JHawk
     SongName: Trouble At The Circus
-  m_FadeDuration: 1
+  m_FadeDuration: 5
   m_TrackCooldownTime: 2
-  m_MinTimeBetweenTracks: 20
-  m_MaxTimeBetweenTracks: 60
+  m_MinTimeBetweenTracks: 15
+  m_MaxTimeBetweenTracks: 30
 --- !u!1 &7992496393168840960
 GameObject:
   m_ObjectHideFlags: 0

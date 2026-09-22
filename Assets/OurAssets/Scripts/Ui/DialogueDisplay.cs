@@ -101,6 +101,7 @@ public class DialogueDisplayer : MonoBehaviour
     public void StartDisplayingDialogue(System.Action callbackFunction = null)
     {
         m_LastCharacter = m_Player.CurrentPlayerCharacter;
+        m_DialogueCharacter.CameraTarget = m_LastCharacter.CameraTarget;
         m_Player.ChangeCharacter(m_DialogueCharacter);
         gameObject.SetActive(true);
         RetrieveCurrentDialogue();
@@ -110,6 +111,7 @@ public class DialogueDisplayer : MonoBehaviour
     void StopDisplayingDialogue()
     {
         m_Player.ChangeCharacter(m_LastCharacter);
+        m_DialogueCharacter.CameraTarget = null;
         m_LastCharacter = null;
         endCallbackFunction?.Invoke();
         endCallbackFunction = null;

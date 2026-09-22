@@ -23,6 +23,8 @@ public class TutorialHouse : MonoBehaviour
     TutorialNPC m_NPC;
     [SerializeField]
     Sprite m_TalkWaypointIcon;
+    [SerializeField]
+    Vector3 m_TalkWaypointOffset = new Vector3(0f, 1f);
 
     [Header("Electrical")]
     [SerializeField]
@@ -31,18 +33,24 @@ public class TutorialHouse : MonoBehaviour
     Light[] m_HouseLights;
     [SerializeField]
     Sprite m_ElectricalWaypointIcon;
+    [SerializeField]
+    Vector3 m_ElectricalWaypointOffset = Vector3.zero;
 
     [Header("Pipe")]
     [SerializeField]
     WallKnockInteractable m_PipeWallInteractable;
     [SerializeField]
     Sprite m_PipeWaypointIcon;
+    [SerializeField]
+    Vector3 m_PipeWaypointOffset = Vector3.zero;
 
     [Header("Disconnect")]
     [SerializeField]
     ChaseMinigameInteract m_DisconnectInteractable;
     [SerializeField]
     Sprite m_DisconnectWaypointIcon;
+    [SerializeField]
+    Vector3 m_DisconnectWaypointOffset = Vector3.zero;
 
     [Header("Reward")]
     [SerializeField, Min(0)]
@@ -53,6 +61,8 @@ public class TutorialHouse : MonoBehaviour
     TutorialHouseDoor m_TutorialHouseDoor;
     [SerializeField]
     Sprite m_LeaveHouseWaypointIcon;
+    [SerializeField]
+    Vector3 m_LeaveHouseWaypointOffset = Vector3.zero;
 
     public UnityEvent OnEnteredHouse;
     public UnityEvent OnTutorialComplete;
@@ -99,7 +109,7 @@ public class TutorialHouse : MonoBehaviour
     #region Waypoints
     void ShowTalkWaypoint()
     {
-        if (m_NPC) WaypointManager.Instance?.AddWaypoint(m_NPC.transform, m_TalkWaypointIcon);
+        if (m_NPC) WaypointManager.Instance?.AddWaypoint(m_NPC.transform, m_TalkWaypointIcon, m_TalkWaypointOffset);
         TaskList.Instance?.AddTask(m_TalkDisplayTask);
     }
 
@@ -122,7 +132,7 @@ public class TutorialHouse : MonoBehaviour
         HideTalkWaypoint();
         if (!m_ElectricalBoxInteractable) return;
         m_ElectricalBoxInteractable.gameObject.SetActive(true);
-        WaypointManager.Instance?.AddWaypoint(m_ElectricalBoxInteractable.transform, m_ElectricalWaypointIcon);
+        WaypointManager.Instance?.AddWaypoint(m_ElectricalBoxInteractable.transform, m_ElectricalWaypointIcon, m_ElectricalWaypointOffset);
         TaskList.Instance?.AddTask(m_ElectricalDisplayTask);
     }
 
@@ -143,7 +153,7 @@ public class TutorialHouse : MonoBehaviour
         HideTalkWaypoint();
         if (!m_PipeWallInteractable) return;
         m_PipeWallInteractable.gameObject.SetActive(true);
-        WaypointManager.Instance?.AddWaypoint(m_PipeWallInteractable.transform, m_PipeWaypointIcon);
+        WaypointManager.Instance?.AddWaypoint(m_PipeWallInteractable.transform, m_PipeWaypointIcon, m_PipeWaypointOffset);
         TaskList.Instance?.AddTask(m_PipeDisplayTask);
     }
 
@@ -164,7 +174,7 @@ public class TutorialHouse : MonoBehaviour
         if (!m_DisconnectInteractable) return;
         if (m_TutorialHouseDoor) m_TutorialHouseDoor.gameObject.SetActive(false);
         m_DisconnectInteractable.gameObject.SetActive(true);
-        WaypointManager.Instance?.AddWaypoint(m_DisconnectInteractable.transform, m_DisconnectWaypointIcon);
+        WaypointManager.Instance?.AddWaypoint(m_DisconnectInteractable.transform, m_DisconnectWaypointIcon, m_DisconnectWaypointOffset);
         TaskList.Instance?.AddTask(m_DisconnectDisplayTask);
     }
 
@@ -190,7 +200,7 @@ public class TutorialHouse : MonoBehaviour
         HideTalkWaypoint();
         PlayerSaveManager.CurrentSaveData.Money += m_MoneyReward;
         PlayerSaveManager.SaveGame();
-        if (m_TutorialHouseDoor) WaypointManager.Instance?.AddWaypoint(m_TutorialHouseDoor.transform, m_LeaveHouseWaypointIcon);
+        if (m_TutorialHouseDoor) WaypointManager.Instance?.AddWaypoint(m_TutorialHouseDoor.transform, m_LeaveHouseWaypointIcon, m_LeaveHouseWaypointOffset);
         TaskList.Instance?.AddTask(m_LeaveHouseDisplayTask);
     }
     #endregion Reward

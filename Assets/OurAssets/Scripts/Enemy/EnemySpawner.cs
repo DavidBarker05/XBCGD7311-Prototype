@@ -1,9 +1,11 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
-    public GameObject enemyPrefab;
+    [SerializeField]
+    public ChasePlayer[] enemyPrefabs;
     public Transform[] spawnPoints; // assign 3 in the Inspector
 
     public float spawnInterval = 60f;   // 1 minute
@@ -13,6 +15,7 @@ public class EnemySpawner : MonoBehaviour
     private int spawnedCount = 0;
     private float elapsedTime = 0f;
     private Coroutine spawnRoutine;
+    private readonly List<ChasePlayer> spawnedEnemies = new List<ChasePlayer>();
 
     private void Update()
     {
@@ -25,14 +28,26 @@ public class EnemySpawner : MonoBehaviour
         }
         else
         {
-            if (spawnRoutine != null)
-            {
-                StopCoroutine(spawnRoutine);
-                spawnRoutine = null;
-            }
-            spawnedCount = 0;
-            elapsedTime = 0f;
+            StopSpawning();
         }
+    }
+
+    void StopSpawning()
+    {
+        if (spawnRoutine != null)
+        {
+            StopCoroutine(spawnRoutine);
+            spawnRoutine = null;
+        }
+        spawnedCount = 0;
+        elapsedTime = 0f;
+    }
+
+    public void ResetSpawner()
+    {
+        StopSpawning();
+        foreach (ChasePlayer enemy in spawnedEnemies) if (enemy) Destroy(enemy.gameObject);
+        spawnedEnemies.Clear();
     }
 
     private IEnumerator SpawnLoop()
@@ -58,15 +73,14 @@ public class EnemySpawner : MonoBehaviour
         }
 
         Transform point = spawnPoints[spawnedCount];
-        GameObject enemyObj = Instantiate(enemyPrefab, point.position, point.rotation);
-
-        ChasePlayer chaseScript = enemyObj.GetComponent<ChasePlayer>();
-        if (chaseScript != null)
+        ChasePlayer enemy = Instantiate(enemyPrefabs[Random.Range(0, enemyPrefabs.Length)], point.position, point.rotation);
+        spawnedEnemies.Add(enemy);
+        if (enemy != null)
         {
             GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
             if (playerObj != null)
             {
-                chaseScript.player = playerObj.transform;
+                enemy.player = playerObj.transform;
             }
             else
             {

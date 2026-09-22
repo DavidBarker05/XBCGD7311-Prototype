@@ -1560,16 +1560,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TutorialHouse
   m_NPC: {fileID: 5903894398551593702}
   m_TalkWaypointIcon: {fileID: 0}
-  m_ElectricalBoxInteractable: {fileID: 3091976912400497888}
+  m_TalkWaypointOffset: {x: 0, y: 1, z: 0}
+  m_ElectricalBoxInteractable: {fileID: 1859554525178447100}
   m_HouseLights: []
   m_ElectricalWaypointIcon: {fileID: 0}
-  m_PipeWallInteractable: {fileID: 69609624301985038}
+  m_ElectricalWaypointOffset: {x: 0, y: 0, z: 0}
+  m_PipeWallInteractable: {fileID: 5064236727396794206}
   m_PipeWaypointIcon: {fileID: 0}
+  m_PipeWaypointOffset: {x: 0, y: 0, z: 0}
   m_DisconnectInteractable: {fileID: 6242342656417394948}
   m_DisconnectWaypointIcon: {fileID: 0}
+  m_DisconnectWaypointOffset: {x: 0, y: 0, z: 0}
   m_MoneyReward: 50
   m_TutorialHouseDoor: {fileID: 1931574651017856778}
   m_LeaveHouseWaypointIcon: {fileID: 0}
+  m_LeaveHouseWaypointOffset: {x: 0, y: 0, z: 0}
   OnEnteredHouse:
     m_PersistentCalls:
       m_Calls:
@@ -1614,12 +1619,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TutorialFlow
   m_OwnDoor: {fileID: 0}
   m_OwnDoorWaypointIcon: {fileID: 0}
+  m_OwnDoorWaypointOffset: {x: 0, y: 0, z: 0}
   m_ThembaDoor: {fileID: 1931574651017856778}
   m_ThembaDoorWaypointIcon: {fileID: 0}
+  m_ThembaDoorWaypointOffset: {x: 0, y: 0, z: 0}
   m_TV: {fileID: 0}
   m_TVWaypointIcon: {fileID: 0}
+  m_TVWaypointOffset: {x: 0, y: 0, z: 0}
   m_Couch: {fileID: 0}
   m_CouchWaypointIcon: {fileID: 0}
+  m_CouchWaypointOffset: {x: 0, y: 0, z: 0}
 --- !u!1 &3059323861775339138
 GameObject:
   m_ObjectHideFlags: 0
@@ -3752,9 +3761,14 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 61def986d5619f74ea18c82c7e26e921, type: 3}
---- !u!114 &69609624301985038 stripped
+--- !u!4 &4806253808493065874 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5714568552593890919, guid: 61def986d5619f74ea18c82c7e26e921, type: 3}
+  m_PrefabInstance: {fileID: 1007970196027271413}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &5064236727396794206 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 939644939855541755, guid: 61def986d5619f74ea18c82c7e26e921, type: 3}
+  m_CorrespondingSourceObject: {fileID: 5456902551240316843, guid: 61def986d5619f74ea18c82c7e26e921, type: 3}
   m_PrefabInstance: {fileID: 1007970196027271413}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
@@ -3763,11 +3777,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a2bc58996eeaa548bd9707f0391354e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WallKnockInteractable
---- !u!4 &4806253808493065874 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5714568552593890919, guid: 61def986d5619f74ea18c82c7e26e921, type: 3}
-  m_PrefabInstance: {fileID: 1007970196027271413}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3749066524556591789
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3907,9 +3916,9 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6437376782999379735, guid: 4f98e2dc28f2384459b37ce15b266c9f, type: 3}
   m_PrefabInstance: {fileID: 6643613766801264055}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &3091976912400497888 stripped
+--- !u!114 &1859554525178447100 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8564213833231675735, guid: 4f98e2dc28f2384459b37ce15b266c9f, type: 3}
+  m_CorrespondingSourceObject: {fileID: 5043096415848286539, guid: 4f98e2dc28f2384459b37ce15b266c9f, type: 3}
   m_PrefabInstance: {fileID: 6643613766801264055}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
