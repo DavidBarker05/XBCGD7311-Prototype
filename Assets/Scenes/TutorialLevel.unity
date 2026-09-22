@@ -31577,6 +31577,46 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3938153586453254402, guid: 2f3777bf0a1f7504ea7dd825f9ef30f8, type: 3}
+      propertyPath: m_HUD
+      value: 
+      objectReference: {fileID: 1236375952}
+    - target: {fileID: 3938153586453254402, guid: 2f3777bf0a1f7504ea7dd825f9ef30f8, type: 3}
+      propertyPath: m_MenuCharacter
+      value: 
+      objectReference: {fileID: 70100332}
+    - target: {fileID: 3938153586453254402, guid: 2f3777bf0a1f7504ea7dd825f9ef30f8, type: 3}
+      propertyPath: m_FirstPersonPlayerCharacter
+      value: 
+      objectReference: {fileID: 434291511}
+    - target: {fileID: 3938153586453254402, guid: 2f3777bf0a1f7504ea7dd825f9ef30f8, type: 3}
+      propertyPath: OnScreenClosed.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3938153586453254402, guid: 2f3777bf0a1f7504ea7dd825f9ef30f8, type: 3}
+      propertyPath: OnScreenClosed.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3938153586453254402, guid: 2f3777bf0a1f7504ea7dd825f9ef30f8, type: 3}
+      propertyPath: OnScreenClosed.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 363574865913430692}
+    - target: {fileID: 3938153586453254402, guid: 2f3777bf0a1f7504ea7dd825f9ef30f8, type: 3}
+      propertyPath: OnScreenClosed.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3938153586453254402, guid: 2f3777bf0a1f7504ea7dd825f9ef30f8, type: 3}
+      propertyPath: OnScreenClosed.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnTVScreenClosed
+      objectReference: {fileID: 0}
+    - target: {fileID: 3938153586453254402, guid: 2f3777bf0a1f7504ea7dd825f9ef30f8, type: 3}
+      propertyPath: OnScreenClosed.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: TutorialFlow, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 3938153586453254402, guid: 2f3777bf0a1f7504ea7dd825f9ef30f8, type: 3}
+      propertyPath: OnScreenClosed.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 4146276321803699331, guid: 2f3777bf0a1f7504ea7dd825f9ef30f8, type: 3}
       propertyPath: m_Name
       value: PlayerHouse
@@ -31676,6 +31716,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e696fe1357e1f2641b4343edc2bc7950, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerEndDay
+--- !u!114 &1375064557 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3938153586453254402, guid: 2f3777bf0a1f7504ea7dd825f9ef30f8, type: 3}
+  m_PrefabInstance: {fileID: 1375064554}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2017a3f7acf3d7458b4b84c85b8bfd4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TVInteractable
 --- !u!1001 &1376285612
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -50515,6 +50566,10 @@ PrefabInstance:
       value: TutorialHouse
       objectReference: {fileID: 0}
     - target: {fileID: 4821656235476995719, guid: 565140633733a7e42ada1b0ea67e9050, type: 3}
+      propertyPath: m_TV
+      value: 
+      objectReference: {fileID: 1375064557}
+    - target: {fileID: 4821656235476995719, guid: 565140633733a7e42ada1b0ea67e9050, type: 3}
       propertyPath: m_Couch
       value: 
       objectReference: {fileID: 1375064556}
@@ -50548,7 +50603,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7840100320233223251, guid: 565140633733a7e42ada1b0ea67e9050, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.1
+      value: -0.01
       objectReference: {fileID: 0}
     - target: {fileID: 7840100320233223251, guid: 565140633733a7e42ada1b0ea67e9050, type: 3}
       propertyPath: m_LocalPosition.z
