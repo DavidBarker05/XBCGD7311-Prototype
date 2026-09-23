@@ -74,7 +74,7 @@ public class PauseCharacter : PlayerCharacter
         m_Player.ChangeCharacter(m_LastCharacter);
         m_LastCharacter = null;
         CameraTarget = null;
-        m_PauseScreen.CloseSettings();
+        m_PauseScreen.Close();
         m_PauseScreen.gameObject.SetActive(false);
         Time.timeScale = 1f;
     }
