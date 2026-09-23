@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: M_House1Walls
+  m_Name: M_House1Walls 1
   m_Shader: {fileID: 4800000, guid: dc87bf999f9700d4dbf63e3438bb9093, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -25,7 +25,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BaseMap:
-        m_Texture: {fileID: 2800000, guid: 26a286267f6a1854dbae3eb9716e8b79, type: 3}
+        m_Texture: {fileID: 2800000, guid: 6cc7fd3bc0bb389449472ba85fd06ef6, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
@@ -49,7 +49,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 26a286267f6a1854dbae3eb9716e8b79, type: 3}
+        m_Texture: {fileID: 2800000, guid: 6cc7fd3bc0bb389449472ba85fd06ef6, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -135,7 +135,7 @@ Material:
     - _ToonSpecularTint: {r: 0.9, g: 0.9, b: 0.9, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
---- !u!114 &7973094787417335368
+--- !u!114 &6515077835261884408
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}

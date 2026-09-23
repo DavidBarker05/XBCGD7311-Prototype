@@ -3421,8 +3421,15 @@ PrefabInstance:
       propertyPath: m_Name
       value: House1 (1)
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    - target: {fileID: 5648158515346685487, guid: ff883fd204bf29a40962a17b02e2ddbc, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 563165421366059588, guid: ff883fd204bf29a40962a17b02e2ddbc, type: 3}
+    - {fileID: 206518056541625180, guid: ff883fd204bf29a40962a17b02e2ddbc, type: 3}
+    m_RemovedGameObjects:
+    - {fileID: 5698632351739727861, guid: ff883fd204bf29a40962a17b02e2ddbc, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ff883fd204bf29a40962a17b02e2ddbc, type: 3}
@@ -29064,8 +29071,15 @@ PrefabInstance:
       propertyPath: m_Name
       value: House1 (2)
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    - target: {fileID: 5648158515346685487, guid: ff883fd204bf29a40962a17b02e2ddbc, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 563165421366059588, guid: ff883fd204bf29a40962a17b02e2ddbc, type: 3}
+    - {fileID: 206518056541625180, guid: ff883fd204bf29a40962a17b02e2ddbc, type: 3}
+    m_RemovedGameObjects:
+    - {fileID: 5698632351739727861, guid: ff883fd204bf29a40962a17b02e2ddbc, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ff883fd204bf29a40962a17b02e2ddbc, type: 3}
@@ -30793,8 +30807,15 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    - target: {fileID: 8149825469446961294, guid: 4f39f3f1cebec3747a60bef7e6b6a487, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 2182295934851935204, guid: 4f39f3f1cebec3747a60bef7e6b6a487, type: 3}
+    - {fileID: 4832529908536020133, guid: 4f39f3f1cebec3747a60bef7e6b6a487, type: 3}
+    m_RemovedGameObjects:
+    - {fileID: 2383210160349389913, guid: 4f39f3f1cebec3747a60bef7e6b6a487, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4f39f3f1cebec3747a60bef7e6b6a487, type: 3}
@@ -40569,8 +40590,15 @@ PrefabInstance:
       propertyPath: m_Name
       value: House1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    - target: {fileID: 5648158515346685487, guid: ff883fd204bf29a40962a17b02e2ddbc, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 563165421366059588, guid: ff883fd204bf29a40962a17b02e2ddbc, type: 3}
+    - {fileID: 206518056541625180, guid: ff883fd204bf29a40962a17b02e2ddbc, type: 3}
+    m_RemovedGameObjects:
+    - {fileID: 5698632351739727861, guid: ff883fd204bf29a40962a17b02e2ddbc, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ff883fd204bf29a40962a17b02e2ddbc, type: 3}

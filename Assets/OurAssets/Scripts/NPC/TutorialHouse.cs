@@ -30,7 +30,7 @@ public class TutorialHouse : MonoBehaviour
     [SerializeField]
     WireMinigameInteractable m_ElectricalBoxInteractable;
     [SerializeField]
-    Light[] m_HouseLights;
+    CeilingLight[] m_HouseLights;
     [SerializeField]
     Sprite m_ElectricalWaypointIcon;
     [SerializeField]
@@ -122,7 +122,12 @@ public class TutorialHouse : MonoBehaviour
 
     void SetLights(bool bOn)
     {
-        foreach (Light light in m_HouseLights) if (light) light.enabled = bOn;
+        foreach (CeilingLight light in m_HouseLights)
+        {
+            if (!light) continue;
+            if (bOn) light.TurnOn();
+            else light.TurnOff();
+        }
     }
 
     #region Electrical

@@ -48,15 +48,21 @@ public class NPCHouse : MonoBehaviour
 
     [Header("Lights")]
     [SerializeField]
-    Light[] m_HouseLights;
+    CeilingLight[] m_HouseLights;
 
     [Header("Waypoint Icons")]
     [SerializeField]
     Sprite m_TalkWaypointIcon;
     [SerializeField]
+    Vector3 m_TalkWaypointOffset = new Vector3(0f, 1f);
+    [SerializeField]
     Sprite m_TaskWaypointIcon;
     [SerializeField]
+    Vector3 m_TaskWaypointOffset = Vector3.zero;
+    [SerializeField]
     Sprite m_ExitWaypointIcon;
+    [SerializeField]
+    Vector3 m_ExitWaypointOffset = Vector3.zero;
 
     public Transform EntryPoint => m_Door.transform;
     public HouseProgress Progress { get; private set; }
@@ -263,7 +269,12 @@ public class NPCHouse : MonoBehaviour
         {
             if (Progress.MinigameTypes[i] == MinigameType.Wires && !Progress.MinigamesBeaten[i]) { bAllWireTasksBeaten = false; break; }
         }
-        foreach (Light light in m_HouseLights) if (light) light.enabled = bAllWireTasksBeaten;
+        foreach (CeilingLight light in m_HouseLights)
+        {
+            if (!light) continue;
+            if (bAllWireTasksBeaten) light.TurnOn();
+            else light.TurnOff();
+        }
     }
     #endregion Lights
 
@@ -273,7 +284,7 @@ public class NPCHouse : MonoBehaviour
         if (Progress.HasTalkedToNPC) RevealTaskEntries();
         else if (m_CurrentNPCTransform)
         {
-            WaypointManager.Instance?.AddWaypoint(m_CurrentNPCTransform, m_TalkWaypointIcon);
+            WaypointManager.Instance?.AddWaypoint(m_CurrentNPCTransform, m_TalkWaypointIcon, m_TalkWaypointOffset);
             m_TalkDisplayTask ??= new DisplayTask("Talk to the resident", 1, 0, false);
             TaskList.Instance?.AddTask(m_TalkDisplayTask);
         }
@@ -283,7 +294,7 @@ public class NPCHouse : MonoBehaviour
     {
         foreach (HouseTaskEntry entry in m_TaskEntries)
         {
-            if (entry.Target) WaypointManager.Instance?.AddWaypoint(entry.Target, m_TaskWaypointIcon);
+            if (entry.Target) WaypointManager.Instance?.AddWaypoint(entry.Target, m_TaskWaypointIcon, m_TaskWaypointOffset);
             TaskList.Instance?.AddTask(entry.DisplayTask);
         }
     }
@@ -329,7 +340,7 @@ public class NPCHouse : MonoBehaviour
         if (Progress.AllMinigamesBeaten)
         {
             ClearAllTaskEntries();
-            WaypointManager.Instance?.AddWaypoint(ActiveDoorTransform, m_ExitWaypointIcon);
+            WaypointManager.Instance?.AddWaypoint(ActiveDoorTransform, m_ExitWaypointIcon, m_ExitWaypointOffset);
             m_ExitDisplayTask ??= new DisplayTask("Head back outside", 1, 0, false);
             TaskList.Instance?.AddTask(m_ExitDisplayTask);
             ReportHouseCompletedOnce();
