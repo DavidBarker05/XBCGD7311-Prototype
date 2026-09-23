@@ -32,6 +32,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2160422474412438901}
+  - {fileID: 6687712324138163815}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &4134245839434669046
@@ -69,6 +70,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 415b20a248c35394dacacb8945f30ff9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TutorialNPC
+  <InteractPromptTransform>k__BackingField: {fileID: 6687712324138163815}
   m_TutorialHouse: {fileID: 0}
   m_WelcomeDialogue: {fileID: 4900000, guid: 0db0331de9e09bb40b8a8b38ed5155b4, type: 3}
   m_ElectricalReminderDialogue: {fileID: 4900000, guid: 3de2ecae72f2ac94096265e2dcb0a5da, type: 3}
@@ -79,6 +81,37 @@ MonoBehaviour:
   m_RewardDialogue: {fileID: 4900000, guid: 9e99eeccc65e1a84fb9f4f0e614b77be, type: 3}
   m_LeaveHouseReminderDialogue: {fileID: 4900000, guid: 2c211309f905d9c4eba930aa71ebf655, type: 3}
   m_OutroDialogue: {fileID: 4900000, guid: a06783f5529920045ac5e07681474b97, type: 3}
+--- !u!1 &2136358680279937368
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6687712324138163815}
+  m_Layer: 8
+  m_Name: InteractPromptTransform
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6687712324138163815
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2136358680279937368}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.259, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6954094118064012174}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1905556688117879454
 PrefabInstance:
   m_ObjectHideFlags: 0

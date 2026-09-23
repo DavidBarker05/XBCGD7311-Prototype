@@ -32,6 +32,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6472966491650353533}
+  - {fileID: 7229683385407950467}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &8198019013259286953
@@ -69,6 +70,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad37165d018daae4e8c310b51c1e651c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EndingNPC
+  <InteractPromptTransform>k__BackingField: {fileID: 7229683385407950467}
   m_VisualsRoot: {fileID: 6472966491650353533}
   m_EndingDialogue: {fileID: 4900000, guid: 6a998a656927b394898c903d7dc5582f, type: 3}
   m_TalkWaypointIcon: {fileID: 0}
@@ -76,6 +78,37 @@ MonoBehaviour:
   m_CouchWaypointIcon: {fileID: 0}
   m_DoorTransform: {fileID: 0}
   m_DoorWaypointIcon: {fileID: 0}
+--- !u!1 &7551081702622104147
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7229683385407950467}
+  m_Layer: 8
+  m_Name: InteractPromptTransform
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7229683385407950467
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7551081702622104147}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.259, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5501656724261933821}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &6799909629840985750
 PrefabInstance:
   m_ObjectHideFlags: 0

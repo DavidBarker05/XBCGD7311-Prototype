@@ -1,5 +1,67 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &754916819739231341
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5802053557722490420}
+  m_Layer: 8
+  m_Name: InteractPromptTransform
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5802053557722490420
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 754916819739231341}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0.0031199958}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1877625094831910064}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1080590494936277008
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2035641697295134247}
+  m_Layer: 8
+  m_Name: InteractPromptTransform
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2035641697295134247
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1080590494936277008}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0.0031199958}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5330656160270355835}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2383210160349389913
 GameObject:
   m_ObjectHideFlags: 0
@@ -32,7 +94,8 @@ Transform:
   m_LocalPosition: {x: -0.09366001, y: 1.9967335, z: 8.420124}
   m_LocalScale: {x: 100, y: 15, z: 170.00002}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 5802053557722490420}
   m_Father: {fileID: 5691826359083535327}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &7574378013359137082
@@ -126,6 +189,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a85c35719a0c0424e8773a7e8fac8743, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ChaseMinigameInteract
+  <InteractPromptTransform>k__BackingField: {fileID: 5802053557722490420}
   m_CanBePlayedAgain: 0
   m_QTEInteractablePrefab: {fileID: 3119160951733337559, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
   m_QTEInteractableSpawns: []
@@ -449,7 +513,8 @@ Transform:
   m_LocalPosition: {x: -0.09366001, y: 1.9967335, z: 8.420124}
   m_LocalScale: {x: 100, y: 15, z: 170.00002}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 2035641697295134247}
   m_Father: {fileID: 5691826359083535327}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &6518441134184554788
@@ -543,6 +608,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3f6c56224480b3498a44bb5c00c2e1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Door
+  <InteractPromptTransform>k__BackingField: {fileID: 2035641697295134247}
 --- !u!1 &8952336338767113090
 GameObject:
   m_ObjectHideFlags: 0

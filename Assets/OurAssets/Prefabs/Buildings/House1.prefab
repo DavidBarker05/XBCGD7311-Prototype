@@ -143,6 +143,37 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &3547735628784030957
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7624434034588151849}
+  m_Layer: 8
+  m_Name: InteractPromptTransform
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7624434034588151849
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3547735628784030957}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0.0037500013}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5151926814904019179}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4171877711352983380
 GameObject:
   m_ObjectHideFlags: 0
@@ -173,6 +204,37 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2500202262954104532}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &4310826587658487922
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 569606360459151646}
+  m_Layer: 8
+  m_Name: InteractPromptTransform
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &569606360459151646
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4310826587658487922}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -0, z: 0.00375}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4217517084819704429}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4423800741489664922
 GameObject:
@@ -314,7 +376,8 @@ Transform:
   m_LocalPosition: {x: -0, y: 1.9967332, z: 8.59467}
   m_LocalScale: {x: 100, y: 15.000001, z: 170}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 7624434034588151849}
   m_Father: {fileID: 6476319871540497193}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &4323668995515429657
@@ -408,8 +471,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a85c35719a0c0424e8773a7e8fac8743, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ChaseMinigameInteract
+  <InteractPromptTransform>k__BackingField: {fileID: 7624434034588151849}
   m_CanBePlayedAgain: 0
-  m_QTEInteractablePrefab: {fileID: 0}
+  m_QTEInteractablePrefab: {fileID: 3119160951733337559, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
   m_QTEInteractableSpawns: []
   m_NumQTEInteractablesToSpawn: 0
   m_ChaseSpawn: {fileID: 7280834665859480184}
@@ -670,6 +734,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: -8068073526183931155, guid: 415ce049364a12f48a13f89792cab666, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 415ce049364a12f48a13f89792cab666, type: 3}
       propertyPath: m_Name
       value: House1(Rework)
@@ -680,6 +748,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 415ce049364a12f48a13f89792cab666, type: 3}
       insertIndex: 1
       addedObject: {fileID: 5151926814904019179}
+    - targetCorrespondingSourceObject: {fileID: -1950733119399844177, guid: 415ce049364a12f48a13f89792cab666, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 569606360459151646}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: -8068073526183931155, guid: 415ce049364a12f48a13f89792cab666, type: 3}
       insertIndex: -1
@@ -694,6 +765,11 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 6080575420501857413}
   m_SourcePrefab: {fileID: 100100000, guid: 415ce049364a12f48a13f89792cab666, type: 3}
+--- !u!4 &4217517084819704429 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -1950733119399844177, guid: 415ce049364a12f48a13f89792cab666, type: 3}
+  m_PrefabInstance: {fileID: 6803316025929821378}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &5648158515346685487 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -8068073526183931155, guid: 415ce049364a12f48a13f89792cab666, type: 3}
@@ -732,6 +808,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3f6c56224480b3498a44bb5c00c2e1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Door
+  <InteractPromptTransform>k__BackingField: {fileID: 569606360459151646}
 --- !u!4 &6476319871540497193 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 415ce049364a12f48a13f89792cab666, type: 3}

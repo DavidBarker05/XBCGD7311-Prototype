@@ -1,21 +1,21 @@
 using TMPro;
 using UnityEngine;
 
-[RequireComponent(typeof(RectTransform))]
+[RequireComponent(typeof(RectTransform), typeof(CanvasGroup))]
 public class InteractPrompt : MonoBehaviour
 {
-    [SerializeField]
-    CanvasGroup m_CanvasGroup;
     [SerializeField]
     TMP_Text m_Text;
 
     RectTransform m_RectTransform;
+    CanvasGroup m_CanvasGroup;
     Transform m_Target;
     Camera m_Camera;
 
     void Awake()
     {
         m_RectTransform = GetComponent<RectTransform>();
+        m_CanvasGroup = GetComponent<CanvasGroup>();
         Hide();
     }
 

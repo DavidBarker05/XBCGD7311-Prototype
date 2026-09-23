@@ -42,7 +42,7 @@ public class FirstPersonPlayerCharacterInteraction : PlayerInteraction
         {
             string keyLabel = GameUserSettingsManager.Instance?.GetBindingDisplayString("Player", "Interact") ?? "E";
             string interactText;
-            if (lookedAtInteraction is TVInteractable && (!PlayerSaveManager.CurrentSaveData?.HasTVLicence ?? true)) interactText = $"Press {keyLabel} to purchase TV Licence";
+            if (lookedAtInteraction is TVInteractable && (!PlayerSaveManager.CurrentSaveData?.HasTVLicence ?? true)) interactText = $"Press {keyLabel} to purchase TV licence";
             else interactText = $"Press {keyLabel} to interact";
             InteractPromptManager.Instance?.Show(lookedAtInteraction.InteractPromptTransform, interactText);
         }
