@@ -203,7 +203,7 @@ public class TutorialHouse : MonoBehaviour
     {
         CurrentStage = Stage.LeaveHousePending;
         HideTalkWaypoint();
-        PlayerSaveManager.CurrentSaveData.Money += m_MoneyReward;
+        CurrencyManager.Instance?.ReceiveMoney(m_MoneyReward);
         PlayerSaveManager.SaveGame();
         if (m_TutorialHouseDoor) WaypointManager.Instance?.AddWaypoint(m_TutorialHouseDoor.transform, m_LeaveHouseWaypointIcon, m_LeaveHouseWaypointOffset);
         TaskList.Instance?.AddTask(m_LeaveHouseDisplayTask);

@@ -15,7 +15,7 @@ public static class MinigameMoneyReward
     public static void Award(float baseMoney, float extraMultiplier = 1f)
     {
         if (PlayerSaveManager.CurrentSaveData == null) return;
-        PlayerSaveManager.CurrentSaveData.Money += Calculate(baseMoney, extraMultiplier);
+        CurrencyManager.Instance?.ReceiveMoney(Calculate(baseMoney, extraMultiplier));
         PlayerSaveManager.SaveGame();
     }
 }

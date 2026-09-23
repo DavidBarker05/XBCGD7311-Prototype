@@ -30,13 +30,13 @@ public static class PlayerUpgradeSystem
         if (PlayerSaveManager.CurrentSaveData == null) return false;
         if (level < 1 || level > PlayerUpgrades.GetMaxLevel(upgrade)) return false;
         if (level != GetLevel(upgrade) + 1) return false; // Not the next level up from what's already owned
-        return PlayerSaveManager.CurrentSaveData.Money >= PlayerUpgrades.GetUpgradeCost(upgrade, level);
+        return (CurrencyManager.Instance?.GetMoney ?? 0) >= PlayerUpgrades.GetUpgradeCost(upgrade, level);
     }
 
     public static bool TryPurchase(PlayerUpgrade upgrade, int level)
     {
         if (!CanPurchase(upgrade, level)) return false;
-        PlayerSaveManager.CurrentSaveData.Money -= PlayerUpgrades.GetUpgradeCost(upgrade, level);
+        CurrencyManager.Instance?.LoseMoney(PlayerUpgrades.GetUpgradeCost(upgrade, level));
         SetLevel(upgrade, level);
         PlayerSaveManager.SaveGame();
         OnUpgradePurchased?.Invoke(upgrade, level);
