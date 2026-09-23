@@ -13,6 +13,8 @@ public class EndingNPC : Interactable
     TextAsset m_EndingDialogue;
     [SerializeField]
     Sprite m_TalkWaypointIcon;
+    [SerializeField]
+    Vector3 m_TalkWaypointOffset = new Vector3(0f, 1f);
 
     [Header("Waypoints")]
     [SerializeField]
@@ -20,9 +22,13 @@ public class EndingNPC : Interactable
     [SerializeField]
     Sprite m_CouchWaypointIcon;
     [SerializeField]
+    Vector3 m_CouchWaypointOffset = Vector3.zero;
+    [SerializeField]
     Transform m_DoorTransform;
     [SerializeField]
     Sprite m_DoorWaypointIcon;
+    [SerializeField]
+    Vector3 m_DoorWaypointOffset = Vector3.zero;
 
     Collider m_InteractionCollider;
 
@@ -55,8 +61,8 @@ public class EndingNPC : Interactable
         }
         SetVisualActive(bIsEndingDay && !m_bChoicePresented);
         IsChoiceActive = bIsEndingDay && m_bChoicePresented && !m_bEndingChosen;
-        SetWaypoint(m_CouchTransform, IsChoiceActive, m_CouchWaypointIcon, m_CouchDisplayTask);
-        SetWaypoint(m_DoorTransform, IsChoiceActive, m_DoorWaypointIcon, m_DoorDisplayTask);
+        SetWaypoint(m_CouchTransform, IsChoiceActive, m_CouchWaypointIcon, m_CouchDisplayTask, m_CouchWaypointOffset);
+        SetWaypoint(m_DoorTransform, IsChoiceActive, m_DoorWaypointIcon, m_DoorDisplayTask, m_DoorWaypointOffset);
     }
 
     void SetVisualActive(bool bActive)
@@ -66,7 +72,7 @@ public class EndingNPC : Interactable
         m_VisualsRoot.gameObject.SetActive(bActive);
         if (bActive)
         {
-            WaypointManager.Instance?.AddWaypoint(m_VisualsRoot, m_TalkWaypointIcon);
+            WaypointManager.Instance?.AddWaypoint(m_VisualsRoot, m_TalkWaypointIcon, m_TalkWaypointOffset);
             TaskList.Instance?.AddTask(m_TalkDisplayTask);
         }
         else
@@ -76,12 +82,12 @@ public class EndingNPC : Interactable
         }
     }
 
-    void SetWaypoint(Transform target, bool bActive, Sprite icon, DisplayTask task)
+    void SetWaypoint(Transform target, bool bActive, Sprite icon, DisplayTask task, Vector3 waypointOffset)
     {
         if (!target) return;
         if (bActive)
         {
-            WaypointManager.Instance?.AddWaypoint(target, icon);
+            WaypointManager.Instance?.AddWaypoint(target, icon, waypointOffset);
             TaskList.Instance?.AddTask(task);
         }
         else
