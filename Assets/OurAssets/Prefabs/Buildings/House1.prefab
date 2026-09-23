@@ -321,7 +321,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NPCHouse
   m_PossibleNPCLocations: []
-  m_PossibleNPCs: []
+  m_PossibleNPCs:
+  - {fileID: 3005713819237972253, guid: 86c03a32250a7b2479e2682f1bcaeae4, type: 3}
+  - {fileID: 3005713819237972253, guid: c2026833efb479247b8612baf3c1ea5a, type: 3}
+  - {fileID: 3005713819237972253, guid: 9ba0d3a4fa5692340ba1e615ca15861e, type: 3}
   m_MinTotalMinigames: 2
   m_MaxWireMinigames: 2
   m_MaxWallKnockMinigames: 2
