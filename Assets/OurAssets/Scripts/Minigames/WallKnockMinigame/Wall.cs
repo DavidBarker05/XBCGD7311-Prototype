@@ -22,8 +22,8 @@ public class Wall : MonoBehaviour
 	WallKnockPlayerCharacter m_WallKnockPlayerCharacter;
 	[SerializeField]
 	GameObject m_HolePrefab;
-	[SerializeField, Min(1)]
-	int m_MaxTries = 3;
+	[field: SerializeField, Min(1)]
+	public int MaxTries { get; private set; } = 3;
 	[SerializeField]
 	Vector3 m_PipeSpawnLowerBound;
 	[SerializeField]
@@ -150,7 +150,7 @@ public class Wall : MonoBehaviour
 	void PartialStartWallKnockMinigame()
 	{
 		m_bAlreadyPlaying = true;
-		m_AvailableTries = m_MaxTries;
+		m_AvailableTries = MaxTries;
 		if (m_bInTutorial && m_TimesFailed % m_RetriesToShowTutorial == 0) ShowTutorialScreen();
 		m_PipePosition = RandomPipePosition;
 	}
