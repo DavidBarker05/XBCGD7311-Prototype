@@ -22,6 +22,8 @@ public class PipeGrid : MonoBehaviour
     FirstPersonPlayerCharacter m_FirstPersonPlayerCharacter;
     [SerializeField]
     PipePlayerCharacter m_PipePlayerCharacter;
+    [SerializeField]
+    GameObject m_HUD;
     [Header("Money Reward")]
     [SerializeField, Min(0f)]
     float m_MinMoneyReward = 40f;
@@ -163,6 +165,7 @@ public class PipeGrid : MonoBehaviour
         TutorialMinigameManager.Instance?.ReportMinigameCompleted(MinigameType.WallKnockAndPipes);
         DeletePipes(ref m_PipeCells);
         m_UnscaledTransform.gameObject.SetActive(false);
+        m_HUD.SetActive(true);
     }
 
     void AwardMoney()

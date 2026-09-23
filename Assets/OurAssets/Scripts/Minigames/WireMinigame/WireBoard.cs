@@ -28,6 +28,8 @@ public class WireBoard : MonoBehaviour
 	FirstPersonPlayerCharacter m_FirstPersonPlayerCharacter;
 	[SerializeField]
 	WirePlayerCharacter m_WirePlayerCharacter;
+	[SerializeField]
+	GameObject m_HUD;
 	[SerializeField, Range(0f, 1f)]
 	float m_TimeActiveAfterCompleted = 0.3f;
 	[field: SerializeField, Min(1)]
@@ -123,6 +125,7 @@ public class WireBoard : MonoBehaviour
 		m_TimeTaken = 0f;
 		CreateWires(Random.Range(m_MinWires, m_WireStartingPositions.Length + 1));
 		m_UnscaledTransform.gameObject.SetActive(true);
+		m_HUD.SetActive(false);
 		if (m_bInTutorial) m_MenuCharacter.OnMenuOpen(m_WirePlayerCharacter, null, m_InstructionsScreen);
 	}
 
@@ -155,6 +158,7 @@ public class WireBoard : MonoBehaviour
 		HouseProgressTracker.ReportMinigameCompleted(MinigameType.Wires);
 		TutorialMinigameManager.Instance?.ReportMinigameCompleted(MinigameType.Wires);
 		m_UnscaledTransform.gameObject.SetActive(false);
+		m_HUD.SetActive(true);
 	}
 
 	void CreateWires(int numWires)

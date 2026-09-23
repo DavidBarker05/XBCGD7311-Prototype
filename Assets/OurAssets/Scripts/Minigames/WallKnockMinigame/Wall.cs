@@ -21,6 +21,8 @@ public class Wall : MonoBehaviour
 	[SerializeField]
 	WallKnockPlayerCharacter m_WallKnockPlayerCharacter;
 	[SerializeField]
+	GameObject m_HUD;
+	[SerializeField]
 	GameObject m_HolePrefab;
 	[field: SerializeField, Min(1)]
 	public int MaxTries { get; private set; } = 3;
@@ -163,6 +165,7 @@ public class Wall : MonoBehaviour
 		m_TimesFailed = 0;
 		EnsureBoundsAreValid();
 		m_UnscaledTransform.gameObject.SetActive(true);
+		m_HUD.SetActive(false);
 		PartialStartWallKnockMinigame();
 	}
 
