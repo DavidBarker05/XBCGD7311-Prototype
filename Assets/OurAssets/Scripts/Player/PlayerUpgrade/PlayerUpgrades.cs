@@ -8,11 +8,31 @@ public enum PlayerUpgrade
 
 public static class PlayerUpgrades
 {
-    public static string GetDisplayName(PlayerUpgrade upgrade) => upgrade switch
+    public static string GetDisplayName(PlayerUpgrade upgrade, int level) => upgrade switch
     {
-        PlayerUpgrade.BiggerWallBreakHole => "Bigger Sledge Hammer",
-        PlayerUpgrade.FasterSprint => "New Kicks",
-        PlayerUpgrade.EarnMoreMoney => "Sweet Talker",
+        PlayerUpgrade.BiggerWallBreakHole => level switch
+        {
+            1 => "Bigger Sledge Hammer I",
+            2 => "Bigger Sledge Hammer II",
+            3 => "Bigger Sledge Hammer III",
+            _ => throw new System.ArgumentException($"{level} is not a valid level for BiggerWallBreakHole")
+        },
+        PlayerUpgrade.FasterSprint => level switch
+        {
+            1 => "New Kicks I",
+            2 => "New Kicks II",
+            3 => "New Kicks III",
+            _ => throw new System.ArgumentException($"{level} is not a valid level for FasterSprint")
+        },
+        PlayerUpgrade.EarnMoreMoney => level == 1 ? "Sweet Talker" : throw new System.ArgumentException($"{level} is not a valid level for EarnMoreMoney"),
+        _ => throw new System.NotImplementedException($"Unknown upgrade \"{upgrade}\"")
+    };
+
+    public static string GetDescription(PlayerUpgrade upgrade) => upgrade switch
+    {
+        PlayerUpgrade.BiggerWallBreakHole => "Smash bigger holes",
+        PlayerUpgrade.FasterSprint => "Run faster",
+        PlayerUpgrade.EarnMoreMoney => "Earn more money",
         _ => throw new System.NotImplementedException($"Unknown upgrade \"{upgrade}\"")
     };
 

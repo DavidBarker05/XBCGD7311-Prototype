@@ -39,6 +39,6 @@ public class UpgradeButton : MonoBehaviour
         m_Button.interactable = !bPurchased && PlayerUpgradeSystem.CanPurchase(m_Upgrade, m_Level);
         if (!m_Label) return;
         string priceOrStatus = bPurchased ? "Purchased" : PlayerUpgrades.GetUpgradeCost(m_Upgrade, m_Level).ToString();
-        m_Label.text = $"{PlayerUpgrades.GetDisplayName(m_Upgrade)}\n{priceOrStatus}";
+        m_Label.text = $"{PlayerUpgrades.GetDisplayName(m_Upgrade, m_Level)}\n({PlayerUpgrades.GetDescription(m_Upgrade)})\n{priceOrStatus}";
     }
 }
