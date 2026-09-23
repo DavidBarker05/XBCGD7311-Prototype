@@ -10,8 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 6954094118064012174}
   - component: {fileID: 4134245839434669046}
+  - component: {fileID: 3005713819237972253}
   m_Layer: 0
-  m_Name: SafeNPC
+  m_Name: SafeNPC 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -56,6 +57,18 @@ CapsuleCollider:
   m_Height: 1.9
   m_Direction: 1
   m_Center: {x: 0, y: 0.95, z: 0}
+--- !u!114 &3005713819237972253
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1078552472785752800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1ea71e8016bb984a89c43d83b4bf7a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NPC
 --- !u!1001 &1905556688117879454
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -112,6 +125,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -5184015388193081231, guid: 6409f43e6fa07d94eb723f1793098a2c, type: 3}
+      propertyPath: 'm_Materials.Array.data[2]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 944d761d0987870419110fa4d190b8ef, type: 2}
     - target: {fileID: 65702495048144492, guid: 6409f43e6fa07d94eb723f1793098a2c, type: 3}
       propertyPath: m_IsActive
       value: 0

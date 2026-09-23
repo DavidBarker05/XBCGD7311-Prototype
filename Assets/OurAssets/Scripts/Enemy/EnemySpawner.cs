@@ -17,6 +17,13 @@ public class EnemySpawner : MonoBehaviour
     private Coroutine spawnRoutine;
     private readonly List<ChasePlayer> spawnedEnemies = new List<ChasePlayer>();
 
+    FirstPersonPlayerCharacter playerObj;
+
+    void Start()
+    {
+        playerObj = FindAnyObjectByType<FirstPersonPlayerCharacter>();
+    }
+
     private void Update()
     {
         if (ChaseMinigameStarter.Instance.ChaseMinigameIsRunning)
@@ -77,14 +84,13 @@ public class EnemySpawner : MonoBehaviour
         spawnedEnemies.Add(enemy);
         if (enemy != null)
         {
-            GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
             if (playerObj != null)
             {
-                enemy.player = playerObj.transform;
+                enemy.Player = playerObj.transform;
             }
             else
             {
-                Debug.LogWarning("No GameObject tagged 'Player' found in scene!");
+                Debug.LogWarning("No 'FirstPersonPlayerCharacter' found in scene!");
             }
         }
         else

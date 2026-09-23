@@ -5,9 +5,9 @@ public class ChasePlayer : MonoBehaviour
 {
     private static readonly int RunningHash = Animator.StringToHash("Running");
 
-    public NavMeshAgent enemy;
     public Animator animator;
-    public Transform player;
+    public Transform Player { get; set; }
+    private NavMeshAgent enemy;
     private Vector3 startPosition;
     private Quaternion startRotation;
 
@@ -15,10 +15,6 @@ public class ChasePlayer : MonoBehaviour
     {
         startPosition = transform.position;
         startRotation = transform.rotation;
-    }
-
-    void Start()
-    {
         enemy = GetComponent<NavMeshAgent>();
     }
 
@@ -31,9 +27,9 @@ public class ChasePlayer : MonoBehaviour
             return;
         }
 
-        if (player != null && !enemy.pathPending && Vector3.Distance(transform.position, player.position) > enemy.stoppingDistance)
+        if (Player != null && !enemy.pathPending && Vector3.Distance(transform.position, Player.position) > enemy.stoppingDistance)
         {
-            enemy.SetDestination(player.position);
+            enemy.SetDestination(Player.position);
             animator.SetBool(RunningHash, true);
         }
     }
