@@ -764,9 +764,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3892981495617743736, guid: 415ce049364a12f48a13f89792cab666, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6306564990061653768}
-    - targetCorrespondingSourceObject: {fileID: 3892981495617743736, guid: 415ce049364a12f48a13f89792cab666, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 6080575420501857413}
   m_SourcePrefab: {fileID: 100100000, guid: 415ce049364a12f48a13f89792cab666, type: 3}
 --- !u!4 &4217517084819704429 stripped
 Transform:
@@ -844,39 +841,6 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -4315542600374322986, guid: 415ce049364a12f48a13f89792cab666, type: 3}
---- !u!114 &6080575420501857413
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7524562706166319034}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2397f510ff00b014eb1c71c844f70732, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::NPCHouse
-  m_PossibleNPCLocations: []
-  m_PossibleNPCs: []
-  m_MinTotalMinigames: 2
-  m_MaxWireMinigames: 2
-  m_MaxWallKnockMinigames: 2
-  m_MaxChaseMinigames: 1
-  m_PossibleWireMinigameLocations: []
-  m_PossiblePipeMinigameLocations: []
-  m_WireMinigameInteractablePrefab: {fileID: 0}
-  m_WallKnockInteractablePrefab: {fileID: 0}
-  m_Door: {fileID: 0}
-  m_ChaseInteract: {fileID: 0}
-  <HouseTeleportSpot>k__BackingField: {fileID: 0}
-  <OutsideTeleportSpot>k__BackingField: {fileID: 0}
-  m_HouseLights: []
-  m_TalkWaypointIcon: {fileID: 0}
-  m_TalkWaypointOffset: {x: 0, y: 1, z: 0}
-  m_TaskWaypointIcon: {fileID: 0}
-  m_TaskWaypointOffset: {x: 0, y: 0, z: 0}
-  m_ExitWaypointIcon: {fileID: 0}
-  m_ExitWaypointOffset: {x: 0, y: 0, z: 0}
 --- !u!1001 &7190485604919053243
 PrefabInstance:
   m_ObjectHideFlags: 0
