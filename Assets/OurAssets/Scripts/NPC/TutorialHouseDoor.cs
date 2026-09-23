@@ -11,6 +11,8 @@ public class TutorialHouseDoor : Interactable
     [SerializeField]
     Transform m_OutsideTeleportSpot;
 
+    public override bool CanInteractWith => DoorType == DoorType.Entry || m_TutorialHouse.CurrentStage == TutorialHouse.Stage.LeaveHousePending;
+
     public override InteractionStatus Interact(params object[] inputParameters)
     {
         if (inputParameters.Length != 1)

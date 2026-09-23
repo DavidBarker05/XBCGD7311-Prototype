@@ -36,6 +36,12 @@ public class ChaseMinigameInteract : Interactable, IHouseTaskInteractable
 		CanInteract = true;
 	}
 
+	bool CanStartChase => CanInteract && (OwningHouse == null || OwningHouse.Progress.HasTalkedToNPC)
+		&& m_QTEInteractableSpawns != null && m_QTEInteractableSpawns.Length > 0
+		&& (!m_HasBeenPlayed || m_CanBePlayedAgain) && !ChaseMinigameStarter.Instance.ChaseMinigameIsRunning;
+
+	public override bool CanInteractWith => CanStartChase;
+
 	public override InteractionStatus Interact(params object[] inputParameters)
 	{
 		if (inputParameters.Length != 0)
@@ -44,26 +50,23 @@ public class ChaseMinigameInteract : Interactable, IHouseTaskInteractable
 			Debug.LogWarning($"WARNING: ChaseMinigameInteract objects needs 0 input parameters. Received {inputParameters.Length} input parameters");
 #endif
 		}
-		else if (CanInteract && (OwningHouse == null || OwningHouse.Progress.HasTalkedToNPC) && m_QTEInteractableSpawns != null && m_QTEInteractableSpawns.Length > 0)
+		else if (CanStartChase)
 		{
-			if ((!m_HasBeenPlayed || m_CanBePlayedAgain) && !ChaseMinigameStarter.Instance.ChaseMinigameIsRunning)
-			{
 #if UNITY_EDITOR
-				if (!m_ChaseSpawn || !m_ReturnSpawn) Debug.LogWarning($"WARNING: {name} is missing its chase spawn and/or return spawn transform");
+			if (!m_ChaseSpawn || !m_ReturnSpawn) Debug.LogWarning($"WARNING: {name} is missing its chase spawn and/or return spawn transform");
 #endif
-				OwningHouse?.OnChaseTaskStarted(transform);
-				int numInteractablesToSpawn = Mathf.Clamp(m_NumQTEInteractablesToSpawn, 1, m_QTEInteractableSpawns.Length);
-				QTEInteractable[] qteInteractables = new QTEInteractable[numInteractablesToSpawn];
-				Transform[] shuffledSpawns = new Transform[m_QTEInteractableSpawns.Length];
-				m_QTEInteractableSpawns.CopyTo(shuffledSpawns, 0);
-				shuffledSpawns.Shuffle();
-				for (int i = 0; i < numInteractablesToSpawn; ++i)
-				{
-					qteInteractables[i] = Instantiate(m_QTEInteractablePrefab, shuffledSpawns[i].position, shuffledSpawns[i].rotation);
-				}
-				ChaseMinigameStarter.Instance.StartChaseMinigame(qteInteractables, m_ChaseSpawn, m_ReturnSpawn);
-				OnChaseStarted?.Invoke();
+			OwningHouse?.OnChaseTaskStarted(transform);
+			int numInteractablesToSpawn = Mathf.Clamp(m_NumQTEInteractablesToSpawn, 1, m_QTEInteractableSpawns.Length);
+			QTEInteractable[] qteInteractables = new QTEInteractable[numInteractablesToSpawn];
+			Transform[] shuffledSpawns = new Transform[m_QTEInteractableSpawns.Length];
+			m_QTEInteractableSpawns.CopyTo(shuffledSpawns, 0);
+			shuffledSpawns.Shuffle();
+			for (int i = 0; i < numInteractablesToSpawn; ++i)
+			{
+				qteInteractables[i] = Instantiate(m_QTEInteractablePrefab, shuffledSpawns[i].position, shuffledSpawns[i].rotation);
 			}
+			ChaseMinigameStarter.Instance.StartChaseMinigame(qteInteractables, m_ChaseSpawn, m_ReturnSpawn);
+			OnChaseStarted?.Invoke();
 			m_HasBeenPlayed = true;
 		}
 		return new InteractionStatus() { EndInteraction = true };

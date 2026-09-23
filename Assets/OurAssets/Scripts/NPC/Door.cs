@@ -19,6 +19,9 @@ public class Door : Interactable
         CanInteract = true;
     }
 
+    public override bool CanInteractWith => CanInteract && OwningHouse && OwningHouse.Progress != null
+        && (DoorType == DoorType.Entry ? !OwningHouse.Progress.HasBeatenHouse : OwningHouse.Progress.AllMinigamesBeaten);
+
     public override InteractionStatus Interact(params object[] inputParameters)
     {
         if (inputParameters.Length != 1)

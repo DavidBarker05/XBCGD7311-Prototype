@@ -9,6 +9,8 @@ public class WireMinigameInteractable : Interactable, IHouseTaskInteractable
 
 	public NPCHouse OwningHouse { get; set; }
 
+	public override bool CanInteractWith => (OwningHouse == null || OwningHouse.Progress.HasTalkedToNPC) && (!m_HasBeenPlayed || m_CanBePlayedAgain);
+
 	public override InteractionStatus Interact(params object[] inputParameters)
 	{
 		if (inputParameters.Length != 0)

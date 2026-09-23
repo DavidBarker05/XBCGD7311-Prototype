@@ -37,7 +37,16 @@ public class FirstPersonPlayerCharacterInteraction : PlayerInteraction
     {
         Sys.Assert(HasBeenInitialised, "FirstPersonPlayerCharacterInteraction hasn't been initialised");
         Sys.AssertType<FirstPersonPlayerCharacterInteractionUpdateData>(playerInteractionUpdateData, nameof(playerInteractionUpdateData));
-        if (m_CurrentInteraction == null) return;
+        Interactable lookedAtInteraction = CheckForInteraction();
+        if (lookedAtInteraction && lookedAtInteraction.CanInteractWith && lookedAtInteraction.InteractPromptTransform)
+        {
+            string keyLabel = GameUserSettingsManager.Instance?.GetBindingDisplayString("Player", "Interact") ?? "E";
+            string interactText;
+            if (lookedAtInteraction is TVInteractable && (!PlayerSaveManager.CurrentSaveData?.HasTVLicence ?? true)) interactText = $"Press {keyLabel} to purchase TV Licence";
+            else interactText = $"Press {keyLabel} to interact";
+            InteractPromptManager.Instance?.Show(lookedAtInteraction.InteractPromptTransform, interactText);
+        }
+        else InteractPromptManager.Instance?.Hide();
     }
 
     protected override Interactable CheckForInteraction()

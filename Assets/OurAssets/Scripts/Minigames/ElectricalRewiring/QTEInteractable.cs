@@ -11,6 +11,8 @@ public class QTEInteractable : Interactable
     public bool CanInteract { get; set; } = true;
     public UnityEvent OnCompleted;
 
+    public override bool CanInteractWith => CanInteract && !hasTriggered;
+
     public override InteractionStatus Interact(params object[] inputParameters)
     {
         if (!CanInteract)

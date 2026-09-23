@@ -90,6 +90,7 @@ public static class PlayerSaveManager
     static PlayerSaveData ConvertToSaveData(string json, int version) => version switch
     {
         0 => JsonUtility.FromJson<PlayerSaveDataV0>(json).ConvertToSaveData(),
+        1 => JsonUtility.FromJson<PlayerSaveDataV1>(json).ConvertToSaveData(),
         PlayerSaveData.CurrentVersionNumber => JsonUtility.FromJson<PlayerSaveData>(json),
         _ => UnknownVersionFallback(json, version)
     };
