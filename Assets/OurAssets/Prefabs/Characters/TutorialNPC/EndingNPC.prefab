@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5501656724261933821}
   - component: {fileID: 8198019013259286953}
   - component: {fileID: 653307290176862753}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: EndingNPC
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -74,10 +74,13 @@ MonoBehaviour:
   m_VisualsRoot: {fileID: 6472966491650353533}
   m_EndingDialogue: {fileID: 4900000, guid: 6a998a656927b394898c903d7dc5582f, type: 3}
   m_TalkWaypointIcon: {fileID: 0}
+  m_TalkWaypointOffset: {x: 0, y: 1, z: 0}
   m_CouchTransform: {fileID: 0}
   m_CouchWaypointIcon: {fileID: 0}
+  m_CouchWaypointOffset: {x: 0, y: 0, z: 0}
   m_DoorTransform: {fileID: 0}
   m_DoorWaypointIcon: {fileID: 0}
+  m_DoorWaypointOffset: {x: 0, y: 0, z: 0}
 --- !u!1 &7551081702622104147
 GameObject:
   m_ObjectHideFlags: 0
