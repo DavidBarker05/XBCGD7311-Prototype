@@ -21081,6 +21081,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8416257780568617516, guid: 4f39f3f1cebec3747a60bef7e6b6a487, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.054
+      objectReference: {fileID: 0}
+    - target: {fileID: 8416257780568617516, guid: 4f39f3f1cebec3747a60bef7e6b6a487, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.146
+      objectReference: {fileID: 0}
+    - target: {fileID: 8416257780568617516, guid: 4f39f3f1cebec3747a60bef7e6b6a487, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 5.904
+      objectReference: {fileID: 0}
     - target: {fileID: 8456348086637079580, guid: 4f39f3f1cebec3747a60bef7e6b6a487, type: 3}
       propertyPath: m_NumQTEInteractablesToSpawn
       value: 9
@@ -36035,6 +36047,18 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7280834665859480184, guid: ff883fd204bf29a40962a17b02e2ddbc, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.054
+      objectReference: {fileID: 0}
+    - target: {fileID: 7280834665859480184, guid: ff883fd204bf29a40962a17b02e2ddbc, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.105
+      objectReference: {fileID: 0}
+    - target: {fileID: 7280834665859480184, guid: ff883fd204bf29a40962a17b02e2ddbc, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 5.429
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -38226,6 +38250,10 @@ PrefabInstance:
     - target: {fileID: 7770395958804826432, guid: 4f39f3f1cebec3747a60bef7e6b6a487, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8416257780568617516, guid: 4f39f3f1cebec3747a60bef7e6b6a487, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.167
       objectReference: {fileID: 0}
     - target: {fileID: 8456348086637079580, guid: 4f39f3f1cebec3747a60bef7e6b6a487, type: 3}
       propertyPath: m_NumQTEInteractablesToSpawn
@@ -57277,6 +57305,10 @@ PrefabInstance:
     - target: {fileID: 4465980746342045763, guid: ff883fd204bf29a40962a17b02e2ddbc, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7280834665859480184, guid: ff883fd204bf29a40962a17b02e2ddbc, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.163
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -139301,6 +139333,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7280834665859480184, guid: ff883fd204bf29a40962a17b02e2ddbc, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.164
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -155588,6 +155624,10 @@ PrefabInstance:
     - target: {fileID: 4465980746342045763, guid: ff883fd204bf29a40962a17b02e2ddbc, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7280834665859480184, guid: ff883fd204bf29a40962a17b02e2ddbc, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.1679
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -190441,6 +190481,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8416257780568617516, guid: 4f39f3f1cebec3747a60bef7e6b6a487, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.164
+      objectReference: {fileID: 0}
     - target: {fileID: 8456348086637079580, guid: 4f39f3f1cebec3747a60bef7e6b6a487, type: 3}
       propertyPath: m_NumQTEInteractablesToSpawn
       value: 8
@@ -208415,6 +208459,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8416257780568617516, guid: 4f39f3f1cebec3747a60bef7e6b6a487, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.054
+      objectReference: {fileID: 0}
+    - target: {fileID: 8416257780568617516, guid: 4f39f3f1cebec3747a60bef7e6b6a487, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.16
+      objectReference: {fileID: 0}
+    - target: {fileID: 8416257780568617516, guid: 4f39f3f1cebec3747a60bef7e6b6a487, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 5.706
+      objectReference: {fileID: 0}
     - target: {fileID: 8456348086637079580, guid: 4f39f3f1cebec3747a60bef7e6b6a487, type: 3}
       propertyPath: m_NumQTEInteractablesToSpawn
       value: 9
@@ -219639,7 +219695,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7770395958804826432, guid: 4f39f3f1cebec3747a60bef7e6b6a487, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 129.38553
+      value: 130.35
       objectReference: {fileID: 0}
     - target: {fileID: 7770395958804826432, guid: 4f39f3f1cebec3747a60bef7e6b6a487, type: 3}
       propertyPath: m_LocalRotation.w
@@ -219668,6 +219724,18 @@ PrefabInstance:
     - target: {fileID: 7770395958804826432, guid: 4f39f3f1cebec3747a60bef7e6b6a487, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8416257780568617516, guid: 4f39f3f1cebec3747a60bef7e6b6a487, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 8416257780568617516, guid: 4f39f3f1cebec3747a60bef7e6b6a487, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.178
+      objectReference: {fileID: 0}
+    - target: {fileID: 8416257780568617516, guid: 4f39f3f1cebec3747a60bef7e6b6a487, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 5.97
       objectReference: {fileID: 0}
     - target: {fileID: 8456348086637079580, guid: 4f39f3f1cebec3747a60bef7e6b6a487, type: 3}
       propertyPath: m_NumQTEInteractablesToSpawn
