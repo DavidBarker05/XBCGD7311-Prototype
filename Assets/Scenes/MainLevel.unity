@@ -78777,7 +78777,7 @@ MonoBehaviour:
   - {fileID: 1935701936}
   - {fileID: 640653088}
   - {fileID: 273673260}
-  spawnInterval: 60
+  spawnInterval: 30
   maxDuration: 540
   maxEnemies: 10
 --- !u!1 &722600089

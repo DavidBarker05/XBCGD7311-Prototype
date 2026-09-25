@@ -8,7 +8,7 @@ public class EnemySpawner : MonoBehaviour
     public ChasePlayer[] enemyPrefabs;
     public Transform[] spawnPoints; // assign 3 in the Inspector
 
-    public float spawnInterval = 60f;   // 1 minute
+    public float spawnInterval = 30f;   // 30 seconds
     public float maxDuration = 540f;    // 9 minutes
     public int maxEnemies = 10;
 

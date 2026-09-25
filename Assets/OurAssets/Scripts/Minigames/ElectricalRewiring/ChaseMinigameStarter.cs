@@ -89,6 +89,7 @@ public class ChaseMinigameStarter : MonoBehaviour
 		m_CheckpointManager?.ClearChaseTask();
 		foreach (QTEInteractable qte in m_QTEInteractables) if (qte) Destroy(qte.gameObject);
 		m_QTEInteractables = null;
+		m_EnemySpawner?.ResetSpawner();
 	}
 
 	void AwardMoney()
