@@ -53,7 +53,7 @@ MonoBehaviour:
     SongName: Castle Theme
   - MusicClip: {fileID: 8300000, guid: 7323651cab71d52429589c6d832e41c9, type: 3}
     ArtistName: JHawk
-    SongName: Islands In TheSky
+    SongName: Islands In The Sky
   - MusicClip: {fileID: 8300000, guid: a38f3b8c32b89304fa9102bf67358e91, type: 3}
     ArtistName: JHawk
     SongName: Mow That Lawn
