@@ -74,11 +74,13 @@ public class NPCHouseDailyManager : MonoBehaviour
             if (house.Progress == null || house.Progress.IsPlayerInside || house.Progress.AllMinigamesBeaten || !house.EntryPoint) continue;
             WaypointManager.Instance?.AddWaypoint(house.EntryPoint, m_HouseWaypointIcon, m_HouseWaypointOffset);
         }
+        if (m_DailyDisplayTask != null) TaskList.Instance?.AddTask(m_DailyDisplayTask);
     }
 
     public void HideAllHouseMarkers()
     {
         foreach (NPCHouse house in m_LoadedHouses) if (house.EntryPoint) WaypointManager.Instance?.RemoveWaypoint(house.EntryPoint);
+        if (m_DailyDisplayTask != null) TaskList.Instance?.RemoveTask(m_DailyDisplayTask);
     }
     #endregion House Markers
 }

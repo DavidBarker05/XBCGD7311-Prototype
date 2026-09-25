@@ -99,9 +99,9 @@ public class TaskList : MonoBehaviour
     bool IncrementAmountDoneForTaskInternal(DisplayTask displayTask)
     {
         if (displayTask == null) return false;
+        ++displayTask.AmountDone;
         int index = m_TasksToDisplay.IndexOf(displayTask);
         if (index == -1) return false;
-        ++displayTask.AmountDone;
         if (displayTask.AmountDone == displayTask.AmountNeeded && !displayTask.StrikeThroughOnCompletion)
             m_TasksToDisplay.RemoveAt(index);
         return true;
