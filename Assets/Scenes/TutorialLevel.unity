@@ -21681,7 +21681,7 @@ Transform:
   m_GameObject: {fileID: 741316663}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.8818801, z: 0, w: 0.47147375}
-  m_LocalPosition: {x: -131.46, y: 0.53999996, z: -86.9}
+  m_LocalPosition: {x: -131.46, y: 0.5273, z: -86.9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -25092,7 +25092,7 @@ Transform:
   m_GameObject: {fileID: 882234205}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: -76.39205, y: 0.4999988, z: -76.32848}
+  m_LocalPosition: {x: -76.39205, y: 0.25, z: -75.602}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -45830,7 +45830,7 @@ Transform:
   m_GameObject: {fileID: 1670865055}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.35233167, z: -0, w: 0.93587524}
-  m_LocalPosition: {x: -12.556296, y: 0.5000007, z: -89.03925}
+  m_LocalPosition: {x: -12.556296, y: 0.25, z: -89.03925}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -60576,10 +60576,6 @@ PrefabInstance:
       propertyPath: m_OwnDoor
       value: 
       objectReference: {fileID: 1375064555}
-    - target: {fileID: 4821656235476995719, guid: 565140633733a7e42ada1b0ea67e9050, type: 3}
-      propertyPath: m_CouchWaypointOffset.y
-      value: 0.5
-      objectReference: {fileID: 0}
     - target: {fileID: 6242342656417394948, guid: 565140633733a7e42ada1b0ea67e9050, type: 3}
       propertyPath: m_NumQTEInteractablesToSpawn
       value: 3

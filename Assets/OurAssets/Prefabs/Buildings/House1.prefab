@@ -476,7 +476,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ChaseMinigameInteract
   <InteractPromptTransform>k__BackingField: {fileID: 7624434034588151849}
   m_CanBePlayedAgain: 0
-  m_QTEInteractablePrefab: {fileID: 3119160951733337559, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
+  m_QTEInteractablePrefab: {fileID: 2650298958595005408, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
   m_QTEInteractableSpawns: []
   m_NumQTEInteractablesToSpawn: 0
   m_ChaseSpawn: {fileID: 7280834665859480184}

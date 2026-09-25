@@ -293,6 +293,7 @@ MonoBehaviour:
   m_Player: {fileID: 0}
   m_FirstPersonPlayerCharacter: {fileID: 0}
   m_PipePlayerCharacter: {fileID: 0}
+  m_HUD: {fileID: 0}
   m_MinMoneyReward: 40
   m_MaxMoneyReward: 80
 --- !u!1 &324972741

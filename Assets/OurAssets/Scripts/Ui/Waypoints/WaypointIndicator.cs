@@ -11,14 +11,17 @@ public class WaypointIndicator : MonoBehaviour
     Transform m_Target;
     Camera m_Camera;
 
-    void Awake()
+    void Awake() => EnsureComponentsFetched();
+
+    void EnsureComponentsFetched()
     {
-        m_RectTransform = GetComponent<RectTransform>();
-        m_Image = GetComponent<Image>();
+        if (!m_RectTransform) m_RectTransform = GetComponent<RectTransform>();
+        if (!m_Image) m_Image = GetComponent<Image>();
     }
 
     public void Init(Transform target, Camera trackingCamera, Sprite icon, Vector3 worldOffset)
     {
+        EnsureComponentsFetched();
         m_Target = target;
         m_Camera = trackingCamera;
         if (icon) m_Image.sprite = icon;
