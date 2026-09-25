@@ -1010,14 +1010,16 @@ MonoBehaviour:
   m_UnscaledTransform: {fileID: 7135223587995993542}
   m_Player: {fileID: 0}
   m_FirstPersonPlayerCharacter: {fileID: 0}
+  m_WirePlayerCharacter: {fileID: 0}
+  m_HUD: {fileID: 0}
   m_TimeActiveAfterCompleted: 0.3
-  m_FailsToLoseColour: 3
+  <FailsToLoseColour>k__BackingField: 3
   m_MinWires: 6
   m_WireMaterial: {fileID: 2100000, guid: e334f31605e2440448ab91d03a805d78, type: 2}
   m_MinMoneyReward: 40
   m_MaxMoneyReward: 80
-  m_FastCompletionTime: 20
-  m_SlowCompletionTime: 60
+  m_FastCompletionTime: 15
+  m_SlowCompletionTime: 30
   m_GrabTolerance: 0.075
   m_ReleaseTolerance: 0.075
   m_IgnoreDepthAxis: 1
@@ -1056,6 +1058,9 @@ MonoBehaviour:
   - {fileID: 1696343776071571945}
   - {fileID: 4605476657758407200}
   - {fileID: 6579461641674840342}
+  m_InstructionsScreen: {fileID: 0}
+  m_ColourblindInstructionsScreen: {fileID: 0}
+  m_MenuCharacter: {fileID: 0}
 --- !u!1 &4142355889832348622
 GameObject:
   m_ObjectHideFlags: 0

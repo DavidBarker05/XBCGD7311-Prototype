@@ -79,6 +79,12 @@ public class NPCHouseDailyManager : MonoBehaviour
         return true;
     }
 
+    public bool IsPlayerInsideAnyHouse()
+    {
+        foreach (NPCHouse house in m_LoadedHouses) if (house.Progress != null && house.Progress.IsPlayerInside) return true;
+        return false;
+    }
+
     #region Leave House
     void ShowLeaveHouseMarker()
     {

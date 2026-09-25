@@ -78818,9 +78818,9 @@ MonoBehaviour:
   - {fileID: 1401828871543590687}
   - {fileID: 1401828869653443949}
   - {fileID: 1401828869711083060}
-  spawnInterval: 30
+  spawnInterval: 15
   maxDuration: 540
-  maxEnemies: 10
+  maxEnemies: 15
   m_ChunkSize: 30
   m_MinChunkDistanceFromPlayer: 2
 --- !u!1 &722600089

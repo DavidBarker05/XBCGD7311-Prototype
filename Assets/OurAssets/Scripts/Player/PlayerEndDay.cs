@@ -29,7 +29,8 @@ public class PlayerEndDay : Interactable
     bool CanUseCouch =>
         (EndingNPC.Instance && EndingNPC.Instance.IsChoiceActive) ||
         (TutorialMinigameManager.Instance ? TutorialFlow.Instance && TutorialFlow.Instance.IsReadyForBed
-            : NPCHouseDailyManager.Instance && NPCHouseDailyManager.Instance.AllMinigamesBeatenForToday());
+            : NPCHouseDailyManager.Instance && NPCHouseDailyManager.Instance.AllMinigamesBeatenForToday()
+                && !NPCHouseDailyManager.Instance.IsPlayerInsideAnyHouse());
 
     public override bool CanInteractWith => CanUseCouch;
 

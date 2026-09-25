@@ -292,17 +292,10 @@ public class NPCHouse : MonoBehaviour
         }
     }
 
-    void ShowRemainingTaskMarkers()
-    {
-        foreach (Transform target in m_TaskEntries.Values)
-        {
-            if (target) WaypointManager.Instance?.AddWaypoint(target, m_TaskWaypointIcon, m_TaskWaypointOffset);
-        }
-    }
-
     void HideAllTaskMarkers()
     {
         foreach (Transform target in m_TaskEntries.Values) if (target) WaypointManager.Instance?.RemoveWaypoint(target);
+        foreach (DisplayTask task in m_DisplayTaskEntries.Values) TaskList.Instance?.RemoveTask(task);
     }
 
     public void HideTaskMarker(int slotIndex)
@@ -383,7 +376,7 @@ public class NPCHouse : MonoBehaviour
         if (type == MinigameType.ChaseMinigame)
         {
             ShowInteriorDoorForCurrentProgress();
-            ShowRemainingTaskMarkers();
+            RevealTaskEntries();
         }
         RefreshExitDoorMarker();
     }

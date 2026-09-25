@@ -114,8 +114,9 @@ MonoBehaviour:
   m_UnscaledTransform: {fileID: 5304736747382252985}
   m_PipePlaceMinigameGenerator: {fileID: 0}
   m_WallKnockPlayerCharacter: {fileID: 0}
+  m_HUD: {fileID: 0}
   m_HolePrefab: {fileID: 4869659471843458809, guid: 508b793c3d8ac92438c1a5f7dc9e603a, type: 3}
-  m_MaxTries: 3
+  <MaxTries>k__BackingField: 3
   m_PipeSpawnLowerBound: {x: -9.5, y: 0, z: -5.5}
   m_PipeSpawnUpperBound: {x: 9.5, y: 0, z: 5.5}
   m_BreakTolerance: 1
@@ -153,11 +154,14 @@ MonoBehaviour:
   m_FurthestIntensity:
     <Distance>k__BackingField: 5
     <NumberOfCircles>k__BackingField: 5
-  m_FastCompletionTime: 30
-  m_SlowCompletionTime: 90
+  m_FastCompletionTime: 15
+  m_SlowCompletionTime: 45
   m_InstructionsScreen: {fileID: 0}
   m_MenuCharacter: {fileID: 0}
   m_RetriesToShowTutorial: 3
+  OnWallEnd:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1001 &836016625164717129
 PrefabInstance:
   m_ObjectHideFlags: 0
