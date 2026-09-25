@@ -14,6 +14,8 @@ public class PlayerEndDay : Interactable
     [Header("Waypoint")]
     [SerializeField]
     Sprite m_EndDayWaypointIcon;
+    [SerializeField]
+    Vector3 m_EndDayWaypointOffset = Vector3.zero;
 
     [Header("Tutorial")]
     [SerializeField]
@@ -26,7 +28,7 @@ public class PlayerEndDay : Interactable
 
     bool CanUseCouch =>
         (EndingNPC.Instance && EndingNPC.Instance.IsChoiceActive) ||
-        (TutorialMinigameManager.Instance ? TutorialMinigameManager.Instance.AllMinigamesBeaten
+        (TutorialMinigameManager.Instance ? TutorialFlow.Instance && TutorialFlow.Instance.IsReadyForBed
             : NPCHouseDailyManager.Instance && NPCHouseDailyManager.Instance.AllMinigamesBeatenForToday());
 
     public override bool CanInteractWith => CanUseCouch;
@@ -38,7 +40,7 @@ public class PlayerEndDay : Interactable
         m_bMarkerShown = bShouldShow;
         if (bShouldShow)
         {
-            WaypointManager.Instance?.AddWaypoint(transform, m_EndDayWaypointIcon);
+            WaypointManager.Instance?.AddWaypoint(transform, m_EndDayWaypointIcon, m_EndDayWaypointOffset);
             TaskList.Instance?.AddTask(m_EndDayDisplayTask);
         }
         else
@@ -68,10 +70,10 @@ public class PlayerEndDay : Interactable
 
     void FinishTutorial()
     {
-        if (!TutorialMinigameManager.Instance.AllMinigamesBeaten)
+        if (!TutorialFlow.Instance || !TutorialFlow.Instance.IsReadyForBed)
         {
 #if UNITY_EDITOR
-            Debug.Log("Can't finish the tutorial until every minigame has been beaten");
+            Debug.Log("Can't finish the tutorial until Themba's TV licence upgrade has been shown");
 #endif
             return;
         }

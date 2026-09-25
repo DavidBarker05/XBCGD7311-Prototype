@@ -2,6 +2,10 @@ using UnityEngine;
 
 public class TutorialFlow : MonoBehaviour
 {
+    public static TutorialFlow Instance { get; private set; }
+
+    public bool IsReadyForBed { get; private set; }
+
     [Header("Own Door")]
     [SerializeField]
     PlayerHouseDoor m_OwnDoor;
@@ -26,18 +30,15 @@ public class TutorialFlow : MonoBehaviour
     [SerializeField]
     Vector3 m_TVWaypointOffset = Vector3.zero;
 
-    [Header("Couch")]
-    [SerializeField]
-    PlayerEndDay m_Couch;
-    [SerializeField]
-    Sprite m_CouchWaypointIcon;
-    [SerializeField]
-    Vector3 m_CouchWaypointOffset = Vector3.zero;
-
     readonly DisplayTask m_OwnDoorTask = new DisplayTask("Go say hello to your neighbour", 1, 0, false);
     readonly DisplayTask m_ThembaDoorTask = new DisplayTask("Head to your neighbour's house", 1, 0, false);
     readonly DisplayTask m_TVTask = new DisplayTask("Check out the TV licence upgrade", 1, 0, false);
-    readonly DisplayTask m_CouchTask = new DisplayTask("Get some rest", 1, 0, false);
+
+    void Awake()
+    {
+        if (Instance && Instance != this) Destroy(gameObject);
+        else Instance = this;
+    }
 
     void Start() => ShowOwnDoorMarker();
 
@@ -79,13 +80,6 @@ public class TutorialFlow : MonoBehaviour
     {
         if (m_TV) WaypointManager.Instance?.RemoveWaypoint(m_TV.transform);
         TaskList.Instance?.RemoveTask(m_TVTask);
-        ShowCouchMarker();
-    }
-
-    void ShowCouchMarker()
-    {
-        if (!m_Couch) return;
-        WaypointManager.Instance?.AddWaypoint(m_Couch.transform, m_CouchWaypointIcon, m_CouchWaypointOffset);
-        TaskList.Instance?.AddTask(m_CouchTask);
+        IsReadyForBed = true;
     }
 }

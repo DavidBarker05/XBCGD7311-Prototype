@@ -11,6 +11,8 @@ public class TVInteractable : Interactable
     FirstPersonPlayerCharacter m_FirstPersonPlayerCharacter;
     [SerializeField]
     GameObject m_HUD;
+    [SerializeField]
+    TutorialHouse m_TutorialHouse;
 
     public UnityEvent OnScreenClosed;
 
@@ -22,7 +24,15 @@ public class TVInteractable : Interactable
             Debug.LogWarning($"WARNING: TutorialTVInteractable objects needs 0 input parameters. Received {inputParameters.Length} input parameters");
 #endif
         }
-        else m_MenuCharacter.OnMenuOpen(m_FirstPersonPlayerCharacter, m_HUD, m_UpgradeScreen);
+        else
+        {
+            if (!PlayerSaveManager.CurrentSaveData.HasTVLicence)
+            {
+                if (m_TutorialHouse) CurrencyManager.Instance?.LoseMoney(m_TutorialHouse.MoneyReward);
+                PlayerSaveManager.CurrentSaveData.HasTVLicence = true;
+            }
+            m_MenuCharacter.OnMenuOpen(m_FirstPersonPlayerCharacter, m_HUD, m_UpgradeScreen);
+        }
         return new InteractionStatus() { EndInteraction = true };
     }
 

@@ -38179,6 +38179,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 70100332}
     - target: {fileID: 3938153586453254402, guid: 2f3777bf0a1f7504ea7dd825f9ef30f8, type: 3}
+      propertyPath: m_TutorialHouse
+      value: 
+      objectReference: {fileID: 363574865913430694}
+    - target: {fileID: 3938153586453254402, guid: 2f3777bf0a1f7504ea7dd825f9ef30f8, type: 3}
       propertyPath: m_UpgradeScreen
       value: 
       objectReference: {fileID: 293899172}
@@ -60652,6 +60656,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc633cc233dc2d743a6c9c4fcee95c2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TutorialFlow
+--- !u!114 &363574865913430694 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7068643120333984700, guid: 565140633733a7e42ada1b0ea67e9050, type: 3}
+  m_PrefabInstance: {fileID: 363574865913430691}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eff2db0f6fd646842a78202746d038af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TutorialHouse
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

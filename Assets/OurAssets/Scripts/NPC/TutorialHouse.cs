@@ -53,8 +53,8 @@ public class TutorialHouse : MonoBehaviour
     Vector3 m_DisconnectWaypointOffset = Vector3.zero;
 
     [Header("Reward")]
-    [SerializeField, Min(0)]
-    int m_MoneyReward = 50;
+    [field: SerializeField, Min(0)]
+    public int MoneyReward { get; private set; } = 50;
 
     [Header("Leave House")]
     [SerializeField]
@@ -71,7 +71,7 @@ public class TutorialHouse : MonoBehaviour
     readonly DisplayTask m_ElectricalDisplayTask = new DisplayTask("Fix the electrical box", 1, 0, false);
     readonly DisplayTask m_PipeDisplayTask = new DisplayTask("Fix the leaking pipe", 1, 0, false);
     readonly DisplayTask m_DisconnectDisplayTask = new DisplayTask("Disconnect the illegal wiring", 1, 0, false);
-    readonly DisplayTask m_LeaveHouseDisplayTask = new DisplayTask("Head outside to start helping others", 1, 0, false);
+    readonly DisplayTask m_LeaveHouseDisplayTask = new DisplayTask("Head outside to go back home", 1, 0, false);
 
     void Awake()
     {
@@ -203,7 +203,7 @@ public class TutorialHouse : MonoBehaviour
     {
         CurrentStage = Stage.LeaveHousePending;
         HideTalkWaypoint();
-        CurrencyManager.Instance?.ReceiveMoney(m_MoneyReward);
+        CurrencyManager.Instance?.ReceiveMoney(MoneyReward);
         if (m_TutorialHouseDoor) WaypointManager.Instance?.AddWaypoint(m_TutorialHouseDoor.transform, m_LeaveHouseWaypointIcon, m_LeaveHouseWaypointOffset);
         TaskList.Instance?.AddTask(m_LeaveHouseDisplayTask);
     }
@@ -216,6 +216,7 @@ public class TutorialHouse : MonoBehaviour
         CurrentStage = Stage.Complete;
         if (m_TutorialHouseDoor) WaypointManager.Instance?.RemoveWaypoint(m_TutorialHouseDoor.transform);
         TaskList.Instance?.RemoveTask(m_LeaveHouseDisplayTask);
+        OnTutorialComplete?.Invoke();
     }
     #endregion Leave House
 }
