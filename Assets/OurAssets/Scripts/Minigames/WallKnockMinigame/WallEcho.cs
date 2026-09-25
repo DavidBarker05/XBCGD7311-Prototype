@@ -8,6 +8,7 @@ public class WallEcho : MonoBehaviour
 	[SerializeField, Min(1f)]
 	float m_MaxGrowSize = 10f;
 
+	Wall m_Wall;
 	Renderer m_Renderer;
 	MaterialPropertyBlock m_MaterialProperyBlock;
 
@@ -22,6 +23,11 @@ public class WallEcho : MonoBehaviour
 		m_bDoUpdate = false;
 	}
 
+	void OnDestroy()
+	{
+		if (m_Wall) m_Wall.OnWallEnd.RemoveListener(DoDestroy);
+	}
+
 	void Update()
 	{
 		if (!m_bDoUpdate) return;
@@ -31,12 +37,16 @@ public class WallEcho : MonoBehaviour
 		if (m_CurrentSize >= m_MaxGrowSize) Destroy(gameObject);
 	}
 
-	public void StartEcho(int numCircles)
+	public void StartEcho(Wall wall, int numCircles)
 	{
 		m_bDoUpdate = true;
+		m_Wall = wall;
+		wall.OnWallEnd.AddListener(DoDestroy);
 		m_CurrentSize = m_Renderer.sharedMaterial.GetFloat("_SquareSize");
 		m_MaterialProperyBlock.SetFloat("_SquareSize", m_CurrentSize);
 		m_MaterialProperyBlock.SetInteger("_NumCircles", numCircles);
 		m_Renderer.SetPropertyBlock(m_MaterialProperyBlock);
 	}
+
+	void DoDestroy() => Destroy(gameObject);
 }

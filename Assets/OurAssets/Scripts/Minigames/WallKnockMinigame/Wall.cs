@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using Util.SystemUtils;
 
 [System.Serializable]
@@ -58,6 +59,8 @@ public class Wall : MonoBehaviour
 	MenuCharacter m_MenuCharacter;
 	[SerializeField, Min(1)]
 	int m_RetriesToShowTutorial = 3;
+
+	public UnityEvent OnWallEnd;
 
 	bool m_bAlreadyPlaying;
 	float m_TimeTaken;
@@ -172,6 +175,7 @@ public class Wall : MonoBehaviour
 	void EndWallKnockMinigame(bool bWon)
 	{
 		m_bAlreadyPlaying = false;
+		OnWallEnd?.Invoke();
 		if (bWon)
 		{
 			ClearHoles();
@@ -239,10 +243,9 @@ public class Wall : MonoBehaviour
 
 	void CreateEcho(Vector3 position, int numCircles)
 	{
-		// Doesn't get deleted when minigame disappears
-		// Not sure how to fix yet, will figure out once I fix the animations
-		GameObject go = Instantiate(m_WallEchoPrefab.gameObject, m_UnscaledTransform);
-		go.transform.position = position + transform.up * 0.01f;
-		go.GetComponent<WallEcho>().StartEcho(numCircles);
+		// Don't parent to transform because then doesn't destroy when wall disappears
+		WallEcho echo = Instantiate(m_WallEchoPrefab);
+		echo.transform.SetPositionAndRotation(position + transform.up * 0.01f, m_UnscaledTransform.rotation);
+		echo.StartEcho(this, numCircles);
 	}
 }
