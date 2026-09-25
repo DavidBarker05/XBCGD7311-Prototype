@@ -54,7 +54,12 @@ public static class HouseProgressTracker
         Mathf.Round(housePosition.y * PositionKeyPrecision) / PositionKeyPrecision,
         Mathf.Round(housePosition.z * PositionKeyPrecision) / PositionKeyPrecision);
 
-    public static void ClearAll() => s_Houses.Clear();
+    public static void ClearAll()
+    {
+        s_Houses.Clear();
+        s_ActiveHousePosition = null;
+        s_ActiveTaskSlotIndex = null;
+    }
 
     public static HouseProgress GetOrRegisterHouse(Vector3 housePosition, Func<MinigameType[]> generatePlan)
     {

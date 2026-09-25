@@ -15,6 +15,7 @@ public class LoadMenuButton : MonoBehaviour
         // Don't let a person just load a tutorial then go back to main menu to get a set seed
         if (PlayerSaveManager.CurrentSaveData.DayNumber == 0)
             Random.InitState(PlayerSaveManager.CurrentSaveData.DaySeed);
+        HouseProgressTracker.ClearAll();
         m_LoadingScreen.SceneIndexToLoad = m_MainMenuSceneIndex;
         m_LoadingScreen.gameObject.SetActive(true);
     });
