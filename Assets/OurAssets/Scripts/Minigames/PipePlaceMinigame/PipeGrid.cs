@@ -134,7 +134,8 @@ public class PipeGrid : MonoBehaviour
             Sys.Assert(pipeCell, $"({pipeDatas[i].CellPosition}) was not a valid index");
             ResolvedStartEndPipe startEndPipe = new ResolvedStartEndPipe() { PipeCell = pipeCell, ArrayIndex = pipeDatas[i].CellPosition, EntranceExitSide = pipeDatas[i].EntranceExitSide };
             startEndPipes[i] = startEndPipe;
-            Vector3Int outsidePosCP = ArrayIndex2DToCellPosition(pipeDatas[i].CellPosition.x, pipeDatas[i].CellPosition.y) + startEndPipe.HoleSideToOutsidePipePos;
+            Vector3Int innerCP = ArrayIndex2DToCellPosition(pipeDatas[i].CellPosition.x, pipeDatas[i].CellPosition.y);
+            Vector3Int outsidePosCP = innerCP + startEndPipe.HoleSideToOutsidePipePos;
             outsidePipes[i].transform.position = m_Grid.CellToWorld(outsidePosCP);
             outsidePipes[i].CurrentPipeAngle = startEndPipe.HoleSideToOutsidePipeAngle;
         }

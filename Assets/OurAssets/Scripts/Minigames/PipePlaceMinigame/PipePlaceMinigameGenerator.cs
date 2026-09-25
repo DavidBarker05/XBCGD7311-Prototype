@@ -29,6 +29,7 @@ public class PipePlaceMinigameGenerator : MonoBehaviour
 		m_Player.ChangeCharacter(m_PipePlayerCharacter);
 		bool bUseProcedural = m_PreGeneratedPuzzles.Count == 0 || Random.value < m_ProceduralPuzzleChance;
 		PipeGridData gridData = bUseProcedural ? GenerateProceduralPuzzle() : LoadPreGeneratedPuzzle();
+		m_PipePlayerCharacter.ClearPipeQuantities();
 		foreach (PipeData pipe in gridData.Pipes)
 		{
 			m_PipePlayerCharacter.SetPipeQuantity(pipe.PipeType, pipe.PipeQuantity);

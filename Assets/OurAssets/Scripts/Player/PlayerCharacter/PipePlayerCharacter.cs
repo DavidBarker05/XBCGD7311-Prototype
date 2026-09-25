@@ -44,7 +44,7 @@ public class PipePlayerCharacter : PlayerCharacter
     GameObject m_CellIndicator;
     Dictionary<PipeSO, uint> m_PipeQuantities = new Dictionary<PipeSO, uint>();
 
-    void OnValidate() => CleanupPlaceablePipes(); // Can't fully clean in OnValidate because unity's + adds duplicate of last item
+    void OnValidate() => CleanupPlaceablePipes();
 
     void OnEnable() => FullyCleanPlaceablePipes();
 
@@ -96,6 +96,7 @@ public class PipePlayerCharacter : PlayerCharacter
     public void CreateCellIndicator()
     {
         if (!m_CellIndicator) m_CellIndicator = Instantiate(m_CellIndicatorPrefab);
+        m_CellIndicator.SetActive(false);
     }
 
     public void DeleteCellIndicator()
@@ -132,7 +133,7 @@ public class PipePlayerCharacter : PlayerCharacter
 
     public void ClearPipeQuantities()
     {
-        foreach (PipeSO pipe in m_PipeQuantities.Keys)
+        foreach (PipeSO pipe in new List<PipeSO>(m_PipeQuantities.Keys))
             m_PipeQuantities[pipe] = 0;
     }
 
@@ -187,5 +188,6 @@ public class PipePlayerCharacter : PlayerCharacter
     {
         Vector3 worldPosition = grid.CellToWorld(cellPosition);
         m_CellIndicator.transform.SetPositionAndRotation(worldPosition, hitInfo.collider.gameObject.transform.rotation);
+        if (!m_CellIndicator.activeSelf) m_CellIndicator.SetActive(true);
     }
 }
