@@ -27,6 +27,8 @@ public class NPCHouseDailyManager : MonoBehaviour
 
     readonly List<NPCHouse> m_LoadedHouses = new List<NPCHouse>();
 
+    bool m_bDayActive;
+
     DisplayTask m_DailyDisplayTask;
     DisplayTask m_LeaveHouseDisplayTask;
 
@@ -51,6 +53,7 @@ public class NPCHouseDailyManager : MonoBehaviour
         }
         for (int i = houseCount; i < shuffledHouses.Length; ++i) shuffledHouses[i].MarkNotNeededToday();
 
+        m_bDayActive = true;
         m_DailyDisplayTask = new DisplayTask("Help out the neighbourhood", m_LoadedHouses.Count, 0, strikeThroughOnCompletion: false);
         bool bIsEndingDay = EndingNPC.Instance && EndingNPC.Instance.IsEndingDay;
         if (houseWithPlayer != null) OnPlayerLeftOwnHouse();
@@ -66,6 +69,7 @@ public class NPCHouseDailyManager : MonoBehaviour
         if (m_DailyDisplayTask != null) { TaskList.Instance?.RemoveTask(m_DailyDisplayTask); m_DailyDisplayTask = null; }
         HideLeaveHouseMarker();
         m_LeaveHouseDisplayTask = null;
+        m_bDayActive = false;
     }
 
     public void ReportHouseCompleted()
@@ -75,6 +79,7 @@ public class NPCHouseDailyManager : MonoBehaviour
 
     public bool AllMinigamesBeatenForToday()
     {
+        if (!m_bDayActive) return false;
         foreach (NPCHouse house in m_LoadedHouses) if (!house.Progress.AllMinigamesBeaten) return false;
         return true;
     }
