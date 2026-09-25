@@ -106,12 +106,12 @@ public class PointerController : MonoBehaviour
         qtePlayer = null;
         if (RectTransformUtility.RectangleContainsScreenPoint(safeZone, pointerTransform.position, null))
         {
-            Debug.Log("Success!");
+            //Debug.Log("Success!");
             QTEManager.Instance.Success();
         }
         else
         {
-            Debug.Log("Failure!");
+            //Debug.Log("Failure!");
             QTEManager.Instance.Falilure();
         }
     }

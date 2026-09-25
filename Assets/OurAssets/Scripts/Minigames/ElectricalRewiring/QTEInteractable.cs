@@ -50,7 +50,7 @@ public class QTEInteractable : Interactable
 
     public void OnQTESuccess()
     {
-        Debug.Log("SUCCESS - Objective completed");
+        //Debug.Log("SUCCESS - Objective completed");
         player.ChangeCharacter(lastPlayer);
         player = null;
         lastPlayer = null;
@@ -61,7 +61,7 @@ public class QTEInteractable : Interactable
 
     public void OnQTEFailure()
     {
-        Debug.Log("FAILURE - Try again");
+        //Debug.Log("FAILURE - Try again");
         player.ChangeCharacter(lastPlayer);
         player = null;
         lastPlayer = null;
