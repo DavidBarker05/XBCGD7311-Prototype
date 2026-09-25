@@ -3,25 +3,25 @@
         {
             "name": "Themba",
             "text": "You made it back in one piece! I did warn you they wouldn't be happy about it.",
-            "fontSize": 24,
+            "fontSize": 32,
             "charactersPerSecond": 50
         },
         {
             "name": "Themba",
             "text": "Electricity's fixed, pipe's fixed, and those freeloaders are disconnected. You've done so much to help me than I could have imagined.",
-            "fontSize": 24,
+            "fontSize": 32,
             "charactersPerSecond": 50
         },
         {
             "name": "Themba",
             "text": "I don't have much but here, take this.",
-            "fontSize": 24,
+            "fontSize": 32,
             "charactersPerSecond": 50
         },
         {
             "name": "Themba",
             "text": "I know it's not much, but it should cover the TV license at least. Wouldn't want the inspectors knocking on your door next.",
-            "fontSize": 24,
+            "fontSize": 32,
             "charactersPerSecond": 50
         },
         {

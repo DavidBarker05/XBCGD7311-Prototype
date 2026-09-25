@@ -3,25 +3,25 @@
         {
             "name": "Themba",
             "text": "Ah, lekker! Look at those lights go!",
-            "fontSize": 24,
+            "fontSize": 32,
             "charactersPerSecond": 50
         },
         {
             "name": "Themba",
             "text": "Now that I can see properly, I can hear it too. There's a pipe leaking somewhere behind these walls.",
-            "fontSize": 24,
+            "fontSize": 32,
             "charactersPerSecond": 50
         },
         {
             "name": "Themba",
             "text": "Find the wall where the bricks are exposed and give it a knock to listen for where the pipe's hiding.",
-            "fontSize": 24,
+            "fontSize": 32,
             "charactersPerSecond": 50
         },
         {
             "name": "Themba",
             "text": "Once you've found it, get in there and fix it up properly.",
-            "fontSize": 24,
+            "fontSize": 32,
             "charactersPerSecond": 50
         }
     ]

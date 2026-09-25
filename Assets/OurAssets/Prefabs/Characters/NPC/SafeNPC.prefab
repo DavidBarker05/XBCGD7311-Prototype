@@ -71,7 +71,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NPC
   <InteractPromptTransform>k__BackingField: {fileID: 6492898946646531859}
-  m_FontSize: 24
+  m_FontSize: 32
   m_CharactersPerSecond: 50
 --- !u!1 &4395757308671212578
 GameObject:

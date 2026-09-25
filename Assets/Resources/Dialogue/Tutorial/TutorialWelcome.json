@@ -3,25 +3,25 @@
         {
             "name": "Themba",
             "text": "Oh, hello there! You must be the new neighbour. Welcome to the settlement!",
-            "fontSize": 24,
+            "fontSize": 32,
             "charactersPerSecond": 50
         },
         {
             "name": "Themba",
             "text": "I heard you're a handyman. Do you mind helping fix some problems with my house?",
-            "fontSize": 24,
+            "fontSize": 32,
             "charactersPerSecond": 50
         },
         {
             "name": "Themba",
             "text": "I won't lie to you, this place needs a bit of work. The electricity's been acting up something terrible.",
-            "fontSize": 24,
+            "fontSize": 32,
             "charactersPerSecond": 50
         },
         {
             "name": "Themba",
             "text": "There's an electrical box next to you. Go take a look and see if you can sort it out.",
-            "fontSize": 24,
+            "fontSize": 32,
             "charactersPerSecond": 50
         },
         {

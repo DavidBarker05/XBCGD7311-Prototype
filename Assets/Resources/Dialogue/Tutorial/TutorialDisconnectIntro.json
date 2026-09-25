@@ -3,25 +3,25 @@
         {
             "name": "Themba",
             "text": "Dry as a bone! You're handy, I'll give you that.",
-            "fontSize": 24,
+            "fontSize": 32,
             "charactersPerSecond": 50
         },
         {
             "name": "Themba",
             "text": "One more thing, and it's a bit trickier. Some folks outside have been connecting to the power without paying.",
-            "fontSize": 24,
+            "fontSize": 32,
             "charactersPerSecond": 50
         },
         {
             "name": "Themba",
             "text": "That's going to come straight off my electricity bill. Head out that door and disconnect them.",
-            "fontSize": 24,
+            "fontSize": 32,
             "charactersPerSecond": 50
         },
         {
             "name": "Themba",
             "text": "Fair warning though, they're not exactly going to thank you for it. Keep your wits about you out there.",
-            "fontSize": 24,
+            "fontSize": 32,
             "charactersPerSecond": 50
         }
     ]
