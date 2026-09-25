@@ -2387,8 +2387,8 @@ MonoBehaviour:
   nextButton: {fileID: 1940342818}
   m_SkipButton: {fileID: 1069205752}
   m_SkipAllButton: {fileID: 257624642}
-  m_Player: {fileID: 0}
-  m_DialogueCharacter: {fileID: 0}
+  m_Player: {fileID: 833965921}
+  m_DialogueCharacter: {fileID: 1517317685}
 --- !u!114 &35824515
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9231,7 +9231,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 90226215}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -9239,7 +9239,7 @@ Transform:
   - {fileID: 764507232}
   - {fileID: 1255181631}
   m_Father: {fileID: 490479497}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!114 &90226217
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -154186,6 +154186,17 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!114 &1517317685 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8548933437997886589, guid: 2288494715f42ad4a8ce262dee2b745b, type: 3}
+  m_PrefabInstance: {fileID: 1015887250}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bc64cedf410ac846a5ce4951cc9fb28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DialoguePlayerCharacter
 --- !u!1 &1517679897
 GameObject:
   m_ObjectHideFlags: 0
@@ -160005,7 +160016,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1578617691}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -160013,7 +160024,7 @@ Transform:
   - {fileID: 635367442}
   - {fileID: 1070225866}
   m_Father: {fileID: 490479497}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!114 &1578617693
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -173127,7 +173138,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1707998422}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -173135,7 +173146,7 @@ Transform:
   - {fileID: 98295135}
   - {fileID: 136636427}
   m_Father: {fileID: 490479497}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!114 &1707998424
 MonoBehaviour:
   m_ObjectHideFlags: 0
