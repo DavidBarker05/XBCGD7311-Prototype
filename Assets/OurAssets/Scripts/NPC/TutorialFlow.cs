@@ -36,11 +36,16 @@ public class TutorialFlow : MonoBehaviour
 
     void Awake()
     {
+        Debug.Log($"[TutorialFlow] Awake, frame={Time.frameCount} time={Time.realtimeSinceStartup:F3}");
         if (Instance && Instance != this) Destroy(gameObject);
         else Instance = this;
     }
 
-    void Start() => ShowOwnDoorMarker();
+    void Start()
+    {
+        Debug.Log($"[TutorialFlow] Start, frame={Time.frameCount} time={Time.realtimeSinceStartup:F3} WaypointManager.Instance={WaypointManager.Instance} TaskList.Instance={TaskList.Instance}");
+        ShowOwnDoorMarker();
+    }
 
     void ShowOwnDoorMarker()
     {
@@ -49,8 +54,10 @@ public class TutorialFlow : MonoBehaviour
         TaskList.Instance?.AddTask(m_OwnDoorTask);
     }
 
+    // Permanent diagnostic — see PlayerHouseDoor.Interact() for context on the bug we're chasing.
     public void OnLeftOwnHouse()
     {
+        Debug.Log($"[TutorialFlow] OnLeftOwnHouse called, frame={Time.frameCount} time={Time.realtimeSinceStartup:F3} WaypointManager.Instance={WaypointManager.Instance} TaskList.Instance={TaskList.Instance}");
         if (m_OwnDoor) WaypointManager.Instance?.RemoveWaypoint(m_OwnDoor.transform);
         TaskList.Instance?.RemoveTask(m_OwnDoorTask);
         ShowThembaDoorMarker();

@@ -54,7 +54,9 @@ public class PlayerHouseDoor : Interactable
             if (!m_bPlayerInside)
             {
                 TryShowDailyHouseMarkers();
+                Debug.Log($"[PlayerHouseDoor] leaving, frame={Time.frameCount} time={Time.realtimeSinceStartup:F3} OnPlayerLeft listeners={OnPlayerLeft?.GetPersistentEventCount()}");
                 OnPlayerLeft?.Invoke();
+                Debug.Log($"[PlayerHouseDoor] OnPlayerLeft.Invoke() returned, frame={Time.frameCount}");
             }
 
             if (bChoosingToLeave) m_MenuCharacter.OnMenuOpen(player, m_HUD, m_WalkOutEndingScreen);
