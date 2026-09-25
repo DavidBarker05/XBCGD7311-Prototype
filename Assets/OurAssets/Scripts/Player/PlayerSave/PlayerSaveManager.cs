@@ -41,8 +41,14 @@ public static class PlayerSaveManager
                 CurrentSaveData = new PlayerSaveData()
                 {
                     DayNumber = 1,
-                    DaySeed = GenerateEntropySeed()
+                    DaySeed = GenerateEntropySeed(),
+                    HasTVLicence = true
                 };
+                SaveGame();
+            }
+            else if (!CurrentSaveData.HasTVLicence)
+            {
+                CurrentSaveData.HasTVLicence = true;
                 SaveGame();
             }
             UseSeedForCurrentDay();
