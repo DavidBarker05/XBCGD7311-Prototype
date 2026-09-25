@@ -21254,6 +21254,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
+      propertyPath: m_Name
+      value: Power Box (8)
+      objectReference: {fileID: 0}
     - target: {fileID: 5752656315732109275, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
       propertyPath: m_LocalPosition.x
       value: -123.23
@@ -21294,90 +21298,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
-      propertyPath: m_Name
-      value: Power Box (8)
-      objectReference: {fileID: 0}
-    - target: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
-      propertyPath: m_TagString
-      value: Interactable
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 198736258}
-    - targetCorrespondingSourceObject: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 198736257}
-    - targetCorrespondingSourceObject: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 198736256}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
---- !u!1 &198736255 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
-  m_PrefabInstance: {fileID: 198736254}
-  m_PrefabAsset: {fileID: 0}
---- !u!65 &198736256
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 198736255}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.02122163, y: 0.022435563, z: 0.18752207}
-  m_Center: {x: -0.0000000010703346, y: -0.00060696574, z: 0.092821}
---- !u!114 &198736257
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 198736255}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c6dd7747c08eaaf4ea0f5685a2d1a2ca, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::QTEInteractable
-  <InteractPromptTransform>k__BackingField: {fileID: 0}
-  OnCompleted:
-    m_PersistentCalls:
-      m_Calls: []
---- !u!208 &198736258
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 198736255}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 0.011000001, y: 0.011000001, z: 0.094000004}
-  m_MoveThreshold: 0.1
-  m_Carve: 1
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: -0.001, z: 0.093}
-  m_TimeToStationary: 0.5
 --- !u!1001 &198980766
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -43059,6 +42984,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
+      propertyPath: m_Name
+      value: Power Box (7)
+      objectReference: {fileID: 0}
     - target: {fileID: 5752656315732109275, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
       propertyPath: m_LocalPosition.x
       value: -56.02055
@@ -43099,90 +43028,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
-      propertyPath: m_Name
-      value: Power Box (7)
-      objectReference: {fileID: 0}
-    - target: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
-      propertyPath: m_TagString
-      value: Interactable
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 397889155}
-    - targetCorrespondingSourceObject: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 397889154}
-    - targetCorrespondingSourceObject: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 397889153}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
---- !u!1 &397889152 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
-  m_PrefabInstance: {fileID: 397889151}
-  m_PrefabAsset: {fileID: 0}
---- !u!65 &397889153
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 397889152}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.02122163, y: 0.022435563, z: 0.18752207}
-  m_Center: {x: -0.0000000010703346, y: -0.00060696574, z: 0.092821}
---- !u!114 &397889154
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 397889152}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c6dd7747c08eaaf4ea0f5685a2d1a2ca, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::QTEInteractable
-  <InteractPromptTransform>k__BackingField: {fileID: 0}
-  OnCompleted:
-    m_PersistentCalls:
-      m_Calls: []
---- !u!208 &397889155
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 397889152}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 0.011000001, y: 0.011000001, z: 0.094000004}
-  m_MoveThreshold: 0.1
-  m_Carve: 1
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: -0.001, z: 0.093}
-  m_TimeToStationary: 0.5
 --- !u!1001 &398153893
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -78780,6 +78630,8 @@ MonoBehaviour:
   spawnInterval: 30
   maxDuration: 540
   maxEnemies: 10
+  m_ChunkSize: 30
+  m_MinChunkDistanceFromPlayer: 2
 --- !u!1 &722600089
 GameObject:
   m_ObjectHideFlags: 0
@@ -104866,6 +104718,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
+      propertyPath: m_Name
+      value: Power Box (6)
+      objectReference: {fileID: 0}
     - target: {fileID: 5752656315732109275, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
       propertyPath: m_LocalPosition.x
       value: -10.46
@@ -104906,90 +104762,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
-      propertyPath: m_Name
-      value: Power Box (6)
-      objectReference: {fileID: 0}
-    - target: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
-      propertyPath: m_TagString
-      value: Interactable
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 996478446}
-    - targetCorrespondingSourceObject: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 996478445}
-    - targetCorrespondingSourceObject: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 996478444}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
---- !u!1 &996478443 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
-  m_PrefabInstance: {fileID: 996478442}
-  m_PrefabAsset: {fileID: 0}
---- !u!65 &996478444
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 996478443}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.02122163, y: 0.022435563, z: 0.18752207}
-  m_Center: {x: -0.0000000010703346, y: -0.00060696574, z: 0.092821}
---- !u!114 &996478445
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 996478443}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c6dd7747c08eaaf4ea0f5685a2d1a2ca, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::QTEInteractable
-  <InteractPromptTransform>k__BackingField: {fileID: 0}
-  OnCompleted:
-    m_PersistentCalls:
-      m_Calls: []
---- !u!208 &996478446
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 996478443}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 0.011000001, y: 0.011000001, z: 0.094000004}
-  m_MoveThreshold: 0.1
-  m_Carve: 1
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: -0.001, z: 0.093}
-  m_TimeToStationary: 0.5
 --- !u!1 &996940795
 GameObject:
   m_ObjectHideFlags: 0
@@ -124922,6 +124699,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
+      propertyPath: m_Name
+      value: Power Box (5)
+      objectReference: {fileID: 0}
     - target: {fileID: 5752656315732109275, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
       propertyPath: m_LocalPosition.x
       value: -55.959957
@@ -124962,90 +124743,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
-      propertyPath: m_Name
-      value: Power Box (5)
-      objectReference: {fileID: 0}
-    - target: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
-      propertyPath: m_TagString
-      value: Interactable
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1204326417}
-    - targetCorrespondingSourceObject: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1204326416}
-    - targetCorrespondingSourceObject: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1204326415}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
---- !u!1 &1204326414 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
-  m_PrefabInstance: {fileID: 1204326413}
-  m_PrefabAsset: {fileID: 0}
---- !u!65 &1204326415
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1204326414}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.02122163, y: 0.022435563, z: 0.18752207}
-  m_Center: {x: -0.0000000010703346, y: -0.00060696574, z: 0.092821}
---- !u!114 &1204326416
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1204326414}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c6dd7747c08eaaf4ea0f5685a2d1a2ca, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::QTEInteractable
-  <InteractPromptTransform>k__BackingField: {fileID: 0}
-  OnCompleted:
-    m_PersistentCalls:
-      m_Calls: []
---- !u!208 &1204326417
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1204326414}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 0.011000001, y: 0.011000001, z: 0.094000004}
-  m_MoveThreshold: 0.1
-  m_Carve: 1
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: -0.001, z: 0.093}
-  m_TimeToStationary: 0.5
 --- !u!1 &1204467768
 GameObject:
   m_ObjectHideFlags: 0
@@ -127054,130 +126756,55 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: -8679921383154817045, guid: 2366f9007feaa6144a4baf16232cc3e5, type: 3}
+    - target: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
+      propertyPath: m_Name
+      value: Power Box (9)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5752656315732109275, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
       propertyPath: m_LocalPosition.x
       value: 6.479328
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 2366f9007feaa6144a4baf16232cc3e5, type: 3}
+    - target: {fileID: 5752656315732109275, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.53997064
+      value: 0.25
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 2366f9007feaa6144a4baf16232cc3e5, type: 3}
+    - target: {fileID: 5752656315732109275, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
       propertyPath: m_LocalPosition.z
       value: -191.94069
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 2366f9007feaa6144a4baf16232cc3e5, type: 3}
+    - target: {fileID: 5752656315732109275, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.7071067
+      value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 2366f9007feaa6144a4baf16232cc3e5, type: 3}
+    - target: {fileID: 5752656315732109275, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.7071068
+      value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 2366f9007feaa6144a4baf16232cc3e5, type: 3}
+    - target: {fileID: 5752656315732109275, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.000000059604645
+      value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 2366f9007feaa6144a4baf16232cc3e5, type: 3}
+    - target: {fileID: 5752656315732109275, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.000000047210005
+      value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 2366f9007feaa6144a4baf16232cc3e5, type: 3}
+    - target: {fileID: 5752656315732109275, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: -89.98
+      value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 2366f9007feaa6144a4baf16232cc3e5, type: 3}
+    - target: {fileID: 5752656315732109275, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 2366f9007feaa6144a4baf16232cc3e5, type: 3}
+    - target: {fileID: 5752656315732109275, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 919132149155446097, guid: 2366f9007feaa6144a4baf16232cc3e5, type: 3}
-      propertyPath: m_Name
-      value: Power box (5)
-      objectReference: {fileID: 0}
-    - target: {fileID: 919132149155446097, guid: 2366f9007feaa6144a4baf16232cc3e5, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 919132149155446097, guid: 2366f9007feaa6144a4baf16232cc3e5, type: 3}
-      propertyPath: m_TagString
-      value: Interactable
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 2366f9007feaa6144a4baf16232cc3e5, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1225716925}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 2366f9007feaa6144a4baf16232cc3e5, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1225716924}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 2366f9007feaa6144a4baf16232cc3e5, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1225716923}
-  m_SourcePrefab: {fileID: 100100000, guid: 2366f9007feaa6144a4baf16232cc3e5, type: 3}
---- !u!1 &1225716922 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 2366f9007feaa6144a4baf16232cc3e5, type: 3}
-  m_PrefabInstance: {fileID: 1225716921}
-  m_PrefabAsset: {fileID: 0}
---- !u!65 &1225716923
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1225716922}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.02122163, y: 0.022435563, z: 0.18752207}
-  m_Center: {x: -0.0000000010703346, y: -0.00060696574, z: 0.092821}
---- !u!114 &1225716924
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1225716922}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c6dd7747c08eaaf4ea0f5685a2d1a2ca, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::QTEInteractable
-  <InteractPromptTransform>k__BackingField: {fileID: 0}
-  OnCompleted:
-    m_PersistentCalls:
-      m_Calls: []
---- !u!208 &1225716925
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1225716922}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 0.011000001, y: 0.011000001, z: 0.094000004}
-  m_MoveThreshold: 0.1
-  m_Carve: 1
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: -0.001, z: 0.093}
-  m_TimeToStationary: 0.5
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
 --- !u!1001 &1225985710
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -141776,6 +141403,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
+      propertyPath: m_Name
+      value: Power Box (4)
+      objectReference: {fileID: 0}
     - target: {fileID: 5752656315732109275, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
       propertyPath: m_LocalPosition.x
       value: -131.16115
@@ -141816,90 +141447,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
-      propertyPath: m_Name
-      value: Power Box (4)
-      objectReference: {fileID: 0}
-    - target: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
-      propertyPath: m_TagString
-      value: Interactable
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1378557137}
-    - targetCorrespondingSourceObject: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1378557136}
-    - targetCorrespondingSourceObject: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1378557135}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
---- !u!1 &1378557134 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
-  m_PrefabInstance: {fileID: 1378557133}
-  m_PrefabAsset: {fileID: 0}
---- !u!65 &1378557135
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1378557134}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.02122163, y: 0.022435563, z: 0.18752207}
-  m_Center: {x: -0.0000000010703346, y: -0.00060696574, z: 0.092821}
---- !u!114 &1378557136
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1378557134}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c6dd7747c08eaaf4ea0f5685a2d1a2ca, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::QTEInteractable
-  <InteractPromptTransform>k__BackingField: {fileID: 0}
-  OnCompleted:
-    m_PersistentCalls:
-      m_Calls: []
---- !u!208 &1378557137
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1378557134}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 0.011000001, y: 0.011000001, z: 0.094000004}
-  m_MoveThreshold: 0.1
-  m_Carve: 1
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: -0.001, z: 0.093}
-  m_TimeToStationary: 0.5
 --- !u!1001 &1380560411
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -142123,6 +141675,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
+      propertyPath: m_Name
+      value: Power Box (3)
+      objectReference: {fileID: 0}
     - target: {fileID: 5752656315732109275, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
       propertyPath: m_LocalPosition.x
       value: -148.08139
@@ -142163,90 +141719,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
-      propertyPath: m_Name
-      value: Power Box (3)
-      objectReference: {fileID: 0}
-    - target: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
-      propertyPath: m_TagString
-      value: Interactable
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1383095275}
-    - targetCorrespondingSourceObject: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1383095274}
-    - targetCorrespondingSourceObject: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1383095273}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
---- !u!1 &1383095272 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
-  m_PrefabInstance: {fileID: 1383095271}
-  m_PrefabAsset: {fileID: 0}
---- !u!65 &1383095273
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1383095272}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.02122163, y: 0.022435563, z: 0.18752207}
-  m_Center: {x: -0.0000000010703346, y: -0.00060696574, z: 0.092821}
---- !u!114 &1383095274
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1383095272}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c6dd7747c08eaaf4ea0f5685a2d1a2ca, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::QTEInteractable
-  <InteractPromptTransform>k__BackingField: {fileID: 0}
-  OnCompleted:
-    m_PersistentCalls:
-      m_Calls: []
---- !u!208 &1383095275
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1383095272}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 0.011000001, y: 0.011000001, z: 0.094000004}
-  m_MoveThreshold: 0.1
-  m_Carve: 1
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: -0.001, z: 0.093}
-  m_TimeToStationary: 0.5
 --- !u!1001 &1383134059
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -146956,14 +146433,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Power Box (2)
       objectReference: {fileID: 0}
-    - target: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
-      propertyPath: m_TagString
-      value: Interactable
-      objectReference: {fileID: 0}
     - target: {fileID: 5752656315732109275, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
       propertyPath: m_LocalPosition.x
       value: -104.81103
@@ -147007,75 +146476,8 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1428909165}
-    - targetCorrespondingSourceObject: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1428909164}
-    - targetCorrespondingSourceObject: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1428909163}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
---- !u!1 &1428909162 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
-  m_PrefabInstance: {fileID: 1428909161}
-  m_PrefabAsset: {fileID: 0}
---- !u!65 &1428909163
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1428909162}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.02122163, y: 0.022435563, z: 0.18752207}
-  m_Center: {x: -0.0000000010703346, y: -0.00060696574, z: 0.092821}
---- !u!114 &1428909164
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1428909162}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c6dd7747c08eaaf4ea0f5685a2d1a2ca, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::QTEInteractable
-  <InteractPromptTransform>k__BackingField: {fileID: 0}
-  OnCompleted:
-    m_PersistentCalls:
-      m_Calls: []
---- !u!208 &1428909165
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1428909162}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 0.011000001, y: 0.011000001, z: 0.094000004}
-  m_MoveThreshold: 0.1
-  m_Carve: 1
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: -0.001, z: 0.093}
-  m_TimeToStationary: 0.5
 --- !u!1 &1429132495
 GameObject:
   m_ObjectHideFlags: 0
@@ -163037,6 +162439,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
+      propertyPath: m_Name
+      value: Power Box (1)
+      objectReference: {fileID: 0}
     - target: {fileID: 5752656315732109275, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
       propertyPath: m_LocalPosition.x
       value: -56.063526
@@ -163077,90 +162483,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
-      propertyPath: m_Name
-      value: Power Box (1)
-      objectReference: {fileID: 0}
-    - target: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
-      propertyPath: m_TagString
-      value: Interactable
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1609355129}
-    - targetCorrespondingSourceObject: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1609355128}
-    - targetCorrespondingSourceObject: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1609355127}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
---- !u!1 &1609355126 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
-  m_PrefabInstance: {fileID: 1609355125}
-  m_PrefabAsset: {fileID: 0}
---- !u!65 &1609355127
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1609355126}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.02122163, y: 0.022435563, z: 0.18752207}
-  m_Center: {x: -0.0000000010703346, y: -0.00060696574, z: 0.092821}
---- !u!114 &1609355128
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1609355126}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c6dd7747c08eaaf4ea0f5685a2d1a2ca, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::QTEInteractable
-  <InteractPromptTransform>k__BackingField: {fileID: 0}
-  OnCompleted:
-    m_PersistentCalls:
-      m_Calls: []
---- !u!208 &1609355129
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1609355126}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 0.011000001, y: 0.011000001, z: 0.094000004}
-  m_MoveThreshold: 0.1
-  m_Carve: 1
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: -0.001, z: 0.093}
-  m_TimeToStationary: 0.5
 --- !u!1001 &1610362273
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -190837,6 +190164,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
+      propertyPath: m_Name
+      value: Power Box
+      objectReference: {fileID: 0}
     - target: {fileID: 5752656315732109275, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
       propertyPath: m_LocalPosition.x
       value: 25.54001
@@ -190877,90 +190208,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
-      propertyPath: m_Name
-      value: Power Box
-      objectReference: {fileID: 0}
-    - target: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
-      propertyPath: m_TagString
-      value: Interactable
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1881152910}
-    - targetCorrespondingSourceObject: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1881152909}
-    - targetCorrespondingSourceObject: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1881152908}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
---- !u!1 &1881152907 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5661944932084971723, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
-  m_PrefabInstance: {fileID: 1881152906}
-  m_PrefabAsset: {fileID: 0}
---- !u!65 &1881152908
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1881152907}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.02122163, y: 0.022435563, z: 0.18752207}
-  m_Center: {x: -0.0000000010703346, y: -0.00060696574, z: 0.092821}
---- !u!114 &1881152909
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1881152907}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c6dd7747c08eaaf4ea0f5685a2d1a2ca, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::QTEInteractable
-  <InteractPromptTransform>k__BackingField: {fileID: 0}
-  OnCompleted:
-    m_PersistentCalls:
-      m_Calls: []
---- !u!208 &1881152910
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1881152907}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 0.011000001, y: 0.011000001, z: 0.094000004}
-  m_MoveThreshold: 0.1
-  m_Carve: 1
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: -0.001, z: 0.093}
-  m_TimeToStationary: 0.5
 --- !u!1001 &1881379832
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -222671,9 +221923,9 @@ SceneRoots:
   - {fileID: 1383095271}
   - {fileID: 198736254}
   - {fileID: 1378557133}
+  - {fileID: 1225716921}
   - {fileID: 1015887250}
   - {fileID: 601956135}
-  - {fileID: 1225716921}
   - {fileID: 2011601489}
   - {fileID: 1391424689}
   - {fileID: 1418589476}
