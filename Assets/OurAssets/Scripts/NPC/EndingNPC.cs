@@ -6,6 +6,8 @@ public class EndingNPC : Interactable
     public static EndingNPC Instance { get; private set; }
 
     public bool IsChoiceActive { get; private set; }
+    public bool IsEndingDay => PlayerSaveManager.CurrentSaveData != null && PlayerSaveManager.CurrentSaveData.DayNumber == 10;
+    public bool HasTalkedToday => m_bChoicePresented;
 
     [SerializeField]
     Transform m_VisualsRoot;
@@ -34,6 +36,7 @@ public class EndingNPC : Interactable
 
     bool m_bChoicePresented;
     bool m_bEndingChosen;
+    bool m_bVisualActive;
     bool m_bCouchWaypointActive;
     bool m_bDoorWaypointActive;
 
@@ -48,6 +51,7 @@ public class EndingNPC : Interactable
         {
             Instance = this;
             m_InteractionCollider = GetComponent<Collider>();
+            if (m_VisualsRoot) m_VisualsRoot.gameObject.SetActive(false);
         }
     }
 
@@ -55,7 +59,7 @@ public class EndingNPC : Interactable
 
     void Refresh()
     {
-        bool bIsEndingDay = PlayerSaveManager.CurrentSaveData != null && PlayerSaveManager.CurrentSaveData.DayNumber == 10;
+        bool bIsEndingDay = IsEndingDay;
         if (!bIsEndingDay)
         {
             m_bChoicePresented = false;
@@ -70,7 +74,8 @@ public class EndingNPC : Interactable
     void SetVisualActive(bool bActive)
     {
         m_InteractionCollider.enabled = bActive;
-        if (!m_VisualsRoot || m_VisualsRoot.gameObject.activeSelf == bActive) return;
+        if (!m_VisualsRoot || m_bVisualActive == bActive) return;
+        m_bVisualActive = bActive;
         m_VisualsRoot.gameObject.SetActive(bActive);
         if (bActive)
         {
@@ -109,8 +114,7 @@ public class EndingNPC : Interactable
 #endif
             return new InteractionStatus() { EndInteraction = true };
         }
-        bool bIsEndingDay = PlayerSaveManager.CurrentSaveData != null && PlayerSaveManager.CurrentSaveData.DayNumber == 10;
-        if (bIsEndingDay && !m_bChoicePresented && m_EndingDialogue)
+        if (IsEndingDay && !m_bChoicePresented && m_EndingDialogue)
         {
             Dialogue dialogue = JsonUtility.FromJson<SerializedDialogue>(m_EndingDialogue.text).Deserialized;
             DialogueManager.Instance.StartDialogue(dialogue, OnEndingDialogueFinished);

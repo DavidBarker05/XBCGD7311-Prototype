@@ -52,8 +52,9 @@ public class NPCHouseDailyManager : MonoBehaviour
         for (int i = houseCount; i < shuffledHouses.Length; ++i) shuffledHouses[i].MarkNotNeededToday();
 
         m_DailyDisplayTask = new DisplayTask("Help out the neighbourhood", m_LoadedHouses.Count, 0, strikeThroughOnCompletion: false);
+        bool bIsEndingDay = EndingNPC.Instance && EndingNPC.Instance.IsEndingDay;
         if (houseWithPlayer != null) OnPlayerLeftOwnHouse();
-        else ShowLeaveHouseMarker();
+        else if (!bIsEndingDay) ShowLeaveHouseMarker();
         return houseWithPlayer;
     }
 

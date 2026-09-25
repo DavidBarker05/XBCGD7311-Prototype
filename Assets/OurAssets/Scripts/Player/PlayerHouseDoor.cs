@@ -31,12 +31,16 @@ public class PlayerHouseDoor : Interactable
         }
         else if (inputParameters[0] is FirstPersonPlayerCharacter player)
         {
-            if (m_bPlayerInside && EndingNPC.Instance && EndingNPC.Instance.IsChoiceActive)
+            if (m_bPlayerInside && EndingNPC.Instance && EndingNPC.Instance.IsEndingDay && !EndingNPC.Instance.HasTalkedToday)
             {
-                EndingNPC.Instance.NotifyEndingChosen();
-                m_MenuCharacter.OnMenuOpen(player, m_HUD, m_WalkOutEndingScreen);
+#if UNITY_EDITOR
+                Debug.Log("Door is locked until you've spoken to Themba");
+#endif
                 return new InteractionStatus() { EndInteraction = true };
             }
+
+            bool bChoosingToLeave = m_bPlayerInside && EndingNPC.Instance && EndingNPC.Instance.IsChoiceActive;
+            if (bChoosingToLeave) EndingNPC.Instance.NotifyEndingChosen();
 
             Transform destination = m_bPlayerInside ? m_OutsideSpot : m_InsideSpot;
             if (destination)
@@ -52,6 +56,8 @@ public class PlayerHouseDoor : Interactable
                 TryShowDailyHouseMarkers();
                 OnPlayerLeft?.Invoke();
             }
+
+            if (bChoosingToLeave) m_MenuCharacter.OnMenuOpen(player, m_HUD, m_WalkOutEndingScreen);
         }
         else
         {
