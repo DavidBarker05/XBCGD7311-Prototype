@@ -17,9 +17,18 @@ public class NPCHouseDailyManager : MonoBehaviour
     [SerializeField]
     Vector3 m_HouseWaypointOffset = Vector3.zero;
 
+    [Header("Leave House")]
+    [SerializeField]
+    PlayerHouseDoor m_PlayerHouseDoor;
+    [SerializeField]
+    Sprite m_LeaveHouseWaypointIcon;
+    [SerializeField]
+    Vector3 m_LeaveHouseWaypointOffset = Vector3.zero;
+
     readonly List<NPCHouse> m_LoadedHouses = new List<NPCHouse>();
 
     DisplayTask m_DailyDisplayTask;
+    DisplayTask m_LeaveHouseDisplayTask;
 
     void Awake()
     {
@@ -43,7 +52,8 @@ public class NPCHouseDailyManager : MonoBehaviour
         for (int i = houseCount; i < shuffledHouses.Length; ++i) shuffledHouses[i].MarkNotNeededToday();
 
         m_DailyDisplayTask = new DisplayTask("Help out the neighbourhood", m_LoadedHouses.Count, 0, strikeThroughOnCompletion: false);
-        TaskList.Instance?.AddTask(m_DailyDisplayTask);
+        if (houseWithPlayer != null) OnPlayerLeftOwnHouse();
+        else ShowLeaveHouseMarker();
         return houseWithPlayer;
     }
 
@@ -53,6 +63,8 @@ public class NPCHouseDailyManager : MonoBehaviour
         m_LoadedHouses.Clear();
         HouseProgressTracker.ClearAll();
         if (m_DailyDisplayTask != null) { TaskList.Instance?.RemoveTask(m_DailyDisplayTask); m_DailyDisplayTask = null; }
+        HideLeaveHouseMarker();
+        m_LeaveHouseDisplayTask = null;
     }
 
     public void ReportHouseCompleted()
@@ -65,6 +77,34 @@ public class NPCHouseDailyManager : MonoBehaviour
         foreach (NPCHouse house in m_LoadedHouses) if (!house.Progress.AllMinigamesBeaten) return false;
         return true;
     }
+
+    #region Leave House
+    void ShowLeaveHouseMarker()
+    {
+        if (!m_PlayerHouseDoor)
+        {
+#if UNITY_EDITOR
+            Debug.LogWarning($"WARNING: {name} has no player house door assigned");
+#endif
+            return;
+        }
+        m_LeaveHouseDisplayTask ??= new DisplayTask("Leave your house to start helping the neighbourhood", 1, 0, false);
+        WaypointManager.Instance?.AddWaypoint(m_PlayerHouseDoor.transform, m_LeaveHouseWaypointIcon, m_LeaveHouseWaypointOffset);
+        TaskList.Instance?.AddTask(m_LeaveHouseDisplayTask);
+    }
+
+    void HideLeaveHouseMarker()
+    {
+        if (m_PlayerHouseDoor) WaypointManager.Instance?.RemoveWaypoint(m_PlayerHouseDoor.transform);
+        if (m_LeaveHouseDisplayTask != null) TaskList.Instance?.RemoveTask(m_LeaveHouseDisplayTask);
+    }
+
+    public void OnPlayerLeftOwnHouse()
+    {
+        HideLeaveHouseMarker();
+        ShowMarkersForIncompleteHouses();
+    }
+    #endregion Leave House
 
     #region House Markers
     public void ShowMarkersForIncompleteHouses()

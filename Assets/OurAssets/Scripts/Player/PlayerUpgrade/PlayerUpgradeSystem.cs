@@ -38,7 +38,6 @@ public static class PlayerUpgradeSystem
         if (!CanPurchase(upgrade, level)) return false;
         CurrencyManager.Instance?.LoseMoney(PlayerUpgrades.GetUpgradeCost(upgrade, level));
         SetLevel(upgrade, level);
-        PlayerSaveManager.SaveGame();
         OnUpgradePurchased?.Invoke(upgrade, level);
         return true;
     }

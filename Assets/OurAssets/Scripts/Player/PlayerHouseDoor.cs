@@ -67,6 +67,6 @@ public class PlayerHouseDoor : Interactable
         int day = PlayerSaveManager.CurrentSaveData?.DayNumber ?? int.MinValue;
         if (day == m_LastMarkersShownDay) return;
         m_LastMarkersShownDay = day;
-        NPCHouseDailyManager.Instance?.ShowMarkersForIncompleteHouses();
+        NPCHouseDailyManager.Instance?.OnPlayerLeftOwnHouse();
     }
 }

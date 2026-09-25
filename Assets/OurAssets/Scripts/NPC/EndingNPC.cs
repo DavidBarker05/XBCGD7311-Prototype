@@ -34,6 +34,8 @@ public class EndingNPC : Interactable
 
     bool m_bChoicePresented;
     bool m_bEndingChosen;
+    bool m_bCouchWaypointActive;
+    bool m_bDoorWaypointActive;
 
     readonly DisplayTask m_TalkDisplayTask = new DisplayTask("Talk to Themba", 1, 0, false);
     readonly DisplayTask m_CouchDisplayTask = new DisplayTask("Rest on the couch", 1, 0, false);
@@ -61,8 +63,8 @@ public class EndingNPC : Interactable
         }
         SetVisualActive(bIsEndingDay && !m_bChoicePresented);
         IsChoiceActive = bIsEndingDay && m_bChoicePresented && !m_bEndingChosen;
-        SetWaypoint(m_CouchTransform, IsChoiceActive, m_CouchWaypointIcon, m_CouchDisplayTask, m_CouchWaypointOffset);
-        SetWaypoint(m_DoorTransform, IsChoiceActive, m_DoorWaypointIcon, m_DoorDisplayTask, m_DoorWaypointOffset);
+        SetWaypoint(m_CouchTransform, IsChoiceActive, m_CouchWaypointIcon, m_CouchDisplayTask, m_CouchWaypointOffset, ref m_bCouchWaypointActive);
+        SetWaypoint(m_DoorTransform, IsChoiceActive, m_DoorWaypointIcon, m_DoorDisplayTask, m_DoorWaypointOffset, ref m_bDoorWaypointActive);
     }
 
     void SetVisualActive(bool bActive)
@@ -82,9 +84,10 @@ public class EndingNPC : Interactable
         }
     }
 
-    void SetWaypoint(Transform target, bool bActive, Sprite icon, DisplayTask task, Vector3 waypointOffset)
+    void SetWaypoint(Transform target, bool bActive, Sprite icon, DisplayTask task, Vector3 waypointOffset, ref bool currentlyActive)
     {
-        if (!target) return;
+        if (!target || bActive == currentlyActive) return;
+        currentlyActive = bActive;
         if (bActive)
         {
             WaypointManager.Instance?.AddWaypoint(target, icon, waypointOffset);

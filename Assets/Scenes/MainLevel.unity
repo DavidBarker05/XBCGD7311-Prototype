@@ -88501,6 +88501,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7226468840076633188, guid: 671086e60c5cb8c428ab3d491f384910, type: 3}
   m_PrefabInstance: {fileID: 825477884}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &826433527 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7051822596265397176, guid: 2f3777bf0a1f7504ea7dd825f9ef30f8, type: 3}
+  m_PrefabInstance: {fileID: 601956135}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa5ae701d1764874ab44900ac2959e69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerHouseDoor
 --- !u!1001 &826943189
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -91772,6 +91783,10 @@ MonoBehaviour:
   m_MinHousesPerDay: 3
   m_MaxHousesPerDay: 5
   m_HouseWaypointIcon: {fileID: 0}
+  m_HouseWaypointOffset: {x: 0, y: 0, z: 0}
+  m_PlayerHouseDoor: {fileID: 826433527}
+  m_LeaveHouseWaypointIcon: {fileID: 0}
+  m_LeaveHouseWaypointOffset: {x: 0, y: 0, z: 0}
 --- !u!1001 &853947806
 PrefabInstance:
   m_ObjectHideFlags: 0
