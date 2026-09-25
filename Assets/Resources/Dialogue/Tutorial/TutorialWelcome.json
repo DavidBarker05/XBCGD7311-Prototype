@@ -27,7 +27,7 @@
         {
             "name": "Themba",
             "text": "Careful with the wires though! You don't want to be the reason the lights go out for the whole street!",
-            "fontSize": 24,
+            "fontSize": 32,
             "charactersPerSecond": 50
         }
     ]

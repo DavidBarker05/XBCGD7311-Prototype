@@ -27,7 +27,13 @@
         {
             "name": "Themba",
             "text": "There's a lot more with problems like me in the area, but hey, welcome to the neighbourhod!",
-            "fontSize": 24,
+            "fontSize": 32,
+            "charactersPerSecond": 50
+        },
+        {
+            "name": "Themba",
+            "text": "Give it about 10 days and I'll swing by to see how you're settling in. Maybe your time here will end around then. Take care of yourself out there!",
+            "fontSize": 32,
             "charactersPerSecond": 50
         }
     ]
