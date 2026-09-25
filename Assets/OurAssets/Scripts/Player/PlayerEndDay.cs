@@ -24,9 +24,16 @@ public class PlayerEndDay : Interactable
     bool m_bMarkerShown;
     readonly DisplayTask m_EndDayDisplayTask = new DisplayTask("Head to bed for the night", 1, 0, false);
 
+    bool CanUseCouch =>
+        (EndingNPC.Instance && EndingNPC.Instance.IsChoiceActive) ||
+        (TutorialMinigameManager.Instance ? TutorialMinigameManager.Instance.AllMinigamesBeaten
+            : NPCHouseDailyManager.Instance && NPCHouseDailyManager.Instance.AllMinigamesBeatenForToday());
+
+    public override bool CanInteractWith => CanUseCouch;
+
     void Update()
     {
-        bool bShouldShow = NPCHouseDailyManager.Instance && NPCHouseDailyManager.Instance.AllMinigamesBeatenForToday();
+        bool bShouldShow = CanUseCouch;
         if (bShouldShow == m_bMarkerShown) return;
         m_bMarkerShown = bShouldShow;
         if (bShouldShow)
