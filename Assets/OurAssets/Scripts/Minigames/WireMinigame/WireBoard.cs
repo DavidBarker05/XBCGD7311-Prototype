@@ -129,11 +129,7 @@ public class WireBoard : MonoBehaviour
 		if (m_bInTutorial) m_MenuCharacter.OnMenuOpen(m_WirePlayerCharacter, null, m_InstructionsScreen);
 	}
 
-	void EndWireMinigame()
-	{
-		AwardMoney();
-		StartCoroutine(CloseMinigame());
-	}
+	void EndWireMinigame() => StartCoroutine(CloseMinigame());
 
 	void AwardMoney()
 	{
@@ -159,6 +155,7 @@ public class WireBoard : MonoBehaviour
 		TutorialMinigameManager.Instance?.ReportMinigameCompleted(MinigameType.Wires);
 		m_UnscaledTransform.gameObject.SetActive(false);
 		m_HUD.SetActive(true);
+		AwardMoney();
 	}
 
 	void CreateWires(int numWires)

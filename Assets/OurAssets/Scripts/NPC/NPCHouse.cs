@@ -67,19 +67,13 @@ public class NPCHouse : MonoBehaviour
     public Transform EntryPoint => m_Door.transform;
     public HouseProgress Progress { get; private set; }
 
-    class HouseTaskEntry
-    {
-        public Transform Target;
-        public MinigameType Type;
-        public DisplayTask DisplayTask;
-    }
-
     Transform ActiveDoorTransform => m_ChaseInteract.gameObject.activeSelf ? m_ChaseInteract.transform : m_Door.transform;
 
     Transform m_CurrentNPCTransform;
     bool m_bHouseCompletionReported;
     readonly List<GameObject> m_SpawnedInteriorObjects = new List<GameObject>();
-    readonly List<HouseTaskEntry> m_TaskEntries = new List<HouseTaskEntry>();
+    readonly Dictionary<Transform, MinigameType> m_TaskEntries = new Dictionary<Transform, MinigameType>();
+    readonly Dictionary<MinigameType, DisplayTask> m_DisplayTaskEntries = new Dictionary<MinigameType, DisplayTask>();
     DisplayTask m_TalkDisplayTask;
     DisplayTask m_ExitDisplayTask;
 
@@ -247,17 +241,14 @@ public class NPCHouse : MonoBehaviour
 
     void RegisterTaskEntry(Transform target, MinigameType type)
     {
-        m_TaskEntries.Add(new HouseTaskEntry
-        {
-            Target = target,
-            Type = type,
-            DisplayTask = new DisplayTask(TaskDisplayNameFor(type), 1, 0, strikeThroughOnCompletion: true)
-        });
+        m_TaskEntries.Add(target, type);
+        if (m_DisplayTaskEntries.ContainsKey(type)) ++m_DisplayTaskEntries[type].AmountNeeded;
+        else m_DisplayTaskEntries.Add(type, new DisplayTask(TaskDisplayNameFor(type), 1, 0, strikeThroughOnCompletion: true));
     }
 
     bool HasTaskEntryOfType(MinigameType type)
     {
-        foreach (HouseTaskEntry entry in m_TaskEntries) if (entry.Type == type) return true;
+        foreach (var kvp in m_TaskEntries) if (kvp.Value == type) return true;
         return false;
     }
 
@@ -292,47 +283,58 @@ public class NPCHouse : MonoBehaviour
 
     void RevealTaskEntries()
     {
-        foreach (HouseTaskEntry entry in m_TaskEntries)
+        foreach (Transform target in m_TaskEntries.Keys)
         {
-            if (entry.Target) WaypointManager.Instance?.AddWaypoint(entry.Target, m_TaskWaypointIcon, m_TaskWaypointOffset);
-            TaskList.Instance?.AddTask(entry.DisplayTask);
+            if (target) WaypointManager.Instance?.AddWaypoint(target, m_TaskWaypointIcon, m_TaskWaypointOffset);
+        }
+        foreach (var kvp in m_DisplayTaskEntries)
+        {
+            TaskList.Instance?.AddTask(kvp.Value);
         }
     }
 
     void ShowRemainingTaskMarkers()
     {
-        foreach (HouseTaskEntry entry in m_TaskEntries)
+        foreach (Transform target in m_TaskEntries.Keys)
         {
-            if (entry.Target && entry.DisplayTask.AmountDone == 0) WaypointManager.Instance?.AddWaypoint(entry.Target, m_TaskWaypointIcon);
+            if (target) WaypointManager.Instance?.AddWaypoint(target, m_TaskWaypointIcon, m_TaskWaypointOffset);
         }
     }
 
     void HideAllTaskMarkers()
     {
-        foreach (HouseTaskEntry entry in m_TaskEntries) if (entry.Target) WaypointManager.Instance?.RemoveWaypoint(entry.Target);
+        foreach (Transform target in m_TaskEntries.Keys) if (target) WaypointManager.Instance?.RemoveWaypoint(target);
     }
 
-    public void HideTaskMarker(Transform target) => WaypointManager.Instance?.RemoveWaypoint(target);
+    public void HideTaskMarker(Transform target)
+    {
+        WaypointManager.Instance?.RemoveWaypoint(target);
+        m_TaskEntries.Remove(target);
+    }
 
     void CompleteTaskEntry(MinigameType type)
     {
-        foreach (HouseTaskEntry entry in m_TaskEntries)
+        foreach (var kvp in m_TaskEntries)
         {
-            if (entry.Type != type || entry.DisplayTask.AmountDone != 0) continue;
-            TaskList.Instance?.IncrementAmountDoneForTask(entry.DisplayTask);
-            if (entry.Target) WaypointManager.Instance?.RemoveWaypoint(entry.Target);
+            if (kvp.Value != type || m_DisplayTaskEntries[type].AmountDone != 0) continue;
+            TaskList.Instance?.IncrementAmountDoneForTask(m_DisplayTaskEntries[type]);
+            if (kvp.Key) WaypointManager.Instance?.RemoveWaypoint(kvp.Key);
             break;
         }
     }
 
     void ClearAllTaskEntries()
     {
-        foreach (HouseTaskEntry entry in m_TaskEntries)
+        foreach (Transform target in m_TaskEntries.Keys)
         {
-            if (entry.Target) WaypointManager.Instance?.RemoveWaypoint(entry.Target);
-            TaskList.Instance?.RemoveTask(entry.DisplayTask);
+            if (target) WaypointManager.Instance?.RemoveWaypoint(target);
+        }
+        foreach (var kvp in m_DisplayTaskEntries)
+        {
+            TaskList.Instance?.RemoveTask(kvp.Value);
         }
         m_TaskEntries.Clear();
+        m_DisplayTaskEntries.Clear();
     }
 
     void RefreshExitDoorMarker()
@@ -340,14 +342,14 @@ public class NPCHouse : MonoBehaviour
         if (Progress.AllMinigamesBeaten)
         {
             ClearAllTaskEntries();
-            WaypointManager.Instance?.AddWaypoint(ActiveDoorTransform, m_ExitWaypointIcon, m_ExitWaypointOffset);
+            WaypointManager.Instance?.AddWaypoint(m_Door.transform, m_ExitWaypointIcon, m_ExitWaypointOffset);
             m_ExitDisplayTask ??= new DisplayTask("Head back outside", 1, 0, false);
             TaskList.Instance?.AddTask(m_ExitDisplayTask);
             ReportHouseCompletedOnce();
         }
         else
         {
-            WaypointManager.Instance?.RemoveWaypoint(ActiveDoorTransform);
+            WaypointManager.Instance?.RemoveWaypoint(m_Door.transform);
             if (m_ExitDisplayTask != null) TaskList.Instance?.RemoveTask(m_ExitDisplayTask);
         }
     }

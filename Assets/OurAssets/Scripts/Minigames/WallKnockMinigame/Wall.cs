@@ -239,6 +239,8 @@ public class Wall : MonoBehaviour
 
 	void CreateEcho(Vector3 position, int numCircles)
 	{
+		// Doesn't get deleted when minigame disappears
+		// Not sure how to fix yet, will figure out once I fix the animations
 		GameObject go = Instantiate(m_WallEchoPrefab.gameObject, m_UnscaledTransform);
 		go.transform.position = position + transform.up * 0.01f;
 		go.GetComponent<WallEcho>().StartEcho(numCircles);

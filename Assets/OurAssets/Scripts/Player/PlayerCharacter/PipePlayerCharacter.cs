@@ -68,7 +68,6 @@ public class PipePlayerCharacter : PlayerCharacter
 #if !UNITY_EDITOR
         m_Debug = false;
 #endif
-        m_CellIndicator = Instantiate(m_CellIndicatorPrefab);
         CurrentlySelectedPipe = m_Debug && m_PlaceablePipes.Count > 0 ? m_PlaceablePipes[0] : m_EmptyPipe;
         FullyCleanPlaceablePipes(); // Just in case
         foreach (PipeSO pipe in m_PlaceablePipes)
@@ -92,6 +91,11 @@ public class PipePlayerCharacter : PlayerCharacter
     {
         Sys.Assert(HasBeenInitialised, "PipePlayerCharacter hasn't been initialised");
         m_PauseCharacter.PauseGame(this);
+    }
+
+    public void CreateCellIndicator()
+    {
+        if (!m_CellIndicator) m_CellIndicator = Instantiate(m_CellIndicatorPrefab);
     }
 
     public void DeleteCellIndicator()

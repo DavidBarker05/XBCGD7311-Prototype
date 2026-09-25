@@ -14,6 +14,8 @@ public class NPCHouseDailyManager : MonoBehaviour
     int m_MaxHousesPerDay = 5;
     [SerializeField]
     Sprite m_HouseWaypointIcon;
+    [SerializeField]
+    Vector3 m_HouseWaypointOffset = Vector3.zero;
 
     readonly List<NPCHouse> m_LoadedHouses = new List<NPCHouse>();
 
@@ -70,7 +72,7 @@ public class NPCHouseDailyManager : MonoBehaviour
         foreach (NPCHouse house in m_LoadedHouses)
         {
             if (house.Progress == null || house.Progress.IsPlayerInside || house.Progress.AllMinigamesBeaten || !house.EntryPoint) continue;
-            WaypointManager.Instance?.AddWaypoint(house.EntryPoint, m_HouseWaypointIcon);
+            WaypointManager.Instance?.AddWaypoint(house.EntryPoint, m_HouseWaypointIcon, m_HouseWaypointOffset);
         }
     }
 

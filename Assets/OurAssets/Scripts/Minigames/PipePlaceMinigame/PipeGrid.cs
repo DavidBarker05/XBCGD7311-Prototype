@@ -145,6 +145,7 @@ public class PipeGrid : MonoBehaviour
     {
         if (!m_PlaneGrid) m_PlaneGrid = GetComponent<PlaneGridGenerator>();
         if (!m_Grid) m_Grid = GetComponent<Grid>();
+        m_PipePlayerCharacter.CreateCellIndicator();
         m_PlaneGrid.GridSize = pipeGridData.GridSize;
         m_SpeedMultiplier = wallKnockSpeedMultiplier;
         m_UnscaledTransform.gameObject.SetActive(true);
@@ -159,13 +160,13 @@ public class PipeGrid : MonoBehaviour
         if (m_PipeUI) m_PipeUI.SetActive(false);
         m_PipePlayerCharacter.DeleteCellIndicator();
         if (m_Player && m_FirstPersonPlayerCharacter) m_Player.ChangeCharacter(m_FirstPersonPlayerCharacter);
-        AwardMoney();
         MinigameManager.Instance?.OnMinigameBeaten();
         HouseProgressTracker.ReportMinigameCompleted(MinigameType.WallKnockAndPipes);
         TutorialMinigameManager.Instance?.ReportMinigameCompleted(MinigameType.WallKnockAndPipes);
         DeletePipes(ref m_PipeCells);
         m_UnscaledTransform.gameObject.SetActive(false);
         m_HUD.SetActive(true);
+        AwardMoney();
     }
 
     void AwardMoney()

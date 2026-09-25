@@ -16,6 +16,5 @@ public static class MinigameMoneyReward
     {
         if (PlayerSaveManager.CurrentSaveData == null) return;
         CurrencyManager.Instance?.ReceiveMoney(Calculate(baseMoney, extraMultiplier));
-        PlayerSaveManager.SaveGame();
     }
 }
