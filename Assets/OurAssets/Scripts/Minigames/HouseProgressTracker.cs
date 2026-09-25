@@ -8,7 +8,7 @@ public class HouseProgress
     public Vector3 HousePosition;
     public MinigameType[] MinigameTypes;
     public bool[] MinigamesBeaten;
-    public MinigameType? PendingCompletedMinigame;
+    public int? PendingCompletedSlot;
     public bool IsPlayerInside;
     public DoorType DoorType = DoorType.Entry;
     public bool HasBeatenHouse;
@@ -33,16 +33,10 @@ public class HouseProgress
         return count;
     }
 
-    public void MarkMinigameBeaten(MinigameType type)
+    public void MarkSlotBeaten(int slotIndex)
     {
-        for (int i = 0; i < MinigameTypes.Length; ++i)
-        {
-            if (MinigameTypes[i] == type && !MinigamesBeaten[i])
-            {
-                MinigamesBeaten[i] = true;
-                return;
-            }
-        }
+        if (slotIndex < 0 || slotIndex >= MinigamesBeaten.Length) return;
+        MinigamesBeaten[slotIndex] = true;
     }
 }
 
@@ -53,6 +47,7 @@ public static class HouseProgressTracker
     static readonly Dictionary<Vector3, HouseProgress> s_Houses = new Dictionary<Vector3, HouseProgress>();
 
     static Vector3? s_ActiveHousePosition;
+    static int? s_ActiveTaskSlotIndex;
 
     static Vector3 KeyFor(Vector3 housePosition) => new Vector3(
         Mathf.Round(housePosition.x * PositionKeyPrecision) / PositionKeyPrecision,
@@ -82,19 +77,33 @@ public static class HouseProgressTracker
     #region Active House
     public static void SetActiveHouse(Vector3? housePosition) => s_ActiveHousePosition = housePosition;
 
+    public static void SetActiveTaskSlot(int? slotIndex) => s_ActiveTaskSlotIndex = slotIndex;
+
     public static void ReportMinigameCompleted(MinigameType type)
     {
         if (!s_ActiveHousePosition.HasValue) return;
         HouseProgress progress = GetHouse(s_ActiveHousePosition.Value);
-        if (progress != null) progress.PendingCompletedMinigame = type;
+        if (progress == null) return;
+        int slotIndex = s_ActiveTaskSlotIndex ?? FindFirstUnbeatenSlot(progress, type);
+        if (slotIndex < 0) return;
+        progress.PendingCompletedSlot = slotIndex;
     }
 
-    public static MinigameType? ConsumePendingCompletedMinigame(Vector3 housePosition)
+    static int FindFirstUnbeatenSlot(HouseProgress progress, MinigameType type)
+    {
+        for (int i = 0; i < progress.MinigameTypes.Length; ++i)
+        {
+            if (progress.MinigameTypes[i] == type && !progress.MinigamesBeaten[i]) return i;
+        }
+        return -1;
+    }
+
+    public static int? ConsumePendingCompletedSlot(Vector3 housePosition)
     {
         HouseProgress progress = GetHouse(housePosition);
         if (progress == null) return null;
-        MinigameType? pending = progress.PendingCompletedMinigame;
-        progress.PendingCompletedMinigame = null;
+        int? pending = progress.PendingCompletedSlot;
+        progress.PendingCompletedSlot = null;
         return pending;
     }
     #endregion Active House

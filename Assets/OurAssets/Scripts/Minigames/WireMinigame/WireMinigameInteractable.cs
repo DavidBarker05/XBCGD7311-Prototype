@@ -8,6 +8,7 @@ public class WireMinigameInteractable : Interactable, IHouseTaskInteractable
 	bool m_HasBeenPlayed = false;
 
 	public NPCHouse OwningHouse { get; set; }
+	public int TaskSlotIndex { get; set; }
 
 	public override bool CanInteractWith => (OwningHouse == null || OwningHouse.Progress.HasTalkedToNPC) && (!m_HasBeenPlayed || m_CanBePlayedAgain);
 
@@ -23,7 +24,8 @@ public class WireMinigameInteractable : Interactable, IHouseTaskInteractable
 		{
 			if (!m_HasBeenPlayed || m_CanBePlayedAgain)
 			{
-				OwningHouse?.HideTaskMarker(transform);
+				OwningHouse?.HideTaskMarker(TaskSlotIndex);
+				HouseProgressTracker.SetActiveTaskSlot(TaskSlotIndex);
 				WireMinigameStarter.Instance.StartWireMinigame();
 			}
 			m_HasBeenPlayed = true;

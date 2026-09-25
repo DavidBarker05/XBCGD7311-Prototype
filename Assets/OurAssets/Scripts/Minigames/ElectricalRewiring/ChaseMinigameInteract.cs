@@ -23,6 +23,7 @@ public class ChaseMinigameInteract : Interactable, IHouseTaskInteractable
 	public Transform ReturnSpawn { get => m_ReturnSpawn; set => m_ReturnSpawn = value; }
 
 	public NPCHouse OwningHouse { get; set; }
+	public int TaskSlotIndex { get; set; } = -1;
 
 	public bool CanInteract { get; set; } = true;
 
@@ -55,7 +56,9 @@ public class ChaseMinigameInteract : Interactable, IHouseTaskInteractable
 #if UNITY_EDITOR
 			if (!m_ChaseSpawn || !m_ReturnSpawn) Debug.LogWarning($"WARNING: {name} is missing its chase spawn and/or return spawn transform");
 #endif
-			OwningHouse?.OnChaseTaskStarted(transform);
+			TaskSlotIndex = OwningHouse ? OwningHouse.NextUnbeatenSlot(MinigameType.ChaseMinigame) : -1;
+			HouseProgressTracker.SetActiveTaskSlot(TaskSlotIndex);
+			OwningHouse?.OnChaseTaskStarted(TaskSlotIndex);
 			int numInteractablesToSpawn = Mathf.Clamp(m_NumQTEInteractablesToSpawn, 1, m_QTEInteractableSpawns.Length);
 			QTEInteractable[] qteInteractables = new QTEInteractable[numInteractablesToSpawn];
 			Transform[] shuffledSpawns = new Transform[m_QTEInteractableSpawns.Length];

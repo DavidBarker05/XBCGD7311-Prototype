@@ -18,6 +18,4 @@ public class CurrencyDisplayText : MonoBehaviour
         CurrencyManager.Instance.OnCurrencyChanged.AddListener(UpdateText);
         UpdateText();
     }
-
-    void OnDisable() => CurrencyManager.Instance?.OnCurrencyChanged.RemoveListener(UpdateText);
 }

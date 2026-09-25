@@ -72,7 +72,7 @@ public class NPCHouse : MonoBehaviour
     Transform m_CurrentNPCTransform;
     bool m_bHouseCompletionReported;
     readonly List<GameObject> m_SpawnedInteriorObjects = new List<GameObject>();
-    readonly Dictionary<Transform, MinigameType> m_TaskEntries = new Dictionary<Transform, MinigameType>();
+    readonly Dictionary<int, Transform> m_TaskEntries = new Dictionary<int, Transform>();
     readonly Dictionary<MinigameType, DisplayTask> m_DisplayTaskEntries = new Dictionary<MinigameType, DisplayTask>();
     DisplayTask m_TalkDisplayTask;
     DisplayTask m_ExitDisplayTask;
@@ -125,8 +125,17 @@ public class NPCHouse : MonoBehaviour
     void Update()
     {
         if (Progress == null || !Progress.IsPlayerInside) return;
-        MinigameType? completed = HouseProgressTracker.ConsumePendingCompletedMinigame(transform.position);
-        if (completed.HasValue) OnMinigameCompleted(completed.Value);
+        int? completedSlot = HouseProgressTracker.ConsumePendingCompletedSlot(transform.position);
+        if (completedSlot.HasValue) OnMinigameCompleted(completedSlot.Value);
+    }
+
+    public int NextUnbeatenSlot(MinigameType type)
+    {
+        for (int i = 0; i < Progress.MinigameTypes.Length; ++i)
+        {
+            if (Progress.MinigameTypes[i] == type && !Progress.MinigamesBeaten[i]) return i;
+        }
+        return -1;
     }
 
     #region Plan Generation
@@ -148,14 +157,7 @@ public class NPCHouse : MonoBehaviour
     #endregion Plan Generation
 
     #region Door
-    bool HasUnbeatenChase()
-    {
-        for (int i = 0; i < Progress.MinigameTypes.Length; ++i)
-        {
-            if (Progress.MinigameTypes[i] == MinigameType.ChaseMinigame && !Progress.MinigamesBeaten[i]) return true;
-        }
-        return false;
-    }
+    bool HasUnbeatenChase() => NextUnbeatenSlot(MinigameType.ChaseMinigame) >= 0;
 
     void ShowExteriorDoor()
     {
@@ -170,7 +172,8 @@ public class NPCHouse : MonoBehaviour
         {
             m_Door.gameObject.SetActive(false);
             m_ChaseInteract.gameObject.SetActive(true);
-            if (!HasTaskEntryOfType(MinigameType.ChaseMinigame)) RegisterTaskEntry(m_ChaseInteract.transform, MinigameType.ChaseMinigame);
+            int slot = NextUnbeatenSlot(MinigameType.ChaseMinigame);
+            if (slot >= 0 && !m_TaskEntries.ContainsKey(slot)) RegisterTaskEntry(slot, m_ChaseInteract.transform);
         }
         else
         {
@@ -208,25 +211,26 @@ public class NPCHouse : MonoBehaviour
 
     void SpawnInteractablesOfType<T>(MinigameType type, Transform[] possibleLocations, T prefab) where T : Component, IHouseTaskInteractable
     {
-        int count = 0;
-        for (int i = 0; i < Progress.MinigameTypes.Length; ++i) if (Progress.MinigameTypes[i] == type && !Progress.MinigamesBeaten[i]) ++count;
-        if (count <= 0) return;
+        List<int> slots = new List<int>();
+        for (int i = 0; i < Progress.MinigameTypes.Length; ++i) if (Progress.MinigameTypes[i] == type && !Progress.MinigamesBeaten[i]) slots.Add(i);
+        if (slots.Count <= 0) return;
         if (!Arrays.IsValid(possibleLocations) || !prefab)
         {
 #if UNITY_EDITOR
-            Debug.LogWarning($"WARNING: {name} needs {count} {type} minigame location(s) and a prefab assigned");
+            Debug.LogWarning($"WARNING: {name} needs {slots.Count} {type} minigame location(s) and a prefab assigned");
 #endif
             return;
         }
         Transform[] shuffledLocations = (Transform[])possibleLocations.Clone();
         shuffledLocations.Shuffle();
-        int spawnCount = Mathf.Min(count, shuffledLocations.Length);
+        int spawnCount = Mathf.Min(slots.Count, shuffledLocations.Length);
         for (int i = 0; i < spawnCount; ++i)
         {
             T instance = Instantiate(prefab, shuffledLocations[i].position, shuffledLocations[i].rotation);
             instance.OwningHouse = this;
+            instance.TaskSlotIndex = slots[i];
             m_SpawnedInteriorObjects.Add(instance.gameObject);
-            RegisterTaskEntry(instance.transform, type);
+            RegisterTaskEntry(slots[i], instance.transform);
         }
     }
     #endregion Spawning
@@ -239,17 +243,12 @@ public class NPCHouse : MonoBehaviour
         _ => "Do the task"
     };
 
-    void RegisterTaskEntry(Transform target, MinigameType type)
+    void RegisterTaskEntry(int slotIndex, Transform target)
     {
-        m_TaskEntries.Add(target, type);
+        m_TaskEntries[slotIndex] = target;
+        MinigameType type = Progress.MinigameTypes[slotIndex];
         if (m_DisplayTaskEntries.ContainsKey(type)) ++m_DisplayTaskEntries[type].AmountNeeded;
         else m_DisplayTaskEntries.Add(type, new DisplayTask(TaskDisplayNameFor(type), 1, 0, strikeThroughOnCompletion: true));
-    }
-
-    bool HasTaskEntryOfType(MinigameType type)
-    {
-        foreach (var kvp in m_TaskEntries) if (kvp.Value == type) return true;
-        return false;
     }
 
     #region Lights
@@ -283,7 +282,7 @@ public class NPCHouse : MonoBehaviour
 
     void RevealTaskEntries()
     {
-        foreach (Transform target in m_TaskEntries.Keys)
+        foreach (Transform target in m_TaskEntries.Values)
         {
             if (target) WaypointManager.Instance?.AddWaypoint(target, m_TaskWaypointIcon, m_TaskWaypointOffset);
         }
@@ -295,7 +294,7 @@ public class NPCHouse : MonoBehaviour
 
     void ShowRemainingTaskMarkers()
     {
-        foreach (Transform target in m_TaskEntries.Keys)
+        foreach (Transform target in m_TaskEntries.Values)
         {
             if (target) WaypointManager.Instance?.AddWaypoint(target, m_TaskWaypointIcon, m_TaskWaypointOffset);
         }
@@ -303,29 +302,26 @@ public class NPCHouse : MonoBehaviour
 
     void HideAllTaskMarkers()
     {
-        foreach (Transform target in m_TaskEntries.Keys) if (target) WaypointManager.Instance?.RemoveWaypoint(target);
+        foreach (Transform target in m_TaskEntries.Values) if (target) WaypointManager.Instance?.RemoveWaypoint(target);
     }
 
-    public void HideTaskMarker(Transform target)
+    public void HideTaskMarker(int slotIndex)
     {
-        WaypointManager.Instance?.RemoveWaypoint(target);
-        m_TaskEntries.Remove(target);
+        if (m_TaskEntries.TryGetValue(slotIndex, out Transform target) && target) WaypointManager.Instance?.RemoveWaypoint(target);
     }
 
-    void CompleteTaskEntry(MinigameType type)
+    void CompleteTaskEntry(int slotIndex)
     {
-        foreach (var kvp in m_TaskEntries)
-        {
-            if (kvp.Value != type || m_DisplayTaskEntries[type].AmountDone != 0) continue;
-            TaskList.Instance?.IncrementAmountDoneForTask(m_DisplayTaskEntries[type]);
-            if (kvp.Key) WaypointManager.Instance?.RemoveWaypoint(kvp.Key);
-            break;
-        }
+        if (!m_TaskEntries.TryGetValue(slotIndex, out Transform target)) return;
+        MinigameType type = Progress.MinigameTypes[slotIndex];
+        if (m_DisplayTaskEntries.TryGetValue(type, out DisplayTask task)) TaskList.Instance?.IncrementAmountDoneForTask(task);
+        if (target) WaypointManager.Instance?.RemoveWaypoint(target);
+        m_TaskEntries.Remove(slotIndex);
     }
 
     void ClearAllTaskEntries()
     {
-        foreach (Transform target in m_TaskEntries.Keys)
+        foreach (Transform target in m_TaskEntries.Values)
         {
             if (target) WaypointManager.Instance?.RemoveWaypoint(target);
         }
@@ -371,18 +367,19 @@ public class NPCHouse : MonoBehaviour
         RefreshExitDoorMarker();
     }
 
-    public void OnChaseTaskStarted(Transform chaseDoorTransform)
+    public void OnChaseTaskStarted(int slotIndex)
     {
-        HideTaskMarker(chaseDoorTransform);
+        HideTaskMarker(slotIndex);
         HideAllTaskMarkers();
     }
     #endregion Markers
 
-    void OnMinigameCompleted(MinigameType type)
+    void OnMinigameCompleted(int slotIndex)
     {
-        Progress.MarkMinigameBeaten(type);
+        MinigameType type = Progress.MinigameTypes[slotIndex];
+        Progress.MarkSlotBeaten(slotIndex);
         if (type == MinigameType.Wires) RefreshLights();
-        CompleteTaskEntry(type);
+        CompleteTaskEntry(slotIndex);
         if (type == MinigameType.ChaseMinigame)
         {
             ShowInteriorDoorForCurrentProgress();
