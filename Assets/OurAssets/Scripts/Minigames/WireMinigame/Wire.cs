@@ -105,7 +105,7 @@ public class Wire : MonoBehaviour
         if (releaseInfo.ReleaseStatus == WireReleaseStatus.Success)
         {
             SetLineEndPosition(releaseInfo.SnapPosition);
-            CanBeGrabbed = true;
+            CanBeGrabbed = false;
         }
         else ResetWire();
     }

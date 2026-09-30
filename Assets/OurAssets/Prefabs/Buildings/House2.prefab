@@ -194,7 +194,7 @@ MonoBehaviour:
   m_QTEInteractablePrefab: {fileID: 2650298958595005408, guid: 89d6b460381f3f14f97a9a6ef36082e4, type: 3}
   m_QTEInteractableSpawns: []
   m_NumQTEInteractablesToSpawn: 0
-  m_ChaseSpawn: {fileID: 5330656160270355835}
+  m_ChaseSpawn: {fileID: 8416257780568617516}
   m_ReturnSpawn: {fileID: 3746923637535405436}
   OnChaseStarted:
     m_PersistentCalls:

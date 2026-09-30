@@ -44,7 +44,7 @@ public class ChaseMinigameStarter : MonoBehaviour
 		m_ChaseSpawn = chaseSpawn;
 		m_HouseSpawn = houseSpawn;
 		m_FPPCharacter.GetComponent<CharacterController>().enabled = false;
-		m_FPPCharacter.gameObject.transform.position = m_ChaseSpawn.position;
+		m_FPPCharacter.gameObject.transform.SetPositionAndRotation(m_ChaseSpawn.position, m_ChaseSpawn.rotation);
 		m_FPPCharacter.GetComponent<CharacterController>().enabled = true;
 		if (bIsNewChase)
 		{

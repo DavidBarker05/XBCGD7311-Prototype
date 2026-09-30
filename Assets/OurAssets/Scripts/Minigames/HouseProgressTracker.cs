@@ -89,7 +89,9 @@ public static class HouseProgressTracker
         if (!s_ActiveHousePosition.HasValue) return;
         HouseProgress progress = GetHouse(s_ActiveHousePosition.Value);
         if (progress == null) return;
-        int slotIndex = s_ActiveTaskSlotIndex ?? FindFirstUnbeatenSlot(progress, type);
+        int slotIndex = (s_ActiveTaskSlotIndex.HasValue && s_ActiveTaskSlotIndex.Value >= 0)
+            ? s_ActiveTaskSlotIndex.Value
+            : FindFirstUnbeatenSlot(progress, type);
         if (slotIndex < 0) return;
         progress.PendingCompletedSlot = slotIndex;
     }
